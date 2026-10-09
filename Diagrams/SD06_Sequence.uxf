@@ -1,0 +1,854 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>35</x>
+      <y>15</y>
+      <w>4060</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>SD06 - Company Notes and Career Development Plan
+fontsize=24
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>35</x>
+      <y>70</y>
+      <w>4060</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>F16-F17. Notes summarize supplied sources. Invalid or over-budget plans cannot be accepted.
+fontsize=16
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>55</x>
+      <y>675</y>
+      <w>4010</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>opt
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>150</x>
+      <y>680</y>
+      <w>3910</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>[summary requested]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>35</x>
+      <y>390</y>
+      <w>4050</w>
+      <h>970</h>
+    </coordinates>
+    <panel_attributes>alt
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>130</x>
+      <y>395</y>
+      <w>3950</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>[company research notes]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>15</x>
+      <y>885</y>
+      <w>4130</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes>20.0;35.0;4070.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>47</x>
+      <y>926</y>
+      <w>4026</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>[career development plan]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>35</x>
+      <y>1395</y>
+      <w>4050</w>
+      <h>875</h>
+    </coordinates>
+    <panel_attributes>alt
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>130</x>
+      <y>1400</y>
+      <w>3950</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>[valid proposal and candidate accepts]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>15</x>
+      <y>2020</y>
+      <w>4130</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes>20.0;35.0;4070.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>47</x>
+      <y>2061</y>
+      <w>4026</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>[missing information / invalid plan / cancellation]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>60</x>
+      <y>120</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Job Seeker
+fontsize=16
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>60</x>
+      <y>2395</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Job Seeker
+fontsize=16
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2285</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2235.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>555</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>JobSearchGUI
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>555</x>
+      <y>2420</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>JobSearchGUI
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2285</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2235.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1095</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>AgentController
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1095</x>
+      <y>2420</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>AgentController
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2285</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2235.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1635</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerFacade
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1635</x>
+      <y>2420</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerFacade
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2285</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2235.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2175</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CompanyNotes
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2175</x>
+      <y>2420</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CompanyNotes
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2300</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2285</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2235.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2715</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerAgent
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2715</x>
+      <y>2420</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerAgent
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2285</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2235.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3255</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerDocument
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3255</x>
+      <y>2420</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerDocument
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3380</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2285</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2235.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3795</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Repository
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3795</x>
+      <y>2420</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Repository
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3920</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2285</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2235.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>205</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Manage notes / Generate plan
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>280</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+handleRequest(request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>415</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+manageCompanyNotes(request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>490</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+addNote(text, source)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>565</y>
+      <w>2240</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+save(notes)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;2180.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>700</y>
+      <w>1160</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+executeTask(summarizeNotes, source context)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;1100.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>775</y>
+      <w>1160</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Source-linked summary proposal
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>1100.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>950</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+generateCareerPlan(request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1025</y>
+      <w>1160</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+executeTask(careerPlan, profile and gaps and budget)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;1100.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1100</y>
+      <w>1160</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Proposed tasks and milestones
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>1100.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1175</y>
+      <w>1700</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+validatePlan(weeklyHours)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;1640.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1250</y>
+      <w>1700</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Valid / over budget / invalid order
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>1640.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>1420</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Review / edit / accept
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>1495</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+handleRequest(approval request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>1570</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+manageCompanyNotes / generateCareerPlan(approval)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1645</y>
+      <w>1700</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+edit(acceptedContent)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;1640.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1720</y>
+      <w>1700</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+accept()
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;1640.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1795</y>
+      <w>2240</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+save(document)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;2180.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>1870</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Result(saved content)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>1945</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Result
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>2085</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Result(clarify / revise / cancelled)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>2160</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Result
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1660</x>
+      <y>2290</y>
+      <w>800</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Saving notes alone requires no AI document approval. SD07 shows readNotes() retrieval.
+fontsize=14
+bg=white
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>35</x>
+      <y>2545</y>
+      <w>4060</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>Solid arrows: calls / user actions. Dashed arrows: returns. CLI uses the same controller and workflows.
+fontsize=14
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

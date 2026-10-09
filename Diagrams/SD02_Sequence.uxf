@@ -1,0 +1,859 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>35</x>
+      <y>15</y>
+      <w>4600</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>SD02 - Job Analysis, Gaps, Matching and Comparison
+fontsize=24
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>35</x>
+      <y>70</y>
+      <w>4600</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>F05-F08. Analysis is reviewed before saving; AI explanation failure retains computed scores and tables.
+fontsize=16
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>55</x>
+      <y>1340</y>
+      <w>4550</w>
+      <h>510</h>
+    </coordinates>
+    <panel_attributes>loop
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>150</x>
+      <y>1345</y>
+      <w>4450</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>[each selected analyzed job]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>35</x>
+      <y>390</y>
+      <w>4590</w>
+      <h>1645</h>
+    </coordinates>
+    <panel_attributes>alt
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>130</x>
+      <y>395</y>
+      <w>4490</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>[analyze job]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>15</x>
+      <y>1015</y>
+      <w>4670</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes>20.0;35.0;4610.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>47</x>
+      <y>1056</y>
+      <w>4566</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>[identify gaps / match / compare]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>60</x>
+      <y>120</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Job Seeker
+fontsize=16
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>60</x>
+      <y>2310</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Job Seeker
+fontsize=16
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2200</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>555</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>JobSearchGUI
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>555</x>
+      <y>2335</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>JobSearchGUI
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2200</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1095</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>AgentController
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1095</x>
+      <y>2335</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>AgentController
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2200</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1635</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerFacade
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1635</x>
+      <y>2335</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerFacade
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2200</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2175</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>ToolManager
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2175</x>
+      <y>2335</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>ToolManager
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2300</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2200</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2715</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>MatchingStrategy
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2715</x>
+      <y>2335</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>MatchingStrategy
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2200</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3255</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerAgent
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3255</x>
+      <y>2335</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerAgent
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3380</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2200</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3795</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Job
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3795</x>
+      <y>2335</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Job
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3920</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2200</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>4335</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Repository
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>4335</x>
+      <y>2335</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Repository
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4460</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2200</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>205</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Analyze / Gaps / Match / Compare
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>280</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+handleRequest(request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>415</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+analyzeJob(request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>490</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+readJob(jobId)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>565</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Job description
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>640</y>
+      <w>1700</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+executeTask(analyzeJob, context)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;1640.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>715</y>
+      <w>1700</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Validated requirement proposals
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>1640.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1930</x>
+      <y>810</y>
+      <w>800</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Candidate reviews and accepts proposed requirements
+fontsize=14
+bg=white
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>865</y>
+      <w>2240</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+updateAnalysis(acceptedRequirements)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;2180.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>940</y>
+      <w>2780</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+save(job)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;2720.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>1080</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+identifyGaps / matchJobs / compareJobs(request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1155</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+readProfile(candidateId)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1230</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+CandidateProfile
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1365</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+readJob(jobId)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1440</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Job
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1515</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+compareSkills(profile, job)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2300</x>
+      <y>1590</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+calculateMatch(profile, job)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2300</x>
+      <y>1665</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Score
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1740</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Map(score, matched, gaps, uncertainty)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1850</y>
+      <w>1700</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+executeTask(explain results, computed context)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;1640.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1925</y>
+      <w>1700</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Explanation or warning
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>1640.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>2035</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Result(analysis / gaps / ranking / table)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>2110</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Result
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1930</x>
+      <y>2205</y>
+      <w>800</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Missing analysis requests analysis first; no requirements means unscorable.
+fontsize=14
+bg=white
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>35</x>
+      <y>2460</y>
+      <w>4600</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>Solid arrows: calls / user actions. Dashed arrows: returns. CLI uses the same controller and workflows.
+fontsize=14
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

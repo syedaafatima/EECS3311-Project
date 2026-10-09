@@ -1,0 +1,787 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>300</x>
+      <y>100</y>
+      <w>1150</w>
+      <h>2400</h>
+    </coordinates>
+    <panel_attributes>AI Job Search and Career Agent
+halign=center
+valign=top
+fontsize=20
+bg=white
+layer=0</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>300</x>
+      <y>20</y>
+      <w>1150</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Combined Use-Case Diagram - UC01-UC17
+fontsize=22
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>230</y>
+      <w>410</w>
+      <h>960</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;900.0;90.0;900.0;340.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>360</y>
+      <w>410</w>
+      <h>830</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;770.0;90.0;770.0;340.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>490</y>
+      <w>410</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;640.0;90.0;640.0;340.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>620</y>
+      <w>410</w>
+      <h>570</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;510.0;90.0;510.0;340.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>750</y>
+      <w>410</w>
+      <h>440</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;380.0;90.0;380.0;340.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>880</y>
+      <w>410</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;250.0;90.0;250.0;340.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1010</y>
+      <w>410</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;120.0;90.0;120.0;340.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;330.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>520</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;460.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>660</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;600.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>780</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;720.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>910</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;850.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>1040</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;980.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>1170</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;1110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1100</y>
+      <w>410</w>
+      <h>1300</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;90.0;30.0;340.0;1240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>490</y>
+      <w>510</w>
+      <h>700</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;640.0;360.0;640.0;20.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>750</y>
+      <w>510</w>
+      <h>440</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;380.0;360.0;380.0;20.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>880</y>
+      <w>510</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;250.0;360.0;250.0;20.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1010</y>
+      <w>510</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;120.0;360.0;120.0;20.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1100</y>
+      <w>510</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;30.0;360.0;30.0;20.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1100</y>
+      <w>510</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;30.0;360.0;30.0;20.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1100</y>
+      <w>510</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;30.0;360.0;30.0;20.0;330.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1100</y>
+      <w>510</w>
+      <h>520</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;30.0;360.0;30.0;20.0;460.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1100</y>
+      <w>510</w>
+      <h>660</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;30.0;360.0;30.0;20.0;600.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1100</y>
+      <w>510</w>
+      <h>780</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;30.0;360.0;30.0;20.0;720.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1100</y>
+      <w>510</w>
+      <h>1170</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;30.0;360.0;30.0;20.0;1110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1100</y>
+      <w>510</w>
+      <h>1300</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;30.0;360.0;30.0;20.0;1240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>300</y>
+      <w>510</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>440.0;30.0;20.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>1990</y>
+      <w>410</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;30.0;340.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>880</y>
+      <w>170</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;include&gt;&gt;
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;160.0;100.0;160.0;100.0;30.0;20.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1180</x>
+      <y>1530</y>
+      <w>170</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;include&gt;&gt;
+fontsize=16
+layer=1</panel_attributes>
+    <additional_attributes>20.0;170.0;100.0;170.0;100.0;30.0;20.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1170</x>
+      <y>1700</y>
+      <w>280</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extend&gt;&gt;
+[feedback requested]
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes>30.0;120.0;210.0;120.0;210.0;30.0;20.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>210</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC01 - Manage Candidate Profile
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>340</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC02 - Import Resume
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>470</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC03 - Extract Resume Skills
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>600</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC04 - Import Job
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>730</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC05 - Analyze Job Description
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>860</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC06 - Identify Skill Gaps
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>990</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC07 - Match Jobs
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>1120</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC08 - Compare Jobs
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>1250</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC09 - Generate Resume Suggestions
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>1380</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC10 - Draft Cover Letter
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>1510</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC11 - Generate Interview Questions
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>1640</y>
+      <w>760</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>UC12 - Conduct Mock Interview
+--
+extension points
+after answer is stored
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>1770</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC13 - Evaluate Interview Answers
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>1900</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC14 - Track Applications
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>2030</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC15 - Track Deadlines
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>2160</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC16 - Manage Company Notes
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>2290</y>
+      <w>760</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>UC17 - Generate Career Plan
+fontsize=16
+bg=white
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>30</x>
+      <y>1100</y>
+      <w>140</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Job Seeker
+fontsize=18
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>1570</x>
+      <y>1100</y>
+      <w>140</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>LLM Service
+fontsize=18
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>1570</x>
+      <y>300</y>
+      <w>140</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>File System
+fontsize=18
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>30</x>
+      <y>1990</y>
+      <w>140</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Clock
+fontsize=18
+layer=2</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>300</x>
+      <y>2540</y>
+      <w>1150</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>UC07 includes UC06. UC12 includes UC11.
+UC13 extends UC12 when feedback is requested, after an answer is stored.
+Solid lines: actor participation. Dashed arrows: include / extend.
+fontsize=16
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

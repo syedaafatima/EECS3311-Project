@@ -1,0 +1,879 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>35</x>
+      <y>15</y>
+      <w>4600</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>SD05 - Application Tracking and Deadlines
+fontsize=24
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>35</x>
+      <y>70</y>
+      <w>4600</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>F14-F15. DeadlineObserver is the active GUI or CLI. Clock represents the scheduled check.
+fontsize=16
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>35</x>
+      <y>390</y>
+      <w>4590</w>
+      <h>725</h>
+    </coordinates>
+    <panel_attributes>alt
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>130</x>
+      <y>395</y>
+      <w>4490</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>[application status]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>15</x>
+      <y>790</y>
+      <w>4670</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes>20.0;35.0;4610.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>47</x>
+      <y>831</y>
+      <w>4566</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>[deadline request]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>55</x>
+      <y>1660</y>
+      <w>4550</w>
+      <h>500</h>
+    </coordinates>
+    <panel_attributes>alt
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>150</x>
+      <y>1665</y>
+      <w>4450</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>[due and notification key not displayed]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>35</x>
+      <y>1985</y>
+      <w>4630</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes>20.0;35.0;4570.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>67</x>
+      <y>2026</y>
+      <w>4526</w>
+      <h>38</h>
+    </coordinates>
+    <panel_attributes>[missing deadline / already displayed / terminal application]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>35</x>
+      <y>1600</y>
+      <w>4590</w>
+      <h>595</h>
+    </coordinates>
+    <panel_attributes>loop
+fontsize=14
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>130</x>
+      <y>1605</y>
+      <w>4490</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>[each recorded deadline]
+fontsize=14
+style=wordwrap
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>60</x>
+      <y>120</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Job Seeker
+fontsize=16
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>60</x>
+      <y>2320</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Job Seeker
+fontsize=16
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2210</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>555</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>JobSearchGUI
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>555</x>
+      <y>2345</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>JobSearchGUI
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2210</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1095</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>AgentController
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1095</x>
+      <y>2345</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>AgentController
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2210</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1635</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerFacade
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1635</x>
+      <y>2345</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>CareerFacade
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2210</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2175</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Application
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2175</x>
+      <y>2345</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Application
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2300</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2210</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2715</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>DeadlineManager
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>2715</x>
+      <y>2345</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>DeadlineManager
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2210</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3255</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>DeadlineObserver
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3255</x>
+      <y>2345</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>DeadlineObserver
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3380</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2210</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3795</x>
+      <y>145</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Repository
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>3795</x>
+      <y>2345</y>
+      <w>290</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Repository
+halign=center
+valign=center
+fontsize=16
+bg=#e6e4ef
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3920</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2210</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>4380</x>
+      <y>120</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Clock
+fontsize=16
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>4380</x>
+      <y>2320</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Clock
+fontsize=16
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4460</x>
+      <y>185</y>
+      <w>80</w>
+      <h>2210</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fontsize=14
+layer=0</panel_attributes>
+    <additional_attributes>20.0;35.0;20.0;2160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>205</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Add / update application or deadline
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>280</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+handleRequest(request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>415</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+trackApplication(request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>490</y>
+      <w>2240</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+load(application, id)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;2180.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>565</y>
+      <w>2240</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Application or new Saved record
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>2180.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>640</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+updateStatus(validStatus)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>715</y>
+      <w>2240</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+save(application)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;2180.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>855</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+trackDeadlines(request)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1930</x>
+      <y>950</y>
+      <w>800</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Validate deadline and timezone; update Application
+fontsize=14
+bg=white
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>1005</y>
+      <w>2240</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+save(application)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;2180.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1220</x>
+      <y>1115</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Result(saved record)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>1190</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Result
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>1265</y>
+      <w>2240</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+subscribe(this)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;2180.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>1340</y>
+      <w>1700</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+checkDeadlines(now)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>1640.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>1415</y>
+      <w>1160</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+list(applications)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;1100.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>1490</y>
+      <w>1160</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Application records
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>1100.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>1685</y>
+      <w>170</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+notifyObservers(application)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;110.0;35.0;110.0;60.0;20.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>1760</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;
+onDeadline(application)
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>20.0;35.0;560.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>1835</y>
+      <w>620</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+Display completed
+fontsize=14
+layer=2</panel_attributes>
+    <additional_attributes>560.0;35.0;20.0;35.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1930</x>
+      <y>1930</y>
+      <w>800</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Record application/deadline notification key
+fontsize=14
+bg=white
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1930</x>
+      <y>2070</y>
+      <w>800</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Skip notification
+fontsize=14
+bg=white
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1930</x>
+      <y>2215</y>
+      <w>800</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Invalid transitions return an error before save; storage failures preserve records.
+fontsize=14
+bg=white
+layer=3</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>35</x>
+      <y>2470</y>
+      <w>4600</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>Solid arrows: calls / user actions. Dashed arrows: returns. CLI uses the same controller and workflows.
+fontsize=14
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>

@@ -1,0 +1,1075 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<diagram program="umlet" version="15.1.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>160</y>
+      <w>180</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R1
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>160</y>
+      <w>180</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R2
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;350.0;60.0;340.0;100.0;340.0;100.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1140</x>
+      <y>160</y>
+      <w>780</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R3
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;60.0;20.0;60.0;180.0;740.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1140</x>
+      <y>320</y>
+      <w>780</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R4
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>740.0;20.0;700.0;20.0;700.0;80.0;60.0;80.0;60.0;180.0;20.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1740</x>
+      <y>180</y>
+      <w>180</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R5
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>140.0;160.0;100.0;160.0;100.0;20.0;20.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1740</x>
+      <y>320</y>
+      <w>180</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R6
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>140.0;20.0;80.0;20.0;80.0;220.0;60.0;220.0;20.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2340</x>
+      <y>160</y>
+      <w>180</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R7
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;180.0;60.0;180.0;60.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2700</x>
+      <y>220</y>
+      <w>60</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;&gt;
+R8
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;160.0;20.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1500</x>
+      <y>260</y>
+      <w>60</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R9
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;20.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1740</x>
+      <y>180</y>
+      <w>780</w>
+      <h>570</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R10
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;60.0;20.0;60.0;520.0;700.0;520.0;740.0;530.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2700</x>
+      <y>750</y>
+      <w>60</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;&gt;
+R11
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;160.0;20.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1140</x>
+      <y>180</y>
+      <w>180</w>
+      <h>370</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R12
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>140.0;20.0;100.0;20.0;100.0;320.0;60.0;320.0;20.0;330.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1500</x>
+      <y>630</y>
+      <w>60</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+R13
+m1=1
+m2=1
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;20.0;360.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1140</x>
+      <y>1020</y>
+      <w>180</w>
+      <h>410</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;&gt;
+R14
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;370.0;60.0;360.0;60.0;20.0;100.0;20.0;140.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1500</x>
+      <y>1090</y>
+      <w>60</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;&gt;
+R15
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;240.0;20.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1140</x>
+      <y>480</y>
+      <w>180</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R16
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>140.0;70.0;100.0;60.0;60.0;60.0;60.0;20.0;20.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2100</x>
+      <y>560</y>
+      <w>60</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R17
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;20.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2100</x>
+      <y>1150</y>
+      <w>60</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+R18
+m1=1
+m2=0..*
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;20.0;260.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>160</y>
+      <w>1380</w>
+      <h>1350</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;&gt;
+R19
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;60.0;20.0;60.0;780.0;1300.0;780.0;1300.0;1300.0;1340.0;1310.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>480</y>
+      <w>1380</w>
+      <h>1030</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;&gt;
+R20
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;30.0;60.0;20.0;80.0;20.0;80.0;440.0;1280.0;440.0;1280.0;980.0;1300.0;980.0;1340.0;990.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1140</x>
+      <y>480</y>
+      <w>780</w>
+      <h>630</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R21
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>740.0;590.0;700.0;580.0;660.0;580.0;660.0;300.0;60.0;300.0;60.0;20.0;20.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3300</x>
+      <y>400</y>
+      <w>60</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+R22
+m1=1
+m2=0..*
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;20.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3540</x>
+      <y>240</y>
+      <w>180</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R23
+m1=1
+m2=0..*
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;60.0;20.0;60.0;420.0;100.0;420.0;140.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3900</x>
+      <y>320</y>
+      <w>60</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R24
+m1=0..*
+m2=1
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;250.0;20.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3540</x>
+      <y>240</y>
+      <w>180</w>
+      <h>970</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+R25
+m1=1
+m2=0..*
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;100.0;20.0;100.0;920.0;140.0;930.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4140</x>
+      <y>200</y>
+      <w>100</w>
+      <h>1010</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R26
+m1=0..*
+m2=1
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;970.0;60.0;960.0;60.0;20.0;20.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3020</x>
+      <y>240</y>
+      <w>100</w>
+      <h>870</h>
+    </coordinates>
+    <panel_attributes>lt=-
+R27
+m1=0..*
+m2=1
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>60.0;830.0;20.0;820.0;20.0;20.0;60.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2340</x>
+      <y>240</y>
+      <w>780</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+R28
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;100.0;680.0;100.0;680.0;20.0;740.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2340</x>
+      <y>320</y>
+      <w>780</w>
+      <h>1170</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+R29
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;20.0;60.0;20.0;60.0;1120.0;700.0;1120.0;740.0;1130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1740</x>
+      <y>520</y>
+      <w>1380</w>
+      <h>970</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+R30
+fontsize=10
+layer=0</panel_attributes>
+    <additional_attributes>20.0;30.0;60.0;20.0;100.0;20.0;100.0;400.0;700.0;400.0;700.0;900.0;1300.0;900.0;1300.0;920.0;1340.0;930.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>120</y>
+      <w>480</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>JobSearchGUI
+--
+- controller : AgentController
+--
++ submitRequest(request : Request) : Result
++ display(result : Result) : void
++ onDeadline(application : Application) : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>450</y>
+      <w>480</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>JobSearchCLI
+--
+- controller : AgentController
+--
++ execute(command : String) : Result
++ display(result : Result) : void
++ onDeadline(application : Application) : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>680</x>
+      <y>120</y>
+      <w>480</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>AgentController
+--
+- facade : CareerFacade
+--
++ handleRequest(request : Request) : Result
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1880</x>
+      <y>120</y>
+      <w>480</w>
+      <h>460</h>
+    </coordinates>
+    <panel_attributes>CareerFacade
+--
+- repository : Repository
+- agent : CareerAgent
+- parser : ResumeParser
+- tools : ToolManager
+- deadlines : DeadlineManager
+--
++ updateProfile(request : Request) : Result
++ importResume(request : Request) : Result
++ extractSkills(request : Request) : Result
++ importJob(request : Request) : Result
++ analyzeJob(request : Request) : Result
++ identifyGaps(request : Request) : Result
++ matchJobs(request : Request) : Result
++ compareJobs(request : Request) : Result
++ suggestResume(request : Request) : Result
++ draftLetter(request : Request) : Result
++ generateQuestions(request : Request) : Result
++ startInterview(request : Request) : Result
++ submitAnswer(request : Request) : Result
++ evaluateAnswer(request : Request) : Result
++ trackApplication(request : Request) : Result
++ trackDeadlines(request : Request) : Result
++ manageCompanyNotes(request : Request) : Result
++ generateCareerPlan(request : Request) : Result
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>680</x>
+      <y>450</y>
+      <w>480</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Repository
+--
+- storagePath : String
+--
++ load(type : String, id : String) : Object
++ list(type : String) : List
++ save(entity : Object) : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>120</y>
+      <w>480</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>CareerAgent
+--
+- llm : LLMClient
+- tools : ToolManager
+- repository : Repository
+- maxSteps : int = 8
+--
++ executeTask(goal : String, context : Map) : Result
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>450</y>
+      <w>480</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>ToolManager
+--
+- repository : Repository
+- strategy : MatchingStrategy
+--
++ executeTool(name : String, args : Map) : Result
++ readProfile(id : String) : CandidateProfile
++ readJob(id : String) : Job
++ compareSkills(profile : CandidateProfile, job : Job) : Map
++ readNotes(company : String) : List
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2480</x>
+      <y>650</y>
+      <w>480</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+LLMClient
+--
+--
++ generate(context : Map) : Map
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2480</x>
+      <y>910</y>
+      <w>480</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>OpenAIAdapter
+--
+- modelId : String
+- endpoint : String
+- apiKeyReference : String
+--
++ generate(context : Map) : Map
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>990</y>
+      <w>480</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+MatchingStrategy
+--
+--
++ calculateMatch(profile : CandidateProfile, job : Job) : double
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>680</x>
+      <y>1330</y>
+      <w>480</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>WeightedMatching
+--
+- requiredWeight : int = 2
+- preferredWeight : int = 1
+--
++ calculateMatch(profile : CandidateProfile, job : Job) : double
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1280</x>
+      <y>1330</y>
+      <w>480</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>RequiredSkillMatching
+--
+- requiredWeight : int = 2
+- preferredWeight : int = 1
+--
++ calculateMatch(profile : CandidateProfile, job : Job) : double
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2480</x>
+      <y>120</y>
+      <w>480</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+ResumeParser
+--
+--
++ extractText(file : Path) : String
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2480</x>
+      <y>380</y>
+      <w>480</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>DocumentParserAdapter
+--
+- supportedFormats : Set
+--
++ extractText(file : Path) : String
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3080</x>
+      <y>120</y>
+      <w>480</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>CandidateProfile
+--
+- id : String
+- name : String
+- education : String
+- experience : String
+- skills : List
+- interests : String
+- locations : List
+- resumes : List
+- applications : List
+- documents : List
+- interviews : List
+--
++ updateProfile(values : Map) : void
++ updateSkills(skills : List) : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3080</x>
+      <y>650</y>
+      <w>480</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>Resume
+--
+- id : String
+- originalPath : String
+- text : String
+- checksum : String
+--
++ hasText() : boolean
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3680</x>
+      <y>120</y>
+      <w>480</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>Job
+--
+- id : String
+- title : String
+- company : String
+- location : String
+- description : String
+- requirements : List
+- salaryText : String
+- deadline : Instant
+--
++ updateAnalysis(requirements : List) : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3680</x>
+      <y>570</y>
+      <w>480</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>Application
+--
+- id : String
+- job : Job
+- status : ApplicationStatus
+- appliedAt : Instant
+- deadline : Instant
+- history : List
+- notes : String
+--
++ updateStatus(status : ApplicationStatus) : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3080</x>
+      <y>970</y>
+      <w>480</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>CareerDocument
+--
+- id : String
+- owner : CandidateProfile
+- type : DocumentType
+- content : String
+- sources : List
+- accepted : boolean
+--
++ edit(content : String) : void
++ accept() : void
++ validatePlan(weeklyHours : double) : boolean
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3680</x>
+      <y>1050</y>
+      <w>480</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>InterviewSession
+--
+- id : String
+- job : Job
+- questions : List
+- answers : List
+- feedback : List
+- currentIndex : int = 0
+- status : InterviewStatus
+--
++ nextQuestion() : String
++ submitAnswer(answer : String) : void
++ saveFeedback(feedback : String) : void
++ finish() : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3080</x>
+      <y>1390</y>
+      <w>480</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>CompanyNotes
+--
+- company : String
+- notes : List
+- sources : List
+--
++ addNote(text : String, source : String) : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1880</x>
+      <y>990</y>
+      <w>480</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>DeadlineManager
+--
+- repository : Repository
+- observers : List
+- displayedKeys : Set
+--
++ subscribe(observer : DeadlineObserver) : void
++ checkDeadlines(now : Instant) : List
++ notifyObservers(application : Application) : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1880</x>
+      <y>1410</y>
+      <w>480</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+DeadlineObserver
+--
+--
++ onDeadline(application : Application) : void
+fontsize=12
+bg=white
+layer=1</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>80</x>
+      <y>20</y>
+      <w>4100</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>AI Job Search and Career Agent - Combined Class Diagram
+fontsize=20
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>80</x>
+      <y>1780</y>
+      <w>1020</w>
+      <h>380</h>
+    </coordinates>
+    <panel_attributes>RELATIONSHIP KEY
+R1: JobSearchGUI -&gt; AgentController (association)
+    submits requests
+R2: JobSearchCLI -&gt; AgentController (association)
+    submits requests
+R3: AgentController -&gt; CareerFacade (association)
+    delegates
+R4: CareerFacade -&gt; Repository (association)
+    persists
+R5: CareerFacade -&gt; CareerAgent (association)
+    AI workflows
+R6: CareerFacade -&gt; ToolManager (association)
+    tools
+R7: CareerFacade -&gt; ResumeParser (association)
+    resume parsing
+R8: DocumentParserAdapter -&gt; ResumeParser (realization)
+fontsize=12
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1120</x>
+      <y>1780</y>
+      <w>1020</w>
+      <h>380</h>
+    </coordinates>
+    <panel_attributes>RELATIONSHIP KEY
+R9: CareerAgent -&gt; ToolManager (association)
+    executes tools
+R10: CareerAgent -&gt; LLMClient (association)
+    inference
+R11: OpenAIAdapter -&gt; LLMClient (realization)
+R12: CareerAgent -&gt; Repository (association)
+    run memory
+R13: ToolManager -&gt; MatchingStrategy (aggregation)
+    selected policy
+R14: WeightedMatching -&gt; MatchingStrategy (realization)
+R15: RequiredSkillMatching -&gt; MatchingStrategy (realization)
+R16: ToolManager -&gt; Repository (association)
+    retrieval
+fontsize=12
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>2160</x>
+      <y>1780</y>
+      <w>1020</w>
+      <h>380</h>
+    </coordinates>
+    <panel_attributes>RELATIONSHIP KEY
+R17: CareerFacade -&gt; DeadlineManager (association)
+    deadline workflow
+R18: DeadlineManager -&gt; DeadlineObserver (aggregation)
+    subscribers
+R19: JobSearchGUI -&gt; DeadlineObserver (realization)
+R20: JobSearchCLI -&gt; DeadlineObserver (realization)
+R21: DeadlineManager -&gt; Repository (association)
+    reads deadlines
+R22: CandidateProfile -&gt; Resume (composition)
+    resume versions
+R23: CandidateProfile -&gt; Application (association)
+    tracks
+R24: Application -&gt; Job (association)
+    for job
+fontsize=12
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>3200</x>
+      <y>1780</y>
+      <w>1020</w>
+      <h>380</h>
+    </coordinates>
+    <panel_attributes>RELATIONSHIP KEY
+R25: CandidateProfile -&gt; InterviewSession (composition)
+    owns sessions
+R26: InterviewSession -&gt; Job (association)
+    prepares for
+R27: CareerDocument -&gt; CandidateProfile (association)
+    owner
+R28: CareerFacade -&gt; CandidateProfile (dependency)
+    creates/updates domain objects
+R29: CareerFacade -&gt; CompanyNotes (dependency)
+    creates and updates notes: manageCompanyNotes()
+R30: ToolManager -&gt; CompanyNotes (dependency)
+    retrieves stored notes: readNotes()
+fontsize=12
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>80</x>
+      <y>2160</y>
+      <w>4100</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Notation: + public; - private; dashed hollow triangle: realization; hollow diamond: aggregation; filled diamond: composition.
+Same 23 classes and 30 relationships as the report. Shared Request, Result and enum value types are referenced in signatures.
+fontsize=12
+style=wordwrap</panel_attributes>
+    <additional_attributes />
+  </element>
+</diagram>
