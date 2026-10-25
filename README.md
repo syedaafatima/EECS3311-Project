@@ -1,4 +1,4 @@
-# AI Job Search and Career Agent
+# EECS 3311 - AI Job Search and Career Agent Project
 
 EECS3311 Stage 2 implementation of the Stage 1 design.
 
