@@ -1,0 +1,21 @@
+# Eclipse / IntelliJ / VS Code
+.classpath
+.project
+.settings/
+.idea/
+.vscode/
+
+# Java build output
+bin/
+target/
+out/
+*.class
+
+# Local application data
+data/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+config.local.json
