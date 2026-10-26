@@ -30,6 +30,8 @@ public class JobSearchCLI {
                 case "help" -> printHelp();
                 case "profile edit" -> editProfile();
                 case "profile show" -> System.out.println(controller.submitRequest("profile.show", Map.of()));
+                case "job import" -> importJob();
+                case "job list" -> System.out.println(controller.submitRequest("job.list", Map.of()));
                 case "exit" -> { return; }
                 case "" -> { }
                 default -> System.out.println("Unknown command. Type 'help'.");
@@ -48,6 +50,17 @@ public class JobSearchCLI {
         System.out.println(controller.submitRequest("profile.update", input));
     }
 
+    private void importJob() {
+        Map<String, String> input = new LinkedHashMap<>();
+        input.put("title", ask("Job title"));
+        input.put("company", ask("Company"));
+        input.put("description", ask("Job description"));
+        input.put("salary", ask("Salary (optional)"));
+        input.put("location", ask("Location"));
+        input.put("deadline", ask("Deadline YYYY-MM-DD (optional)"));
+        System.out.println(controller.submitRequest("job.import", input));
+    }
+
     private String ask(String label) {
         System.out.print(label + ": ");
         return scanner.nextLine();
@@ -56,6 +69,8 @@ public class JobSearchCLI {
     private void printHelp() {
         System.out.println("profile edit  - create/update candidate profile");
         System.out.println("profile show  - display saved profile");
+        System.out.println("job import    - import a job posting");
+        System.out.println("job list      - list imported jobs");
         System.out.println("exit          - close the CLI");
     }
 
