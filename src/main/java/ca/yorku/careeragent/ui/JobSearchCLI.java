@@ -32,6 +32,9 @@ public class JobSearchCLI {
                 case "profile show" -> System.out.println(controller.submitRequest("profile.show", Map.of()));
                 case "job import" -> importJob();
                 case "job list" -> System.out.println(controller.submitRequest("job.list", Map.of()));
+                case "application add" -> addApplication();
+                case "application update" -> updateApplication();
+                case "application list" -> System.out.println(controller.submitRequest("application.list", Map.of()));
                 case "exit" -> { return; }
                 case "" -> { }
                 default -> System.out.println("Unknown command. Type 'help'.");
@@ -61,17 +64,35 @@ public class JobSearchCLI {
         System.out.println(controller.submitRequest("job.import", input));
     }
 
+    private void addApplication() {
+        Map<String, String> input = new LinkedHashMap<>();
+        input.put("jobId", ask("Job id (example J01)"));
+        input.put("submissionDate", ask("Submission date YYYY-MM-DD"));
+        input.put("status", ask("Status [SAVED/APPLIED/INTERVIEW/OFFER/ACCEPTED/REJECTED/WITHDRAWN]"));
+        System.out.println(controller.submitRequest("application.add", input));
+    }
+
+    private void updateApplication() {
+        Map<String, String> input = new LinkedHashMap<>();
+        input.put("applicationId", ask("Application id (example A01)"));
+        input.put("status", ask("New status"));
+        System.out.println(controller.submitRequest("application.update", input));
+    }
+
     private String ask(String label) {
         System.out.print(label + ": ");
         return scanner.nextLine();
     }
 
     private void printHelp() {
-        System.out.println("profile edit  - create/update candidate profile");
-        System.out.println("profile show  - display saved profile");
-        System.out.println("job import    - import a job posting");
-        System.out.println("job list      - list imported jobs");
-        System.out.println("exit          - close the CLI");
+        System.out.println("profile edit       - create/update candidate profile");
+        System.out.println("profile show       - display saved profile");
+        System.out.println("job import         - import a job posting");
+        System.out.println("job list           - list imported jobs");
+        System.out.println("application add    - track a job application");
+        System.out.println("application update - update application status");
+        System.out.println("application list   - list tracked applications");
+        System.out.println("exit               - close the CLI");
     }
 
     public static void main(String[] args) {

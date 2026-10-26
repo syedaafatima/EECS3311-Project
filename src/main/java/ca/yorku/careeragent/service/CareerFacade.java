@@ -1,5 +1,6 @@
 package ca.yorku.careeragent.service;
 
+import ca.yorku.careeragent.domain.Application;
 import ca.yorku.careeragent.domain.CandidateProfile;
 import ca.yorku.careeragent.domain.Job;
 import ca.yorku.careeragent.persistence.Repository;
@@ -45,5 +46,31 @@ public class CareerFacade {
 
     public List<Job> listJobs() {
         return repository.listJobs();
+    }
+
+    public Application trackApplication(String jobId, LocalDate submissionDate, Application.Status requestedStatus) {
+        repository.findJob(jobId).orElseThrow(() -> new IllegalArgumentException("Unknown job: " + jobId));
+        Optional<Application> existing = repository.findApplicationByJobId(jobId);
+        Application application;
+        if (existing.isPresent()) {
+            application = existing.get();
+            application.updateStatus(requestedStatus);
+        } else {
+            application = new Application(repository.nextApplicationId(), jobId, submissionDate, requestedStatus);
+        }
+        repository.save(application);
+        return application;
+    }
+
+    public Application updateApplicationStatus(String applicationId, Application.Status status) {
+        Application application = repository.findApplication(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown application: " + applicationId));
+        application.updateStatus(status);
+        repository.save(application);
+        return application;
+    }
+
+    public List<Application> listApplications() {
+        return repository.listApplications();
     }
 }

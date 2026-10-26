@@ -1,5 +1,6 @@
 package ca.yorku.careeragent.persistence;
 
+import ca.yorku.careeragent.domain.Application;
 import ca.yorku.careeragent.domain.CandidateProfile;
 import ca.yorku.careeragent.domain.Job;
 
@@ -19,12 +20,15 @@ import java.util.Set;
 public class Repository {
     private final Path dataDirectory;
     private final Path jobsDirectory;
+    private final Path applicationsDirectory;
 
     public Repository(Path dataDirectory) {
         this.dataDirectory = dataDirectory;
         this.jobsDirectory = dataDirectory.resolve("jobs");
+        this.applicationsDirectory = dataDirectory.resolve("applications");
         try {
             Files.createDirectories(jobsDirectory);
+            Files.createDirectories(applicationsDirectory);
         } catch (IOException e) {
             throw new IllegalStateException("Could not create data directory: " + dataDirectory, e);
         }
@@ -102,6 +106,61 @@ public class Repository {
                 .mapToInt(id -> Integer.parseInt(id.substring(1)))
                 .max().orElse(0);
         return String.format("J%02d", max + 1);
+    }
+
+
+    public void save(Application application) {
+        String json = "{\n" +
+                "  \"id\": " + JsonSupport.quote(application.getId()) + ",\n" +
+                "  \"jobId\": " + JsonSupport.quote(application.getJobId()) + ",\n" +
+                "  \"submissionDate\": " + JsonSupport.quote(application.getSubmissionDate().toString()) + ",\n" +
+                "  \"status\": " + JsonSupport.quote(application.getStatus().name()) + ",\n" +
+                "  \"statusHistory\": " + JsonSupport.arrayOfStrings(application.getStatusHistory()) + "\n" +
+                "}\n";
+        write(applicationsDirectory.resolve(application.getId() + ".json"), json);
+    }
+
+    public Optional<Application> findApplication(String id) {
+        Path file = applicationsDirectory.resolve(id + ".json");
+        if (!Files.exists(file)) return Optional.empty();
+        return Optional.of(readApplication(file));
+    }
+
+    public Optional<Application> findApplicationByJobId(String jobId) {
+        return listApplications().stream()
+                .filter(a -> a.getJobId().equalsIgnoreCase(jobId))
+                .findFirst();
+    }
+
+    public List<Application> listApplications() {
+        try (var paths = Files.list(applicationsDirectory)) {
+            return paths.filter(p -> p.getFileName().toString().endsWith(".json"))
+                    .map(this::readApplication)
+                    .sorted(Comparator.comparing(Application::getId))
+                    .toList();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not list applications.", e);
+        }
+    }
+
+    public String nextApplicationId() {
+        int max = listApplications().stream()
+                .map(Application::getId)
+                .filter(id -> id.matches("A\\d+"))
+                .mapToInt(id -> Integer.parseInt(id.substring(1)))
+                .max().orElse(0);
+        return String.format("A%02d", max + 1);
+    }
+
+    private Application readApplication(Path file) {
+        String json = read(file);
+        Application application = new Application(
+                JsonSupport.stringField(json, "id"),
+                JsonSupport.stringField(json, "jobId"),
+                LocalDate.parse(JsonSupport.stringField(json, "submissionDate")),
+                Application.Status.valueOf(JsonSupport.stringField(json, "status")));
+        application.restoreHistory(JsonSupport.stringArrayField(json, "statusHistory"));
+        return application;
     }
 
     private Job readJob(Path file) {
