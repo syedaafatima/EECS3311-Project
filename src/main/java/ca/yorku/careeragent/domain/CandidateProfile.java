@@ -14,7 +14,10 @@ public class CandidateProfile {
     private String locationPreference;
 
     public CandidateProfile() {
-        this("", "", "", Set.of(), Set.of(), "");
+        this.name = "";
+        this.educationLevel = "";
+        this.experience = "";
+        this.locationPreference = "";
     }
 
     public CandidateProfile(String name, String educationLevel, String experience,

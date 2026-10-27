@@ -29,12 +29,14 @@ public class JobSearchCLI {
             switch (command) {
                 case "help" -> printHelp();
                 case "profile edit" -> editProfile();
-                case "profile show" -> System.out.println(controller.submitRequest("profile.show", Map.of()));
+                case "profile show" -> print("profile.show", Map.of());
                 case "job import" -> importJob();
-                case "job list" -> System.out.println(controller.submitRequest("job.list", Map.of()));
+                case "job list" -> print("job.list", Map.of());
+                case "job gaps" -> print("job.gaps", Map.of("jobId", ask("Job id")));
+                case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
                 case "application add" -> addApplication();
                 case "application update" -> updateApplication();
-                case "application list" -> System.out.println(controller.submitRequest("application.list", Map.of()));
+                case "application list" -> print("application.list", Map.of());
                 case "exit" -> { return; }
                 case "" -> { }
                 default -> System.out.println("Unknown command. Type 'help'.");
@@ -50,7 +52,7 @@ public class JobSearchCLI {
         input.put("skills", ask("Skills (comma-separated)"));
         input.put("interests", ask("Interests (comma-separated)"));
         input.put("location", ask("Preferred job location"));
-        System.out.println(controller.submitRequest("profile.update", input));
+        print("profile.update", input);
     }
 
     private void importJob() {
@@ -61,7 +63,7 @@ public class JobSearchCLI {
         input.put("salary", ask("Salary (optional)"));
         input.put("location", ask("Location"));
         input.put("deadline", ask("Deadline YYYY-MM-DD (optional)"));
-        System.out.println(controller.submitRequest("job.import", input));
+        print("job.import", input);
     }
 
     private void addApplication() {
@@ -69,14 +71,18 @@ public class JobSearchCLI {
         input.put("jobId", ask("Job id (example J01)"));
         input.put("submissionDate", ask("Submission date YYYY-MM-DD"));
         input.put("status", ask("Status [SAVED/APPLIED/INTERVIEW/OFFER/ACCEPTED/REJECTED/WITHDRAWN]"));
-        System.out.println(controller.submitRequest("application.add", input));
+        print("application.add", input);
     }
 
     private void updateApplication() {
         Map<String, String> input = new LinkedHashMap<>();
         input.put("applicationId", ask("Application id (example A01)"));
         input.put("status", ask("New status"));
-        System.out.println(controller.submitRequest("application.update", input));
+        print("application.update", input);
+    }
+
+    private void print(String action, Map<String, String> input) {
+        System.out.println(controller.submitRequest(action, input));
     }
 
     private String ask(String label) {
@@ -89,6 +95,8 @@ public class JobSearchCLI {
         System.out.println("profile show       - display saved profile");
         System.out.println("job import         - import a job posting");
         System.out.println("job list           - list imported jobs");
+        System.out.println("job gaps           - compare profile skills with a reviewed job analysis");
+        System.out.println("job match          - rank reviewed jobs using a Strategy implementation");
         System.out.println("application add    - track a job application");
         System.out.println("application update - update application status");
         System.out.println("application list   - list tracked applications");

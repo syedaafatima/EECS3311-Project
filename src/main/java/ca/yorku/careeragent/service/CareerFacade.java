@@ -4,18 +4,29 @@ import ca.yorku.careeragent.domain.Application;
 import ca.yorku.careeragent.domain.CandidateProfile;
 import ca.yorku.careeragent.domain.Job;
 import ca.yorku.careeragent.persistence.Repository;
+import ca.yorku.careeragent.strategy.RequiredSkillMatching;
+import ca.yorku.careeragent.strategy.WeightedMatching;
 
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 /** Facade that coordinates application workflows from the Stage 1 design. */
 public class CareerFacade {
     private final Repository repository;
+    private final ToolManager toolManager;
 
     public CareerFacade(Repository repository) {
+        this(repository, new ToolManager(repository));
+    }
+
+    public CareerFacade(Repository repository, ToolManager toolManager) {
         this.repository = repository;
+        this.toolManager = toolManager;
     }
 
     public CandidateProfile updateProfile(String name, String educationLevel, String experience,
@@ -72,5 +83,32 @@ public class CareerFacade {
 
     public List<Application> listApplications() {
         return repository.listApplications();
+    }
+
+    public Map<String, List<String>> identifyGaps(String jobId) {
+        return toolManager.compareSkills(jobId);
+    }
+
+    public Map<Job, Double> matchJobs(String strategyName) {
+        if ("required".equalsIgnoreCase(strategyName)) {
+            toolManager.setMatchingStrategy(new RequiredSkillMatching());
+        } else if ("weighted".equalsIgnoreCase(strategyName) || strategyName == null || strategyName.isBlank()) {
+            toolManager.setMatchingStrategy(new WeightedMatching());
+        } else {
+            throw new IllegalArgumentException("Matching strategy must be 'weighted' or 'required'.");
+        }
+
+        List<Map.Entry<Job, Double>> scored = repository.listJobs().stream()
+                .filter(Job::isAnalyzed)
+                .map(job -> Map.entry(job, toolManager.calculateMatch(job.getId())))
+                .sorted(Map.Entry.<Job, Double>comparingByValue(Comparator.reverseOrder()))
+                .toList();
+
+        if (scored.isEmpty()) {
+            throw new IllegalArgumentException("No analyzed jobs are available for matching.");
+        }
+        Map<Job, Double> ranked = new LinkedHashMap<>();
+        scored.forEach(entry -> ranked.put(entry.getKey(), entry.getValue()));
+        return ranked;
     }
 }
