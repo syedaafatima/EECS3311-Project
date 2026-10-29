@@ -3,8 +3,10 @@ package ca.yorku.careeragent.controller;
 import ca.yorku.careeragent.domain.Application;
 import ca.yorku.careeragent.domain.CandidateProfile;
 import ca.yorku.careeragent.domain.Job;
+import ca.yorku.careeragent.domain.Resume;
 import ca.yorku.careeragent.service.CareerFacade;
 
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedHashSet;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 /** Routes GUI/CLI requests to the shared CareerFacade. */
 public class AgentController {
     private final CareerFacade facade;
+    private Resume pendingResume;
 
     public AgentController(CareerFacade facade) {
         this.facade = facade;
@@ -26,6 +29,17 @@ public class AgentController {
                 case "profile.update" -> updateProfile(input);
                 case "profile.show" -> facade.getProfile().map(CandidateProfile::toString)
                         .orElse("No candidate profile has been saved yet.");
+                case "resume.preview" -> previewResume(input);
+                case "resume.paste" -> previewResumeText(input);
+                case "resume.import" -> confirmResume(input);
+                case "resume.cancel" -> { pendingResume = null; yield "Resume import cancelled."; }
+                case "resume.list" -> facade.listResumes().stream()
+                        .map(r -> r.getId() + " | " + r.getOriginalPath())
+                        .collect(Collectors.collectingAndThen(Collectors.joining(System.lineSeparator()),
+                                result -> result.isEmpty() ? "No resumes have been imported yet." : result));
+                case "resume.show" -> facade.listResumes().stream()
+                        .filter(r -> r.getId().equals(input.get("resumeId"))).findFirst()
+                        .map(Resume::toString).orElse("No matching resume found.");
                 case "job.import" -> importJob(input);
                 case "job.list" -> listJobs();
                 case "application.add" -> addApplication(input);
@@ -38,6 +52,30 @@ public class AgentController {
         } catch (IllegalArgumentException | IllegalStateException e) {
             return "ERROR: " + e.getMessage();
         }
+    }
+
+    private String previewResume(Map<String, String> input) {
+        pendingResume = null;
+        String path = input.get("path");
+        if (path == null || path.isBlank()) throw new IllegalArgumentException("Resume path is required.");
+        pendingResume = facade.previewResume(Path.of(path));
+        return "Resume preview (not saved):" + System.lineSeparator() + pendingResume;
+    }
+
+    private String previewResumeText(Map<String, String> input) {
+        pendingResume = null;
+        pendingResume = facade.previewResumeText(input.get("text"));
+        return "Resume preview (not saved):" + System.lineSeparator() + pendingResume;
+    }
+
+    private String confirmResume(Map<String, String> input) {
+        if (!"yes".equalsIgnoreCase(input.get("confirmed"))) {
+            pendingResume = null;
+            return "Resume import cancelled.";
+        }
+        Resume saved = facade.importResume(pendingResume);
+        pendingResume = null;
+        return "Resume saved: " + saved.getId();
     }
 
     private String updateProfile(Map<String, String> input) {
