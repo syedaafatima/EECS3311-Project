@@ -10,21 +10,47 @@ final class JsonSupport {
 
     static String quote(String value) {
         if (value == null) return "null";
-        return "\"" + value
-                .replace("\\", "\\\\")
-                .replace("\"", "\\\"")
-                .replace("\n", "\\n")
-                .replace("\r", "\\r")
-                .replace("\t", "\\t") + "\"";
+        StringBuilder out = new StringBuilder("\"");
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            switch (c) {
+                case '\\' -> out.append("\\\\");
+                case '"' -> out.append("\\\"");
+                case '\n' -> out.append("\\n");
+                case '\r' -> out.append("\\r");
+                case '\t' -> out.append("\\t");
+                default -> {
+                    if (c < 0x20) out.append(String.format("\\u%04x", (int) c));
+                    else out.append(c);
+                }
+            }
+        }
+        return out.append('"').toString();
     }
 
     static String stringField(String json, String key) {
-        Pattern p = Pattern.compile("\\\"" + Pattern.quote(key)
-                + "\\\"\\s*:\\s*(null|\\\"((?:\\\\.|[^\\\"\\\\])*)\\\")");
-        Matcher m = p.matcher(json);
-        if (!m.find()) return null;
-        if ("null".equals(m.group(1))) return null;
-        return unescape(m.group(2));
+        Pattern field = Pattern.compile("\"" + Pattern.quote(key) + "\"\\s*:\\s*");
+        Matcher match = field.matcher(json);
+        if (!match.find()) return null;
+        int start = match.end();
+        if (json.startsWith("null", start)) return null;
+        if (start >= json.length() || json.charAt(start) != '"') {
+            throw new IllegalArgumentException("Expected a JSON string for " + key + ".");
+        }
+
+        // Scan iteratively: a repeated regex group over a full resume can overflow the stack.
+        boolean escaped = false;
+        for (int i = start + 1; i < json.length(); i++) {
+            char c = json.charAt(i);
+            if (escaped) {
+                escaped = false;
+            } else if (c == '\\') {
+                escaped = true;
+            } else if (c == '"') {
+                return unescape(json.substring(start + 1, i));
+            }
+        }
+        throw new IllegalArgumentException("Unterminated JSON string for " + key + ".");
     }
 
     static List<String> stringArrayField(String json, String key) {
@@ -56,6 +82,11 @@ final class JsonSupport {
             char c = value.charAt(i);
             if (escaped) {
                 switch (c) {
+                    case 'u' -> {
+                        if (i + 4 >= value.length()) throw new IllegalArgumentException("Invalid JSON escape.");
+                        out.append((char) Integer.parseInt(value.substring(i + 1, i + 5), 16));
+                        i += 4;
+                    }
                     case 'n' -> out.append('\n');
                     case 'r' -> out.append('\r');
                     case 't' -> out.append('\t');

@@ -3,6 +3,7 @@ package ca.yorku.careeragent.persistence;
 import ca.yorku.careeragent.domain.Application;
 import ca.yorku.careeragent.domain.CandidateProfile;
 import ca.yorku.careeragent.domain.Job;
+import ca.yorku.careeragent.domain.Resume;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -150,6 +151,71 @@ public class Repository {
                 .mapToInt(id -> Integer.parseInt(id.substring(1)))
                 .max().orElse(0);
         return String.format("A%02d", max + 1);
+    }
+
+    /** Each confirmed import is a separate version; failed writes cannot replace older resumes. */
+    public void save(Resume resume) {
+        if (resume == null || !resume.hasText()) {
+            throw new IllegalArgumentException("Cannot save a resume without usable text.");
+        }
+        String json = "{\n"
+                + "  \"id\": " + JsonSupport.quote(resume.getId()) + ",\n"
+                + "  \"originalPath\": " + JsonSupport.quote(resume.getOriginalPath()) + ",\n"
+                + "  \"text\": " + JsonSupport.quote(resume.getText()) + ",\n"
+                + "  \"checksum\": " + JsonSupport.quote(resume.getChecksum()) + "\n}\n";
+        Path directory = dataDirectory.resolve("resumes");
+        Path temporary = null;
+        try {
+            Files.createDirectories(directory);
+            Path destination = directory.resolve(resume.getId() + ".json");
+            if (Files.exists(destination)) {
+                if (findResume(resume.getId()).orElseThrow().getChecksum().equals(resume.getChecksum())
+                        && read(destination).equals(json)) return;
+                throw new IllegalArgumentException("A different resume already uses this ID.");
+            }
+            temporary = Files.createTempFile(directory, ".import-", ".tmp");
+            Files.writeString(temporary, json, StandardCharsets.UTF_8);
+            try {
+                Files.move(temporary, destination, java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+            } catch (java.nio.file.AtomicMoveNotSupportedException e) {
+                Files.move(temporary, destination);
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not save imported resume.", e);
+        } finally {
+            if (temporary != null) {
+                try { Files.deleteIfExists(temporary); }
+                catch (IOException e) { temporary.toFile().deleteOnExit(); }
+            }
+        }
+    }
+
+    public Optional<Resume> findResume(String id) {
+        if (id == null || !id.matches("R-[0-9a-f-]{36}")) {
+            throw new IllegalArgumentException("Invalid resume ID.");
+        }
+        Path file = dataDirectory.resolve("resumes").resolve(id + ".json");
+        return Files.exists(file) ? Optional.of(readResume(file)) : Optional.empty();
+    }
+
+    public List<Resume> listResumes() {
+        Path directory = dataDirectory.resolve("resumes");
+        if (!Files.exists(directory)) return List.of();
+        try (var paths = Files.list(directory)) {
+            return paths.filter(p -> p.getFileName().toString().endsWith(".json"))
+                    .sorted().map(this::readResume).toList();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not list resumes.", e);
+        }
+    }
+
+    private Resume readResume(Path file) {
+        String json = read(file);
+        Resume resume = new Resume(JsonSupport.stringField(json, "id"),
+                JsonSupport.stringField(json, "originalPath"), JsonSupport.stringField(json, "text"),
+                JsonSupport.stringField(json, "checksum"));
+        if (!resume.hasText()) throw new IllegalStateException("Stored resume has no usable text.");
+        return resume;
     }
 
     private Application readApplication(Path file) {

@@ -7,6 +7,7 @@ import ca.yorku.careeragent.service.CareerFacade;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /** Command-line view for the same application workflows used by the GUI. */
@@ -26,22 +27,66 @@ public class JobSearchCLI {
             System.out.print("career-agent> ");
             if (!scanner.hasNextLine()) break;
             String command = scanner.nextLine().trim();
-            switch (command) {
-                case "help" -> printHelp();
-                case "profile edit" -> editProfile();
-                case "profile show" -> print("profile.show", Map.of());
-                case "job import" -> importJob();
-                case "job list" -> print("job.list", Map.of());
-                case "job gaps" -> print("job.gaps", Map.of("jobId", ask("Job id")));
-                case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
-                case "application add" -> addApplication();
-                case "application update" -> updateApplication();
-                case "application list" -> print("application.list", Map.of());
-                case "exit" -> { return; }
-                case "" -> { }
-                default -> System.out.println("Unknown command. Type 'help'.");
+            try {
+                if (command.startsWith("resume import ")) {
+                    importResume(command.substring("resume import ".length()).trim());
+                    continue;
+                }
+                switch (command) {
+                    case "help" -> printHelp();
+                    case "profile edit" -> editProfile();
+                    case "profile show" -> print("profile.show", Map.of());
+                    case "resume import" -> importResume(ask("PDF/DOCX resume path"));
+                    case "resume paste" -> pasteResume();
+                    case "resume list" -> print("resume.list", Map.of());
+                    case "resume show" -> print("resume.show", Map.of("resumeId", ask("Resume id")));
+                    case "job import" -> importJob();
+                    case "job list" -> print("job.list", Map.of());
+                    case "job gaps" -> print("job.gaps", Map.of("jobId", ask("Job id")));
+                    case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
+                    case "application add" -> addApplication();
+                    case "application update" -> updateApplication();
+                    case "application list" -> print("application.list", Map.of());
+                    case "exit" -> { return; }
+                    case "" -> { }
+                    default -> System.out.println("Unknown command. Type 'help'.");
+                }
+            } catch (NoSuchElementException e) {
+                controller.submitRequest("resume.cancel", Map.of());
+                System.out.println("Input ended. Current command cancelled.");
+                return;
             }
         }
+    }
+
+    private void importResume(String path) {
+        if (path.length() >= 2 && path.startsWith("\"") && path.endsWith("\"")) {
+            path = path.substring(1, path.length() - 1);
+        }
+        reviewResume("resume.preview", Map.of("path", path));
+    }
+
+    private void pasteResume() {
+        System.out.println("Paste resume text; finish with a line containing only .");
+        StringBuilder text = new StringBuilder();
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            if (line.equals(".")) {
+                reviewResume("resume.paste", Map.of("text", text.toString()));
+                return;
+            }
+            text.append(line).append('\n');
+        }
+        print("resume.cancel", Map.of());
+    }
+
+    private void reviewResume(String action, Map<String, String> input) {
+        String preview = controller.submitRequest(action, input);
+        System.out.println(preview);
+        if (preview.startsWith("ERROR:")) return;
+        System.out.print("Save this resume? [yes/no]: ");
+        String confirmation = scanner.hasNextLine() ? scanner.nextLine().trim() : "no";
+        print("resume.import", Map.of("confirmed", confirmation));
     }
 
     private void editProfile() {
@@ -91,6 +136,10 @@ public class JobSearchCLI {
     }
 
     private void printHelp() {
+        System.out.println("resume import [path] - preview PDF/DOCX and confirm import");
+        System.out.println("resume paste       - paste text from a scanned resume and review");
+        System.out.println("resume list        - list saved resume versions");
+        System.out.println("resume show        - display a saved resume's text");
         System.out.println("profile edit       - create/update candidate profile");
         System.out.println("profile show       - display saved profile");
         System.out.println("job import         - import a job posting");
