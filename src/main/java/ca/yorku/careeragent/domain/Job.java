@@ -14,6 +14,7 @@ public class Job {
     private String salary;
     private String location;
     private LocalDate deadline;
+    private final java.util.List<Requirement> analysisDetails = new java.util.ArrayList<>();
     private final Set<String> requiredSkills = new LinkedHashSet<>();
     private final Set<String> preferredSkills = new LinkedHashSet<>();
 
@@ -27,13 +28,20 @@ public class Job {
             String salary, String location, LocalDate deadline) {
         this.title = requireText(title, "Job title");
         this.company = requireText(company, "Company");
-        this.description = requireText(description, "Job description");
+        String updatedDescription = requireText(description, "Job description");
+        if (!Objects.equals(this.description, updatedDescription)) {
+            requiredSkills.clear();
+            preferredSkills.clear();
+            analysisDetails.clear();
+        }
+        this.description = updatedDescription;
         this.salary = Objects.requireNonNullElse(salary, "").trim();
         this.location = Objects.requireNonNullElse(location, "").trim();
         this.deadline = deadline;
     }
 
     public void updateAnalysis(Set<String> requiredSkills, Set<String> preferredSkills) {
+        analysisDetails.clear();
         this.requiredSkills.clear();
         this.preferredSkills.clear();
         if (requiredSkills != null) {
@@ -45,6 +53,18 @@ public class Job {
                     .filter(s -> !s.isEmpty()).forEach(this.preferredSkills::add);
         }
     }
+
+    public void updateReviewedAnalysis(java.util.List<Requirement> requirements) {
+        updateAnalysis(Set.of(), Set.of());
+        analysisDetails.addAll(requirements);
+        for (Requirement item : requirements) {
+            if (item.kind() == Requirement.Kind.REQUIRED) requiredSkills.add(item.text());
+            if (item.kind() == Requirement.Kind.PREFERRED) preferredSkills.add(item.text());
+        }
+        preferredSkills.removeIf(s -> requiredSkills.stream().anyMatch(s::equalsIgnoreCase));
+    }
+
+    public java.util.List<Requirement> getAnalysisDetails() { return java.util.List.copyOf(analysisDetails); }
 
     public boolean isAnalyzed() {
         return !requiredSkills.isEmpty() || !preferredSkills.isEmpty();

@@ -71,6 +71,8 @@ public class Repository {
                 "  \"location\": " + JsonSupport.quote(job.getLocation()) + ",\n" +
                 "  \"deadline\": " + deadline + ",\n" +
                 "  \"requiredSkills\": " + JsonSupport.arrayOfStrings(job.getRequiredSkills()) + ",\n" +
+                "  \"analysisDetails\": " + ca.yorku.careeragent.llm.Json.encode(job.getAnalysisDetails().stream()
+                        .map(r -> java.util.Map.of("kind", r.kind().name(), "text", r.text(), "evidence", r.evidence())).toList()) + ",\n" +
                 "  \"preferredSkills\": " + JsonSupport.arrayOfStrings(job.getPreferredSkills()) + "\n" +
                 "}\n";
         write(jobsDirectory.resolve(job.getId() + ".json"), json);
@@ -245,6 +247,17 @@ public class Repository {
         Set<String> required = new LinkedHashSet<>(JsonSupport.stringArrayField(json, "requiredSkills"));
         Set<String> preferred = new LinkedHashSet<>(JsonSupport.stringArrayField(json, "preferredSkills"));
         job.updateAnalysis(required, preferred);
+        Object details = ca.yorku.careeragent.llm.Json.object(ca.yorku.careeragent.llm.Json.parse(json)).get("analysisDetails");
+        if (details != null && !ca.yorku.careeragent.llm.Json.array(details).isEmpty()) {
+            List<ca.yorku.careeragent.domain.Requirement> restored = new ArrayList<>();
+            for (Object value : ca.yorku.careeragent.llm.Json.array(details)) {
+                var item = ca.yorku.careeragent.llm.Json.object(value);
+                restored.add(new ca.yorku.careeragent.domain.Requirement(
+                        ca.yorku.careeragent.domain.Requirement.Kind.valueOf(ca.yorku.careeragent.llm.Json.text(item.get("kind"))),
+                        ca.yorku.careeragent.llm.Json.text(item.get("text")), ca.yorku.careeragent.llm.Json.text(item.get("evidence"))));
+            }
+            job.updateReviewedAnalysis(restored);
+        }
         return job;
     }
 

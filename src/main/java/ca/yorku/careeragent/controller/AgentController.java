@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 /** Routes GUI/CLI requests to the shared CareerFacade. */
 public class AgentController {
     private final CareerFacade facade;
+    private ca.yorku.careeragent.domain.JobAnalysis pendingAnalysis;
     private Resume pendingResume;
     private java.util.List<ca.yorku.careeragent.domain.SkillProposal> pendingSkills;
 
@@ -44,6 +45,12 @@ public class AgentController {
                 case "resume.show" -> facade.listResumes().stream()
                         .filter(r -> r.getId().equals(input.get("resumeId"))).findFirst()
                         .map(Resume::toString).orElse("No matching resume found.");
+                case "job.analyze" -> analyzeJob(input);
+                case "job.analysis.approve" -> approveJobAnalysis(input);
+                case "job.analysis.cancel" -> { pendingAnalysis = null; yield "Job analysis cancelled."; }
+                case "job.requirements" -> "Manual requirements saved: " + facade.saveManualRequirements(
+                        input.get("jobId"), csv(input.get("required")), csv(input.get("preferred")));
+                case "job.show" -> showJob(input.get("jobId"));
                 case "job.import" -> importJob(input);
                 case "job.list" -> listJobs();
                 case "application.add" -> addApplication(input);
@@ -89,6 +96,39 @@ public class AgentController {
             catch (NumberFormatException e) { throw new IllegalArgumentException("Select comma-separated proposal numbers."); }
         }
         return selected;
+    }
+
+    private String analyzeJob(Map<String, String> input) {
+        pendingAnalysis = null;
+        pendingAnalysis = facade.analyzeJob(input.get("jobId"));
+        if (pendingAnalysis.requirements().isEmpty()) return "No evidence-backed requirements found. Use job requirements for manual entry.";
+        StringBuilder out = new StringBuilder("Proposed requirements (not saved; select numbers to approve):");
+        for (int i = 0; i < pendingAnalysis.requirements().size(); i++) {
+            var item = pendingAnalysis.requirements().get(i);
+            out.append(System.lineSeparator()).append(i + 1).append(". ").append(item.kind()).append(": ")
+                    .append(item.text()).append(" | Evidence: ").append(item.evidence());
+        }
+        return out.toString();
+    }
+
+    private String approveJobAnalysis(Map<String, String> input) {
+        if (!"yes".equalsIgnoreCase(input.get("confirmed"))) {
+            pendingAnalysis = null;
+            return "Job analysis cancelled.";
+        }
+        Job job = facade.approveJobAnalysis(pendingAnalysis, proposalNumbers(input.get("selected")));
+        pendingAnalysis = null;
+        return "Reviewed job analysis saved: " + job.getId();
+    }
+
+    private String showJob(String jobId) {
+        Job job = facade.getJob(jobId);
+        return job + System.lineSeparator() + job.getDescription() + System.lineSeparator()
+                + "Salary: " + (job.getSalary().isBlank() ? "Unknown" : job.getSalary())
+                + " | Deadline: " + (job.getDeadline() == null ? "Unknown" : job.getDeadline())
+                + System.lineSeparator() + "Required skills: " + job.getRequiredSkills()
+                + System.lineSeparator() + "Preferred skills: " + job.getPreferredSkills()
+                + System.lineSeparator() + "Reviewed evidence: " + job.getAnalysisDetails();
     }
 
     private String previewResume(Map<String, String> input) {

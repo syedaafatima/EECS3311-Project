@@ -171,6 +171,37 @@ public class CareerFacade {
         return job;
     }
 
+    public ca.yorku.careeragent.domain.JobAnalysis analyzeJob(String jobId) {
+        return agent.analyzeJob(jobId);
+    }
+
+    public Job approveJobAnalysis(ca.yorku.careeragent.domain.JobAnalysis preview, Set<Integer> selected) {
+        if (preview == null || selected.isEmpty()) throw new IllegalArgumentException("Select requirements from an analysis preview first.");
+        Job job = toolManager.readJob(preview.jobId());
+        if (!job.getDescription().equals(preview.sourceDescription())) {
+            throw new IllegalArgumentException("The job description changed. Analyze it again before approving.");
+        }
+        List<ca.yorku.careeragent.domain.Requirement> accepted = new java.util.ArrayList<>();
+        for (int index : selected) {
+            if (index < 1 || index > preview.requirements().size()) throw new IllegalArgumentException("Invalid requirement number.");
+            accepted.add(preview.requirements().get(index - 1));
+        }
+        job.updateReviewedAnalysis(accepted);
+        repository.save(job);
+        return job;
+    }
+
+    /** Explicit manual fallback; these entries are candidate-supplied, not claimed as AI evidence. */
+    public Job saveManualRequirements(String jobId, Set<String> required, Set<String> preferred) {
+        if (required.isEmpty() && preferred.isEmpty()) throw new IllegalArgumentException("Enter at least one skill requirement.");
+        Job job = toolManager.readJob(jobId);
+        job.updateAnalysis(required, preferred);
+        repository.save(job);
+        return job;
+    }
+
+    public Job getJob(String jobId) { return toolManager.readJob(jobId); }
+
     public List<Job> listJobs() {
         return repository.listJobs();
     }

@@ -78,3 +78,23 @@ controller. `OpenAIAdapter` translates the OpenAI HTTP API (Adapter); saved reco
 change only after candidate review through the Facade/MVC workflow. No model response
 is treated as an executable tool instruction. The automated suite uses fake model
 responses and a local HTTP server, never a real key or paid generation.
+
+## F05 — Reviewed job analysis
+
+After `job import`, run `job analyze`, consent to sending the description to OpenAI,
+and select a job ID. Review and accept only the numbered requirements you want to
+save. Required/preferred skills affect matching; education, experience, and vague
+(`UNCERTAIN`) requirements retain their evidence but do not become scored skills.
+Unsupported excerpts are discarded. `job show` displays saved evidence and unknown
+salary/deadline values. `job requirements` is an explicit manual fallback.
+
+F05 uses `CareerAgent.analyzeJob` with job-specific retrieval/schema validation,
+separate from `extractSkills`' resume-specific branch. `JobAnalysis` captures the
+source description; `CareerFacade.approveJobAnalysis` rejects stale previews.
+Changing a posting's description invalidates its old reviewed requirements. Saved
+analysis is reloaded by `Repository`, making the existing `job gaps` and `job match`
+commands usable from ordinary imported jobs without modifying JSON by hand.
+These checks validate literal evidence, not the model's interpretation of a sentence:
+the user must still review whether a skill is actually required or merely mentioned.
+F06/F07 currently provide deterministic comparisons/scores; their planned AI
+explanations are still outstanding.

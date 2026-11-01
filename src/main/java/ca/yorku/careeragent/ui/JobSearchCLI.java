@@ -42,6 +42,11 @@ public class JobSearchCLI {
                     case "resume list" -> print("resume.list", Map.of());
                     case "resume show" -> print("resume.show", Map.of("resumeId", ask("Resume id")));
                     case "job import" -> importJob();
+                    case "job analyze" -> analyzeJob();
+                    case "job requirements" -> print("job.requirements", Map.of("jobId", ask("Job id"),
+                            "required", ask("Reviewed required skills (comma-separated)"),
+                            "preferred", ask("Reviewed preferred skills (comma-separated)")));
+                    case "job show" -> print("job.show", Map.of("jobId", ask("Job id")));
                     case "job list" -> print("job.list", Map.of());
                     case "job gaps" -> print("job.gaps", Map.of("jobId", ask("Job id")));
                     case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
@@ -55,6 +60,7 @@ public class JobSearchCLI {
             } catch (NoSuchElementException e) {
                 controller.submitRequest("resume.cancel", Map.of());
                 controller.submitRequest("skills.cancel", Map.of());
+                controller.submitRequest("job.analysis.cancel", Map.of());
                 System.out.println("Input ended. Current command cancelled.");
                 return;
             }
@@ -99,6 +105,16 @@ public class JobSearchCLI {
         if (!preview.startsWith("Proposed skills")) return;
         String selected = ask("Skill numbers to accept (comma-separated, blank to cancel)");
         print("skills.approve", Map.of("selected", selected, "confirmed", selected.isBlank() ? "no" : "yes"));
+    }
+
+    private void analyzeJob() {
+        System.out.println("This sends the saved job description to the configured LLM provider.");
+        if (!"yes".equalsIgnoreCase(ask("Continue? [yes/no]"))) return;
+        String preview = controller.submitRequest("job.analyze", Map.of("jobId", ask("Job id")));
+        System.out.println(preview);
+        if (!preview.startsWith("Proposed requirements")) return;
+        String selected = ask("Requirement numbers to accept (comma-separated, blank to cancel)");
+        print("job.analysis.approve", Map.of("selected", selected, "confirmed", selected.isBlank() ? "no" : "yes"));
     }
 
     private void editProfile() {
@@ -156,6 +172,9 @@ public class JobSearchCLI {
         System.out.println("profile edit       - create/update candidate profile");
         System.out.println("profile show       - display saved profile");
         System.out.println("job import         - import a job posting");
+        System.out.println("job analyze        - propose source-backed requirements; review before saving");
+        System.out.println("job requirements   - manually enter reviewed skill requirements");
+        System.out.println("job show           - show posting, reviewed requirements, and evidence");
         System.out.println("job list           - list imported jobs");
         System.out.println("job gaps           - compare profile skills with a reviewed job analysis");
         System.out.println("job match          - rank reviewed jobs using a Strategy implementation");
