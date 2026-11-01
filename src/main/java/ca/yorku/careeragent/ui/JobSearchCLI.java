@@ -38,6 +38,7 @@ public class JobSearchCLI {
                     case "profile show" -> print("profile.show", Map.of());
                     case "resume import" -> importResume(ask("PDF/DOCX resume path"));
                     case "resume paste" -> pasteResume();
+                    case "resume extract-skills" -> extractSkills();
                     case "resume list" -> print("resume.list", Map.of());
                     case "resume show" -> print("resume.show", Map.of("resumeId", ask("Resume id")));
                     case "job import" -> importJob();
@@ -53,6 +54,7 @@ public class JobSearchCLI {
                 }
             } catch (NoSuchElementException e) {
                 controller.submitRequest("resume.cancel", Map.of());
+                controller.submitRequest("skills.cancel", Map.of());
                 System.out.println("Input ended. Current command cancelled.");
                 return;
             }
@@ -87,6 +89,16 @@ public class JobSearchCLI {
         System.out.print("Save this resume? [yes/no]: ");
         String confirmation = scanner.hasNextLine() ? scanner.nextLine().trim() : "no";
         print("resume.import", Map.of("confirmed", confirmation));
+    }
+
+    private void extractSkills() {
+        System.out.println("This sends the saved resume text to the configured LLM provider.");
+        if (!"yes".equalsIgnoreCase(ask("Continue? [yes/no]"))) return;
+        String preview = controller.submitRequest("resume.extract-skills", Map.of("resumeId", ask("Resume id")));
+        System.out.println(preview);
+        if (!preview.startsWith("Proposed skills")) return;
+        String selected = ask("Skill numbers to accept (comma-separated, blank to cancel)");
+        print("skills.approve", Map.of("selected", selected, "confirmed", selected.isBlank() ? "no" : "yes"));
     }
 
     private void editProfile() {
@@ -138,6 +150,7 @@ public class JobSearchCLI {
     private void printHelp() {
         System.out.println("resume import [path] - preview PDF/DOCX and confirm import");
         System.out.println("resume paste       - paste text from a scanned resume and review");
+        System.out.println("resume extract-skills - propose evidence-backed skills using the LLM; review before saving");
         System.out.println("resume list        - list saved resume versions");
         System.out.println("resume show        - display a saved resume's text");
         System.out.println("profile edit       - create/update candidate profile");

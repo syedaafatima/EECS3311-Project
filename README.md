@@ -55,3 +55,26 @@ persistence failure, long resume text loaded after restart, and interrupted CLI
 input. The long-text and interrupted-input checks reproduce defects found and
 fixed during review. `mvn package` builds the application JAR; use `mvn exec:java`
 to launch with the required runtime dependencies.
+
+## F03 — Evidence-backed resume skills
+
+Copy `.env.example` to `.env` in the repository root, then replace the placeholder
+with your own OpenAI API key locally. `OPENAI_MODEL` defaults to `gpt-4.1-mini`.
+Environment variables override `.env`. Both files and environment variables are
+read only when an AI feature is invoked; profile/import/tracking work without a key.
+`.env` and local data are ignored by Git. Never put credentials in screenshots or videos.
+
+In the CLI, create a profile, import/paste a resume, then use `resume list` to obtain
+its ID. Run `resume extract-skills`, consent to sending that resume's text to OpenAI,
+and enter its ID. Review the numbered proposals and their verbatim evidence; enter
+only the numbers you accept. A blank selection cancels. Unsupported proposals are
+removed, duplicates collapse, and approved skills merge with existing profile skills.
+Use `profile edit` to enter or edit skills manually if generation fails. Source text
+is limited to 60,000 characters for AI tasks; larger resumes remain available locally.
+
+`CareerAgent` retrieves through `ToolManager`, invokes the provider-independent
+`LLMClient`, checks evidence against the source, and returns proposals to the shared
+controller. `OpenAIAdapter` translates the OpenAI HTTP API (Adapter); saved records
+change only after candidate review through the Facade/MVC workflow. No model response
+is treated as an executable tool instruction. The automated suite uses fake model
+responses and a local HTTP server, never a real key or paid generation.

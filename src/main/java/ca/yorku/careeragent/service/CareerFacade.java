@@ -31,6 +31,7 @@ public class CareerFacade {
     private final Repository repository;
     private final ToolManager toolManager;
     private final ResumeParser parser;
+    private final CareerAgent agent;
 
     public CareerFacade(Repository repository) {
         this(repository, new ToolManager(repository));
@@ -41,9 +42,15 @@ public class CareerFacade {
     }
 
     public CareerFacade(Repository repository, ToolManager toolManager, ResumeParser parser) {
+        this(repository, toolManager, parser, new ca.yorku.careeragent.llm.OpenAIAdapter());
+    }
+
+    public CareerFacade(Repository repository, ToolManager toolManager, ResumeParser parser,
+            ca.yorku.careeragent.llm.LLMClient llm) {
         this.repository = java.util.Objects.requireNonNull(repository);
         this.toolManager = java.util.Objects.requireNonNull(toolManager);
         this.parser = java.util.Objects.requireNonNull(parser);
+        this.agent = new CareerAgent(toolManager, llm);
     }
 
     public CandidateProfile updateProfile(String name, String educationLevel, String experience,
@@ -121,6 +128,28 @@ public class CareerFacade {
     }
 
     public List<Resume> listResumes() { return repository.listResumes(); }
+
+    public List<ca.yorku.careeragent.domain.SkillProposal> extractSkills(String resumeId) {
+        return agent.extractSkills(resumeId);
+    }
+
+    /** Merge only selected, evidence-backed proposals; existing approved skills remain intact. */
+    public CandidateProfile approveSkills(List<ca.yorku.careeragent.domain.SkillProposal> proposals,
+            Set<Integer> selected) {
+        if (proposals == null || selected.isEmpty()) {
+            throw new IllegalArgumentException("Select at least one proposed skill, or cancel.");
+        }
+        CandidateProfile profile = toolManager.readProfile();
+        Set<String> skills = new java.util.TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        skills.addAll(profile.getSkills());
+        for (int index : selected) {
+            if (index < 1 || index > proposals.size()) throw new IllegalArgumentException("Invalid proposal number.");
+            skills.add(proposals.get(index - 1).skill());
+        }
+        profile.updateSkills(skills);
+        repository.save(profile);
+        return profile;
+    }
 
     private void requireProfile() {
         if (repository.loadProfile().isEmpty()) {

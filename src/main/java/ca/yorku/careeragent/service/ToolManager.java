@@ -31,6 +31,11 @@ public class ToolManager {
                 .orElseThrow(() -> new IllegalArgumentException("Candidate profile is required."));
     }
 
+    public ca.yorku.careeragent.domain.Resume readResume(String resumeId) {
+        return repository.findResume(resumeId)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown resume: " + resumeId));
+    }
+
     public Job readJob(String jobId) {
         return repository.findJob(jobId)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown job: " + jobId));

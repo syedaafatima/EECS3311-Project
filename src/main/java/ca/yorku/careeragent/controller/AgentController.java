@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class AgentController {
     private final CareerFacade facade;
     private Resume pendingResume;
+    private java.util.List<ca.yorku.careeragent.domain.SkillProposal> pendingSkills;
 
     public AgentController(CareerFacade facade) {
         this.facade = facade;
@@ -29,6 +30,9 @@ public class AgentController {
                 case "profile.update" -> updateProfile(input);
                 case "profile.show" -> facade.getProfile().map(CandidateProfile::toString)
                         .orElse("No candidate profile has been saved yet.");
+                case "resume.extract-skills" -> extractSkills(input);
+                case "skills.approve" -> approveSkills(input);
+                case "skills.cancel" -> { pendingSkills = null; yield "Skill extraction cancelled."; }
                 case "resume.preview" -> previewResume(input);
                 case "resume.paste" -> previewResumeText(input);
                 case "resume.import" -> confirmResume(input);
@@ -52,6 +56,39 @@ public class AgentController {
         } catch (IllegalArgumentException | IllegalStateException e) {
             return "ERROR: " + e.getMessage();
         }
+    }
+
+    private String extractSkills(Map<String, String> input) {
+        pendingSkills = null;
+        pendingSkills = facade.extractSkills(input.get("resumeId"));
+        if (pendingSkills.isEmpty()) return "No evidence-backed skills found. Use profile edit for manual entry.";
+        StringBuilder out = new StringBuilder("Proposed skills (not saved; select numbers to approve):");
+        for (int i = 0; i < pendingSkills.size(); i++) {
+            var skill = pendingSkills.get(i);
+            out.append(System.lineSeparator()).append(i + 1).append(". ").append(skill.skill())
+                    .append(" | Evidence: ").append(skill.evidence());
+        }
+        return out.toString();
+    }
+
+    private String approveSkills(Map<String, String> input) {
+        if (pendingSkills == null) throw new IllegalArgumentException("Extract skills before approving them.");
+        if (!"yes".equalsIgnoreCase(input.get("confirmed"))) {
+            pendingSkills = null;
+            return "Skill extraction cancelled.";
+        }
+        CandidateProfile profile = facade.approveSkills(pendingSkills, proposalNumbers(input.get("selected")));
+        pendingSkills = null;
+        return "Approved skills saved: " + profile.getSkills();
+    }
+
+    private static Set<Integer> proposalNumbers(String value) {
+        Set<Integer> selected = new LinkedHashSet<>();
+        for (String part : csv(value)) {
+            try { selected.add(Integer.parseInt(part)); }
+            catch (NumberFormatException e) { throw new IllegalArgumentException("Select comma-separated proposal numbers."); }
+        }
+        return selected;
     }
 
     private String previewResume(Map<String, String> input) {
