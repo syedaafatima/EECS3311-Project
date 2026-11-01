@@ -25,9 +25,21 @@ public class AgentController {
         this.facade = facade;
     }
 
+    public void subscribeDeadlines(ca.yorku.careeragent.deadline.DeadlineObserver observer) {
+        facade.subscribeDeadlines(observer);
+    }
+
+    public void unsubscribeDeadlines(ca.yorku.careeragent.deadline.DeadlineObserver observer) {
+        facade.unsubscribeDeadlines(observer);
+    }
+
     public String submitRequest(String action, Map<String, String> input) {
         try {
             return switch (action) {
+                case "deadlines.list" -> facade.listDeadlines().stream().map(Object::toString)
+                        .collect(Collectors.collectingAndThen(Collectors.joining(System.lineSeparator()),
+                                result -> result.isEmpty() ? "No outstanding application deadlines." : result));
+                case "deadlines.check" -> "Upcoming deadlines within 7 days: " + facade.checkDeadlines();
                 case "profile.update" -> updateProfile(input);
                 case "profile.show" -> facade.getProfile().map(CandidateProfile::toString)
                         .orElse("No candidate profile has been saved yet.");

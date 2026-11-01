@@ -32,6 +32,7 @@ public class CareerFacade {
     private final ToolManager toolManager;
     private final ResumeParser parser;
     private final CareerAgent agent;
+    private final ca.yorku.careeragent.deadline.DeadlineManager deadlines;
 
     public CareerFacade(Repository repository) {
         this(repository, new ToolManager(repository));
@@ -51,7 +52,19 @@ public class CareerFacade {
         this.toolManager = java.util.Objects.requireNonNull(toolManager);
         this.parser = java.util.Objects.requireNonNull(parser);
         this.agent = new CareerAgent(toolManager, llm);
+        this.deadlines = new ca.yorku.careeragent.deadline.DeadlineManager(repository);
     }
+
+    public void subscribeDeadlines(ca.yorku.careeragent.deadline.DeadlineObserver observer) {
+        deadlines.subscribe(observer);
+    }
+
+    public void unsubscribeDeadlines(ca.yorku.careeragent.deadline.DeadlineObserver observer) {
+        deadlines.unsubscribe(observer);
+    }
+
+    public List<ca.yorku.careeragent.deadline.DeadlineReminder> listDeadlines() { return deadlines.listDeadlines(); }
+    public int checkDeadlines() { return deadlines.checkDeadlines().size(); }
 
     public CandidateProfile updateProfile(String name, String educationLevel, String experience,
             Set<String> skills, Set<String> interests, String locationPreference) {

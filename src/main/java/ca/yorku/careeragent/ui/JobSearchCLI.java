@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /** Command-line view for the same application workflows used by the GUI. */
-public class JobSearchCLI {
+public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObserver {
     private final AgentController controller;
     private final Scanner scanner;
 
@@ -20,10 +20,23 @@ public class JobSearchCLI {
         this.scanner = scanner;
     }
 
+    @Override public void onDeadline(ca.yorku.careeragent.deadline.DeadlineReminder reminder) {
+        System.out.println("Deadline reminder: " + reminder);
+    }
+
     public void run() {
+        controller.subscribeDeadlines(this);
+        try { runCommands(); }
+        finally { controller.unsubscribeDeadlines(this); }
+    }
+
+    private void runCommands() {
         System.out.println("AI Job Search and Career Agent - CLI");
         System.out.println("Type 'help' for commands.");
         while (true) {
+            // Check on each prompt, without an unmanaged background thread competing for stdin.
+            String deadlineCheck = controller.submitRequest("deadlines.check", Map.of());
+            if (deadlineCheck.startsWith("ERROR:")) System.out.println(deadlineCheck);
             System.out.print("career-agent> ");
             if (!scanner.hasNextLine()) break;
             String command = scanner.nextLine().trim();
@@ -52,6 +65,8 @@ public class JobSearchCLI {
                     case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
                     case "application add" -> addApplication();
                     case "application update" -> updateApplication();
+                    case "deadlines list" -> print("deadlines.list", Map.of());
+                    case "deadlines check" -> print("deadlines.check", Map.of());
                     case "application list" -> print("application.list", Map.of());
                     case "exit" -> { return; }
                     case "" -> { }
@@ -181,6 +196,8 @@ public class JobSearchCLI {
         System.out.println("application add    - track a job application");
         System.out.println("application update - update application status");
         System.out.println("application list   - list tracked applications");
+        System.out.println("deadlines list     - list outstanding, overdue, and unknown deadlines");
+        System.out.println("deadlines check    - check reminders due within seven days (Toronto time)");
         System.out.println("exit               - close the CLI");
     }
 

@@ -98,3 +98,21 @@ These checks validate literal evidence, not the model's interpretation of a sent
 the user must still review whether a skill is actually required or merely mentioned.
 F06/F07 currently provide deterministic comparisons/scores; their planned AI
 explanations are still outstanding.
+
+## F15 — Deadline tracking (Observer)
+
+`deadlines list` displays outstanding jobs, including overdue and unknown deadlines,
+sorted by date. A date is inclusive in `America/Toronto`; it remains due today until
+local midnight, including daylight-saving changes. Untracked jobs and SAVED
+applications are outstanding; APPLIED and later/closed statuses have fulfilled or
+closed the submission task and receive no deadline reminders.
+
+`deadlines check` notifies subscribed views for today through seven days ahead.
+The CLI also checks at each prompt. Past, missing, and distant dates do not notify.
+`DeadlineManager` is the Observer subject, with concrete `subscribe(DeadlineObserver)`,
+`unsubscribe(DeadlineObserver)`, and `checkDeadlines()` operations;
+`DeadlineObserver.onDeadline(DeadlineReminder)` is the callback. Views register only
+while active. Checks deduplicate by job/deadline for the current local day in memory;
+restarting the process allows a fresh reminder. `Clock` injection makes timezone and
+boundary verification independent of the machine's current date. No email or external
+notifications are sent.
