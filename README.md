@@ -6,6 +6,10 @@ EECS3311 Stage 2 implementation of the Stage 1 design.
 
 - Candidate profile creation and updates (F01)
 - PDF/DOCX resume import with preview and confirmation (F02)
+- Evidence-backed LLM resume skill extraction with selective approval (F03)
+- Reviewed LLM job-description analysis and a manual fallback (F05)
+- Toronto deadline tracking and active-view Observer reminders (F15)
+- Swing GUI and CLI using the same controller and persistence
 - Job import and duplicate updates (F04)
 - Reviewed skill comparison and Strategy-based matching
 - Application tracking and status history (F14)
@@ -46,7 +50,8 @@ source/target options because this image omits the symbol archive needed by
 
 ### Verification
 
-`mvn test` currently executes 15 tests with assertions enabled, including the
+The current suite executes 33 tests with assertions enabled. The F02 checkpoint
+introduced 15 of them, including the
 existing Period 1 verification. Coverage includes PDF and DOCX extraction,
 paragraphs and tables, Unicode/control-character persistence, invalid and
 password-protected files, blank/oversized files, misleading file extensions,
@@ -116,3 +121,40 @@ while active. Checks deduplicate by job/deadline for the current local day in me
 restarting the process allows a fresh reminder. `Clock` injection makes timezone and
 boundary verification independent of the machine's current date. No email or external
 notifications are sent.
+
+## GUI and current Stage 2 status
+
+Launch the Swing GUI on a desktop with Java 17+ and Maven 3.9+:
+
+```sh
+mvn compile exec:java -Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI
+```
+
+The default `mvn compile exec:java` starts the CLI. Run from the repository root;
+both interfaces use the same local `data/` directory. Use one interface at a time.
+The GUI offers Skills profile, Resumes, Jobs & matching, and Applications & deadlines
+tabs. Import a resume and review its preview before saving. AI extraction/analysis
+asks before sending text to OpenAI, shows source evidence, and lets you approve
+only selected numbered proposals. AI work runs in a background worker. Deadline
+checks run every minute while the GUI is open, and stop when it closes.
+
+Use `.env.example` as the safe template (`cp .env.example .env` on macOS/Linux;
+`Copy-Item .env.example .env` in PowerShell). Enter your real key only in `.env`.
+No key is needed for manual profile/requirements editing, file parsing, matching,
+tracking, or deadlines. On a machine without a desktop display, use the CLI;
+GUI automated tests exercise Swing forms headlessly.
+
+See [the implementation checkpoint](docs/stage2-progress.md) for all 17 Stage 1
+features, remaining work, pattern roles, verification limitations, and the response
+to Stage 1 feedback. Updated diagrams:
+
+- [Implemented class diagram](Diagrams/stage2_class_diagram.png)
+- [Feature-specific F03 and F05 sequences](Diagrams/stage2_ai_workflows.md)
+- [Concrete Observer sequence](Diagrams/stage2_deadlines.md)
+- [Current GUI/CLI use cases](Diagrams/stage2_use_cases.md)
+
+The original Stage 1 class diagram source/export has refined role labels and
+Observer/Adapter signatures. It describes the planned full system; the separate
+Stage 2 diagram describes the implemented subset. Other original Stage 1 diagrams
+are design references. The Stage 2 report and feature demonstration videos are
+still required; this checkpoint is not a completed final submission.

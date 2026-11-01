@@ -43,7 +43,9 @@ class DeadlineManagerTest {
             Job completed = job(facade, status.name(), today);
             facade.trackApplication(completed.getId(), today, status);
         }
-        var reminders = new DeadlineManager(repo, clock).listDeadlines();
+        DeadlineManager manager = new DeadlineManager(repo, clock);
+        var reminders = manager.listDeadlines();
+        assertEquals(2, manager.checkDeadlines().size()); // Today and exactly seven days, not eight.
         assertEquals(5, reminders.size());
         assertEquals(List.of(DeadlineReminder.State.OVERDUE, DeadlineReminder.State.TODAY,
                 DeadlineReminder.State.UPCOMING, DeadlineReminder.State.UPCOMING, DeadlineReminder.State.UNKNOWN),

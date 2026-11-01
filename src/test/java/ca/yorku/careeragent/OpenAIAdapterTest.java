@@ -69,6 +69,13 @@ class OpenAIAdapterTest {
         assertThrows(IllegalArgumentException.class, () -> adapter.complete("Extract", "x".repeat(60_001)));
     }
 
+    @Test void malformedKeyFailsWithoutEchoingItsValue() {
+        OpenAIAdapter adapter = new OpenAIAdapter(temp.resolve("missing"), Map.of("OPENAI_API_KEY", "sensitive-value\ninvalid"),
+                URI.create("http://127.0.0.1:1/chat"));
+        var error = assertThrows(IllegalStateException.class, () -> adapter.complete("Extract", "Java"));
+        assertFalse(error.getMessage().contains("sensitive-value"));
+    }
+
     @Test void strictJsonRejectsAmbiguousMalformedAndDeeplyNestedData() {
         for (String invalid : new String[]{"{\"a\":1,\"a\":2}", "[1,]", "{} trailing", "\"bad\\z\"",
                 "01", "[".repeat(40) + "0" + "]".repeat(40)}) {

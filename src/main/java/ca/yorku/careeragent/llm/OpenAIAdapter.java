@@ -53,6 +53,9 @@ public final class OpenAIAdapter implements LLMClient {
         if (key.isEmpty() || key.equals("YOUR_LOCAL_API_KEY_HERE")) {
             throw new IllegalStateException("Set OPENAI_API_KEY in local .env or your environment. Manual entry remains available.");
         }
+        if (!key.matches("[\\x21-\\x7e]+")) {
+            throw new IllegalStateException("OPENAI_API_KEY must contain only printable non-space ASCII characters.");
+        }
         String body = Json.encode(Map.of("model", config.getOrDefault("OPENAI_MODEL", "gpt-4.1-mini"),
                 "messages", List.of(Map.of("role", "system", "content", instructions),
                         Map.of("role", "user", "content", context)),

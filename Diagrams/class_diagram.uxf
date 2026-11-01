@@ -10,7 +10,7 @@
       <h>60</h>
     </coordinates>
     <panel_attributes>lt=-
-R1
+controller
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;20.0;140.0;20.0</additional_attributes>
@@ -24,7 +24,7 @@ layer=0</panel_attributes>
       <h>390</h>
     </coordinates>
     <panel_attributes>lt=-
-R2
+controller
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;350.0;60.0;340.0;100.0;340.0;100.0;20.0;140.0;20.0</additional_attributes>
@@ -38,7 +38,7 @@ layer=0</panel_attributes>
       <h>220</h>
     </coordinates>
     <panel_attributes>lt=-
-R3
+facade
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;20.0;60.0;20.0;60.0;180.0;740.0;180.0</additional_attributes>
@@ -52,7 +52,7 @@ layer=0</panel_attributes>
       <h>230</h>
     </coordinates>
     <panel_attributes>lt=-
-R4
+repository
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>740.0;20.0;700.0;20.0;700.0;80.0;60.0;80.0;60.0;180.0;20.0;190.0</additional_attributes>
@@ -66,7 +66,7 @@ layer=0</panel_attributes>
       <h>200</h>
     </coordinates>
     <panel_attributes>lt=-
-R5
+agent
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>140.0;160.0;100.0;160.0;100.0;20.0;20.0;20.0</additional_attributes>
@@ -80,7 +80,7 @@ layer=0</panel_attributes>
       <h>270</h>
     </coordinates>
     <panel_attributes>lt=-
-R6
+tools
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>140.0;20.0;80.0;20.0;80.0;220.0;60.0;220.0;20.0;230.0</additional_attributes>
@@ -94,7 +94,7 @@ layer=0</panel_attributes>
       <h>220</h>
     </coordinates>
     <panel_attributes>lt=-
-R7
+parser
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;180.0;60.0;180.0;60.0;20.0;140.0;20.0</additional_attributes>
@@ -108,7 +108,6 @@ layer=0</panel_attributes>
       <h>200</h>
     </coordinates>
     <panel_attributes>lt=.&gt;&gt;
-R8
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;160.0;20.0;20.0</additional_attributes>
@@ -122,7 +121,7 @@ layer=0</panel_attributes>
       <h>230</h>
     </coordinates>
     <panel_attributes>lt=-
-R9
+tools
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;20.0;20.0;190.0</additional_attributes>
@@ -136,7 +135,7 @@ layer=0</panel_attributes>
       <h>570</h>
     </coordinates>
     <panel_attributes>lt=-
-R10
+llm
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;20.0;60.0;20.0;60.0;520.0;700.0;520.0;740.0;530.0</additional_attributes>
@@ -150,7 +149,6 @@ layer=0</panel_attributes>
       <h>200</h>
     </coordinates>
     <panel_attributes>lt=.&gt;&gt;
-R11
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;160.0;20.0;20.0</additional_attributes>
@@ -164,7 +162,7 @@ layer=0</panel_attributes>
       <h>370</h>
     </coordinates>
     <panel_attributes>lt=-
-R12
+planned run memory
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>140.0;20.0;100.0;20.0;100.0;320.0;60.0;320.0;20.0;330.0</additional_attributes>
@@ -178,7 +176,7 @@ layer=0</panel_attributes>
       <h>400</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
-R13
+strategy
 m1=1
 m2=1
 fontsize=10
@@ -194,7 +192,6 @@ layer=0</panel_attributes>
       <h>410</h>
     </coordinates>
     <panel_attributes>lt=.&gt;&gt;
-R14
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;370.0;60.0;360.0;60.0;20.0;100.0;20.0;140.0;30.0</additional_attributes>
@@ -208,7 +205,6 @@ layer=0</panel_attributes>
       <h>280</h>
     </coordinates>
     <panel_attributes>lt=.&gt;&gt;
-R15
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;240.0;20.0;20.0</additional_attributes>
@@ -222,7 +218,7 @@ layer=0</panel_attributes>
       <h>110</h>
     </coordinates>
     <panel_attributes>lt=-
-R16
+repository
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>140.0;70.0;100.0;60.0;60.0;60.0;60.0;20.0;20.0;30.0</additional_attributes>
@@ -236,7 +232,7 @@ layer=0</panel_attributes>
       <h>470</h>
     </coordinates>
     <panel_attributes>lt=-
-R17
+deadlines
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;20.0;20.0;430.0</additional_attributes>
@@ -250,7 +246,7 @@ layer=0</panel_attributes>
       <h>300</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
-R18
+observers
 m1=1
 m2=0..*
 fontsize=10
@@ -266,7 +262,6 @@ layer=0</panel_attributes>
       <h>1350</h>
     </coordinates>
     <panel_attributes>lt=.&gt;&gt;
-R19
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;20.0;60.0;20.0;60.0;780.0;1300.0;780.0;1300.0;1300.0;1340.0;1310.0</additional_attributes>
@@ -280,7 +275,6 @@ layer=0</panel_attributes>
       <h>1030</h>
     </coordinates>
     <panel_attributes>lt=.&gt;&gt;
-R20
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;30.0;60.0;20.0;80.0;20.0;80.0;440.0;1280.0;440.0;1280.0;980.0;1300.0;980.0;1340.0;990.0</additional_attributes>
@@ -294,7 +288,7 @@ layer=0</panel_attributes>
       <h>630</h>
     </coordinates>
     <panel_attributes>lt=-
-R21
+repository
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>740.0;590.0;700.0;580.0;660.0;580.0;660.0;300.0;60.0;300.0;60.0;20.0;20.0;30.0</additional_attributes>
@@ -308,7 +302,7 @@ layer=0</panel_attributes>
       <h>290</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
-R22
+resume versions
 m1=1
 m2=0..*
 fontsize=10
@@ -324,7 +318,7 @@ layer=0</panel_attributes>
       <h>470</h>
     </coordinates>
     <panel_attributes>lt=-
-R23
+applications
 m1=1
 m2=0..*
 fontsize=10
@@ -340,7 +334,7 @@ layer=0</panel_attributes>
       <h>290</h>
     </coordinates>
     <panel_attributes>lt=-
-R24
+jobId
 m1=0..*
 m2=1
 fontsize=10
@@ -356,7 +350,7 @@ layer=0</panel_attributes>
       <h>970</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
-R25
+sessions
 m1=1
 m2=0..*
 fontsize=10
@@ -372,7 +366,7 @@ layer=0</panel_attributes>
       <h>1010</h>
     </coordinates>
     <panel_attributes>lt=-
-R26
+jobId
 m1=0..*
 m2=1
 fontsize=10
@@ -388,7 +382,7 @@ layer=0</panel_attributes>
       <h>870</h>
     </coordinates>
     <panel_attributes>lt=-
-R27
+candidate
 m1=0..*
 m2=1
 fontsize=10
@@ -404,7 +398,7 @@ layer=0</panel_attributes>
       <h>140</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-R28
+profile
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;100.0;680.0;100.0;680.0;20.0;740.0;20.0</additional_attributes>
@@ -418,7 +412,7 @@ layer=0</panel_attributes>
       <h>1170</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-R29
+notes
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;20.0;60.0;20.0;60.0;1120.0;700.0;1120.0;740.0;1130.0</additional_attributes>
@@ -432,7 +426,7 @@ layer=0</panel_attributes>
       <h>970</h>
     </coordinates>
     <panel_attributes>lt=.&gt;
-R30
+notes
 fontsize=10
 layer=0</panel_attributes>
     <additional_attributes>20.0;30.0;60.0;20.0;100.0;20.0;100.0;400.0;700.0;400.0;700.0;900.0;1300.0;900.0;1300.0;920.0;1340.0;930.0</additional_attributes>
@@ -451,7 +445,7 @@ layer=0</panel_attributes>
 --
 + submitRequest(request : Request) : Result
 + display(result : Result) : void
-+ onDeadline(application : Application) : void
++ onDeadline(reminder : DeadlineReminder) : void
 fontsize=12
 bg=white
 layer=1</panel_attributes>
@@ -471,7 +465,7 @@ layer=1</panel_attributes>
 --
 + execute(command : String) : Result
 + display(result : Result) : void
-+ onDeadline(application : Application) : void
++ onDeadline(reminder : DeadlineReminder) : void
 fontsize=12
 bg=white
 layer=1</panel_attributes>
@@ -610,7 +604,7 @@ layer=1</panel_attributes>
 LLMClient
 --
 --
-+ generate(context : Map) : Map
++ complete(instructions : String, context : String) : String
 fontsize=12
 bg=white
 layer=1</panel_attributes>
@@ -630,7 +624,7 @@ layer=1</panel_attributes>
 - endpoint : String
 - apiKeyReference : String
 --
-+ generate(context : Map) : Map
++ complete(instructions : String, context : String) : String
 fontsize=12
 bg=white
 layer=1</panel_attributes>
@@ -914,8 +908,9 @@ layer=1</panel_attributes>
 - displayedKeys : Set
 --
 + subscribe(observer : DeadlineObserver) : void
-+ checkDeadlines(now : Instant) : List
-+ notifyObservers(application : Application) : void
++ unsubscribe(observer : DeadlineObserver) : void
++ listDeadlines() : List
++ checkDeadlines() : List
 fontsize=12
 bg=white
 layer=1</panel_attributes>
@@ -933,7 +928,7 @@ layer=1</panel_attributes>
 DeadlineObserver
 --
 --
-+ onDeadline(application : Application) : void
++ onDeadline(reminder : DeadlineReminder) : void
 fontsize=12
 bg=white
 layer=1</panel_attributes>
@@ -947,114 +942,8 @@ layer=1</panel_attributes>
       <w>4100</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>AI Job Search and Career Agent - Combined Class Diagram
+    <panel_attributes>Stage 1 Planned Design - Refined Labels and Adapter/Observer Contracts
 fontsize=20
-style=wordwrap</panel_attributes>
-    <additional_attributes />
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>80</x>
-      <y>1780</y>
-      <w>1020</w>
-      <h>380</h>
-    </coordinates>
-    <panel_attributes>RELATIONSHIP KEY
-R1: JobSearchGUI -&gt; AgentController (association)
-    submits requests
-R2: JobSearchCLI -&gt; AgentController (association)
-    submits requests
-R3: AgentController -&gt; CareerFacade (association)
-    delegates
-R4: CareerFacade -&gt; Repository (association)
-    persists
-R5: CareerFacade -&gt; CareerAgent (association)
-    AI workflows
-R6: CareerFacade -&gt; ToolManager (association)
-    tools
-R7: CareerFacade -&gt; ResumeParser (association)
-    resume parsing
-R8: DocumentParserAdapter -&gt; ResumeParser (realization)
-fontsize=12
-style=wordwrap</panel_attributes>
-    <additional_attributes />
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>1120</x>
-      <y>1780</y>
-      <w>1020</w>
-      <h>380</h>
-    </coordinates>
-    <panel_attributes>RELATIONSHIP KEY
-R9: CareerAgent -&gt; ToolManager (association)
-    executes tools
-R10: CareerAgent -&gt; LLMClient (association)
-    inference
-R11: OpenAIAdapter -&gt; LLMClient (realization)
-R12: CareerAgent -&gt; Repository (association)
-    run memory
-R13: ToolManager -&gt; MatchingStrategy (aggregation)
-    selected policy
-R14: WeightedMatching -&gt; MatchingStrategy (realization)
-R15: RequiredSkillMatching -&gt; MatchingStrategy (realization)
-R16: ToolManager -&gt; Repository (association)
-    retrieval
-fontsize=12
-style=wordwrap</panel_attributes>
-    <additional_attributes />
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>2160</x>
-      <y>1780</y>
-      <w>1020</w>
-      <h>380</h>
-    </coordinates>
-    <panel_attributes>RELATIONSHIP KEY
-R17: CareerFacade -&gt; DeadlineManager (association)
-    deadline workflow
-R18: DeadlineManager -&gt; DeadlineObserver (aggregation)
-    subscribers
-R19: JobSearchGUI -&gt; DeadlineObserver (realization)
-R20: JobSearchCLI -&gt; DeadlineObserver (realization)
-R21: DeadlineManager -&gt; Repository (association)
-    reads deadlines
-R22: CandidateProfile -&gt; Resume (composition)
-    resume versions
-R23: CandidateProfile -&gt; Application (association)
-    tracks
-R24: Application -&gt; Job (association)
-    for job
-fontsize=12
-style=wordwrap</panel_attributes>
-    <additional_attributes />
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>3200</x>
-      <y>1780</y>
-      <w>1020</w>
-      <h>380</h>
-    </coordinates>
-    <panel_attributes>RELATIONSHIP KEY
-R25: CandidateProfile -&gt; InterviewSession (composition)
-    owns sessions
-R26: InterviewSession -&gt; Job (association)
-    prepares for
-R27: CareerDocument -&gt; CandidateProfile (association)
-    owner
-R28: CareerFacade -&gt; CandidateProfile (dependency)
-    creates/updates domain objects
-R29: CareerFacade -&gt; CompanyNotes (dependency)
-    creates and updates notes: manageCompanyNotes()
-R30: ToolManager -&gt; CompanyNotes (dependency)
-    retrieves stored notes: readNotes()
-fontsize=12
 style=wordwrap</panel_attributes>
     <additional_attributes />
   </element>
@@ -1067,7 +956,7 @@ style=wordwrap</panel_attributes>
       <h>80</h>
     </coordinates>
     <panel_attributes>Notation: + public; - private; dashed hollow triangle: realization; hollow diamond: aggregation; filled diamond: composition.
-Same 23 classes and 30 relationships as the report. Shared Request, Result and enum value types are referenced in signatures.
+Planned architecture from Stage 1. See stage2_class_diagram.png for the current implementation.
 fontsize=12
 style=wordwrap</panel_attributes>
     <additional_attributes />

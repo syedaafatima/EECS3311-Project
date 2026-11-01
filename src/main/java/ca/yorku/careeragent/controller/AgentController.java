@@ -25,6 +25,10 @@ public class AgentController {
         this.facade = facade;
     }
 
+    public java.util.Optional<CandidateProfile> getProfile() { return facade.getProfile(); }
+    public java.util.List<Job> getJobs() { return facade.listJobs(); }
+    public java.util.List<Resume> listResumes() { return facade.listResumes(); }
+
     public void subscribeDeadlines(ca.yorku.careeragent.deadline.DeadlineObserver observer) {
         facade.subscribeDeadlines(observer);
     }
