@@ -1,0 +1,44 @@
+# Weekly code-commit summary — working record
+
+Repository: https://github.com/syedaafatima/EECS3311-Project
+
+Course periods use **Toronto local time**. Select five distinct meaningful implementation/test changes per period. Repeated imports/merge copies of the same development change and documentation-only commits are not additional meaningful code changes.
+
+## Period 1: October 20–26, 2026
+
+| Commit | Development change | Upload status |
+|---|---|---|
+| [8542dbe](https://github.com/syedaafatima/EECS3311-Project/commit/8542dbe) | Core domain models and JSON repository | Present in repository history |
+| [4ac8717](https://github.com/syedaafatima/EECS3311-Project/commit/4ac8717) | F01 candidate profile through MVC and Facade | Present in repository history |
+| [0945542](https://github.com/syedaafatima/EECS3311-Project/commit/0945542) | F04 job import and duplicate updates | Present in repository history |
+| [1509555](https://github.com/syedaafatima/EECS3311-Project/commit/1509555) | F14 application tracking/history | Present in repository history |
+| [c9cfb2d](https://github.com/syedaafatima/EECS3311-Project/commit/c9cfb2d) | Strategy matching and Period 1 verification | Present in repository history |
+
+## Period 2: October 27–November 2, 2026
+
+| Commit | Development change | Upload status |
+|---|---|---|
+| [80fbb8e](https://github.com/syedaafatima/EECS3311-Project/commit/80fbb8e) | F02 PDF/DOCX resume import and verification | Present in repository history |
+| [5d74f5d](https://github.com/syedaafatima/EECS3311-Project/commit/5d74f5d) | F03 reviewed resume skill extraction | Present in repository history |
+| [0c92787](https://github.com/syedaafatima/EECS3311-Project/commit/0c92787) | F05 reviewed job analysis and invalidation | Present in repository history |
+| [df2882e](https://github.com/syedaafatima/EECS3311-Project/commit/df2882e) | F15 deadline Observer | Present in repository history |
+| [12fc14a](https://github.com/syedaafatima/EECS3311-Project/commit/12fc14a) | Shared Swing GUI and refined UML/workflows | Present in repository history |
+
+## Period 3: November 3–9, 2026
+
+| Commit | Development change | Upload status |
+|---|---|---|
+| [a73d1ac](https://github.com/syedaafatima/EECS3311-Project/commit/a73d1ac) | F06–F08 AI explanations and job comparison | Local checkpoint only; push not confirmed |
+| [bbe8de8](https://github.com/syedaafatima/EECS3311-Project/commit/bbe8de8) | F09–F10 editable evidence-backed writing | Local checkpoint only; push not confirmed |
+| [7bd7015](https://github.com/syedaafatima/EECS3311-Project/commit/7bd7015) | F11–F13 question sets, sessions and feedback | Local checkpoint only; push not confirmed |
+| [579f50a](https://github.com/syedaafatima/EECS3311-Project/commit/579f50a) | F16–F17 company research and career plans | Local checkpoint only; push not confirmed |
+| Pending fifth code commit | Stable cross-process source fingerprints, atomic updates, safe identifiers/date validation, AI setup/verification, GUI/persistence regression tests | Changes tested; final commit/push interrupted by unavailable workspace |
+
+## Evidence and counting notes
+
+- Period 1's Strategy/verification commit was pushed at approximately 2026-10-27 03:31 UTC, which is **October 26 at 11:31 p.m. Toronto**, inside Period 1. Do not classify it using UTC calendar dates.
+- F02 appears in the history as an original imported commit plus a merge/import copy. It represents one selected development change here.
+- The four November 1 additions were confirmed on main, pushed on **November 1 at 4:02:39 p.m. Toronto**, advancing main from d0f9e9f to 12fc14a. GitHub's repository Activity API recorded the push, independently of profile-calendar indexing.
+- Period 3's four local commits were created on November 7. They are not claimed as uploaded. The workspace disconnected before a fifth code commit and final push could be verified.
+- The report/checklist files on branch stage2-report-draft-nov7 are documentation changes and are not counted toward the five-code-commit minimum.
+- Before final submission, verify actual remote commit hashes and upload activity for Period 3, add the fifth code-commit URL, and regenerate the final report. Do not change dates or create empty commits to fill a period.
