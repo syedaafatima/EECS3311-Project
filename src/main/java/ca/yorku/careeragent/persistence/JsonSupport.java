@@ -54,14 +54,29 @@ final class JsonSupport {
     }
 
     static List<String> stringArrayField(String json, String key) {
-        Pattern p = Pattern.compile("\\\"" + Pattern.quote(key)
-                + "\\\"\\s*:\\s*\\[(.*?)]", Pattern.DOTALL);
-        Matcher m = p.matcher(json);
+        Matcher match = Pattern.compile("\\\"" + Pattern.quote(key) + "\\\"\\s*:\\s*\\[").matcher(json);
         List<String> values = new ArrayList<>();
-        if (!m.find()) return values;
-        Matcher item = Pattern.compile("\\\"((?:\\\\.|[^\\\"\\\\])*)\\\"").matcher(m.group(1));
-        while (item.find()) values.add(unescape(item.group(1)));
-        return values;
+        if (!match.find()) return values;
+        int pos = match.end();
+        while (true) {
+            while (pos < json.length() && Character.isWhitespace(json.charAt(pos))) pos++;
+            if (pos < json.length() && json.charAt(pos) == ']') return values;
+            if (pos >= json.length() || json.charAt(pos++) != '"') throw new IllegalArgumentException("Invalid stored string array.");
+            int start = pos;
+            boolean escaped = false;
+            while (pos < json.length()) {
+                char c = json.charAt(pos++);
+                if (escaped) escaped = false;
+                else if (c == '\\') escaped = true;
+                else if (c == '"') break;
+            }
+            if (pos > json.length() || json.charAt(pos - 1) != '"') throw new IllegalArgumentException("Unterminated stored array item.");
+            values.add(unescape(json.substring(start, pos - 1)));
+            while (pos < json.length() && Character.isWhitespace(json.charAt(pos))) pos++;
+            if (pos < json.length() && json.charAt(pos) == ',') { pos++; continue; }
+            if (pos < json.length() && json.charAt(pos) == ']') return values;
+            throw new IllegalArgumentException("Invalid stored string array separator.");
+        }
     }
 
     static String arrayOfStrings(Iterable<String> values) {

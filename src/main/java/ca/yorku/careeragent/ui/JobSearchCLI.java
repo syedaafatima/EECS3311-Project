@@ -47,6 +47,8 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
                 }
                 switch (command) {
                     case "help" -> printHelp();
+                    case "ai status" -> print("ai.status", Map.of());
+                    case "ai verify" -> aiRequest("ai.verify", Map.of());
                     case "profile edit" -> editProfile();
                     case "profile show" -> print("profile.show", Map.of());
                     case "resume import" -> importResume(ask("PDF/DOCX resume path"));
@@ -215,6 +217,7 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
     }
 
     private void printHelp() {
+        System.out.println("ai status / ai verify - inspect local key setup (redacted) and verify live model access");
         System.out.println("resume import [path] - preview PDF/DOCX and confirm import");
         System.out.println("resume paste       - paste text from a scanned resume and review");
         System.out.println("resume extract-skills - propose evidence-backed skills using the LLM; review before saving");

@@ -68,8 +68,13 @@ public final class OpenAIAdapter implements LLMClient {
             try (var input = response.body()) {
                 if (response.statusCode() != 200) {
                     // Provider bodies can echo personal data or credentials: never surface them.
-                    throw new IllegalStateException("LLM request failed (HTTP " + response.statusCode()
-                            + "). Check configuration or retry; saved data is unchanged.");
+                    String help = switch (response.statusCode()) {
+                        case 401 -> "API key rejected. Check the local key and project.";
+                        case 403 -> "Access denied. Check project/model permissions.";
+                        case 429 -> "Check API credits/billing or request rate limits; ChatGPT subscription billing is separate.";
+                        default -> "Retry later or check provider availability.";
+                    };
+                    throw new IllegalStateException("LLM request failed (HTTP " + response.statusCode() + "). " + help + " Saved data is unchanged.");
                 }
                 byte[] bytes = input.readNBytes(1_048_577);
                 if (bytes.length > 1_048_576) throw new IllegalStateException("LLM response is too large.");
@@ -116,4 +121,14 @@ public final class OpenAIAdapter implements LLMClient {
         }
         return result;
     }
+
+    public String configurationStatus() {
+        String key = readConfig().getOrDefault("OPENAI_API_KEY", "").strip();
+        if (key.isEmpty() || key.equals("YOUR_LOCAL_API_KEY_HERE")) {
+            return "OpenAI API key is not configured. Copy .env.example to .env, enter your API key locally, and use ai verify. "
+                    + "OpenAI API billing is separate from a ChatGPT subscription. Never paste a key into chat or commit .env.";
+        }
+        return "An API key is configured locally (value hidden). A live verification request is still needed to check access and billing.";
+    }
+
 }

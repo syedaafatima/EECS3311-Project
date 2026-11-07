@@ -222,6 +222,9 @@ public class CareerFacade {
     }
 
     public Application trackApplication(String jobId, LocalDate submissionDate, Application.Status requestedStatus) {
+        if (submissionDate == null || submissionDate.isAfter(LocalDate.now(java.time.ZoneId.of("America/Toronto")))) {
+            throw new IllegalArgumentException("Submission/saved date must not be in the future (Toronto time).");
+        }
         repository.findJob(jobId).orElseThrow(() -> new IllegalArgumentException("Unknown job: " + jobId));
         Optional<Application> existing = repository.findApplicationByJobId(jobId);
         Application application;
@@ -376,5 +379,9 @@ public class CareerFacade {
     public ca.yorku.careeragent.domain.CareerDocument generateCareerPlan(List<String> jobIds, String goals, int hours, java.math.BigDecimal budget) {
         return agent.generateCareerPlan(jobIds, goals, hours, budget);
     }
+
+
+    public String aiStatus() { return agent.aiStatus(); }
+    public String verifyAI() { return agent.verifyAI(); }
 
 }

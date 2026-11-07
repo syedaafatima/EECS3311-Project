@@ -1,7 +1,6 @@
 package ca.yorku.careeragent.domain;
 
 import ca.yorku.careeragent.llm.Json;
-import ca.yorku.careeragent.service.ToolManager;
 import java.net.URI;
 import java.util.List;
 import java.util.Locale;
@@ -26,13 +25,13 @@ public record CompanyNotes(String id, String company, String text, List<String> 
     }
     public static String idFor(String company) {
         if (company == null || company.isBlank()) throw new IllegalArgumentException("Company name is required.");
-        return "N-" + ToolManager.fingerprint(company.strip().toLowerCase(Locale.ROOT)).substring(0, 32);
+        return "N-" + SourceFingerprint.of(company.strip().toLowerCase(Locale.ROOT)).substring(0, 32);
     }
     public Map<String, Object> toRecord() { return Map.of("id", id, "company", company, "text", text, "sources", sources); }
     public static CompanyNotes fromRecord(Map<?, ?> row) {
         return new CompanyNotes(Json.text(row.get("id")), Json.text(row.get("company")), Json.text(row.get("text")),
                 Json.array(row.get("sources")).stream().map(Json::text).toList());
     }
-    public String fingerprint() { return ToolManager.fingerprint(Json.encode(toRecord())); }
+    public String fingerprint() { return SourceFingerprint.of(company + "\n" + text + "\n" + String.join("\n", sources)); }
     @Override public String toString() { return id + " | " + company + "\n" + text + "\nProvided sources: " + sources; }
 }

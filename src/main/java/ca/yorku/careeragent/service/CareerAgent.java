@@ -335,4 +335,15 @@ public final class CareerAgent {
         return number;
     }
 
+
+    public String aiStatus() {
+        return llm instanceof ca.yorku.careeragent.llm.OpenAIAdapter adapter ? adapter.configurationStatus() : "A test LLM client is active.";
+    }
+    public String verifyAI() {
+        Map<?, ?> response = Json.object(Json.parse(llm.complete("Return exactly the JSON object {\"status\":\"ok\"}.",
+                "Connectivity check only. No candidate or job data is included.")));
+        if (!"ok".equals(response.get("status"))) throw new IllegalStateException("Provider response did not pass the connectivity check.");
+        return "Live LLM verification succeeded. The configured model returned the expected JSON response.";
+    }
+
 }

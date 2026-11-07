@@ -57,6 +57,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         tabs.addTab("Interview preparation", interviewTab());
         tabs.addTab("Company research", researchTab());
         tabs.addTab("Career plan", careerPlanTab());
+        tabs.addTab("AI setup", aiSetupTab());
         add(tabs, BorderLayout.CENTER);
         add(status, BorderLayout.SOUTH);
         deadlineTimer = new Timer(60_000, e -> {
@@ -390,7 +391,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         };
     }
 
-    private static JPanel actions() { return new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 6)); }
+    private static JPanel actions() { return new JPanel(new GridLayout(0, 2, 6, 6)); }
 
     private static void field(JPanel form, Map<String, JTextComponent> fields, String prefix,
             String key, String label, boolean multiline) {
@@ -539,6 +540,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         form.add(new JLabel("Saved interview sessions")); form.add(sessions);
         Map<String, JTextComponent> fields = new LinkedHashMap<>();
         field(form, fields, "interview", "answer", "Answer to the next question", true);
+        fields.get("answer").setName("interview.answerText");
         JPanel answering = actions();
         button(answering, "Save answer", "interview.answer", () -> withChoice(sessions, id ->
                 execute("interview.answer", Map.of("sessionId", id, "answer", fields.get("answer").getText()), result,
@@ -600,6 +602,26 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         });
         button(actions, "List target jobs", "plan.jobs", () -> execute("job.list", Map.of(), result, null));
         button(actions, "List saved plans / documents", "plan.saved", () -> execute("document.list", Map.of(), result, null));
+        form.add(actions);
+        return split(form, result);
+    }
+
+
+    private JPanel aiSetupTab() {
+        JPanel form = form();
+        form.add(new JLabel("OpenAI API access is billed separately from a ChatGPT subscription."));
+        JTextArea result = output("ai.result");
+        result.setText("1. Create an API key at https://platform.openai.com/api-keys\n"
+                + "2. Add API billing/credits if required and set a usage budget alert.\n"
+                + "3. Copy .env.example to .env in this project's directory.\n"
+                + "4. Set OPENAI_API_KEY locally. Keep .env private and ignored by Git.\n"
+                + "5. Check setup, then verify live access. The verification sends no personal records.\n\n"
+                + "Manual workflows remain available without an API key.");
+        JPanel actions = actions();
+        button(actions, "Check local setup", "ai.status", () -> execute("ai.status", Map.of(), result, null));
+        button(actions, "Verify live API access…", "ai.verify", () -> {
+            if (allowAI("a short connectivity check containing no personal records")) execute("ai.verify", Map.of(), result, null);
+        });
         form.add(actions);
         return split(form, result);
     }

@@ -79,6 +79,7 @@ public class Repository {
     }
 
     public Optional<Job> findJob(String id) {
+        if (id == null || !id.matches("J\\d+")) throw new IllegalArgumentException("Invalid job ID.");
         Path file = jobsDirectory.resolve(id + ".json");
         if (!Files.exists(file)) return Optional.empty();
         return Optional.of(readJob(file));
@@ -96,6 +97,7 @@ public class Repository {
     }
 
     public Optional<Job> findJobByTitleAndCompany(String title, String company) {
+        if (title == null || title.isBlank() || company == null || company.isBlank()) throw new IllegalArgumentException("Job title and company are required.");
         return listJobs().stream()
                 .filter(j -> j.getTitle().equalsIgnoreCase(title.trim())
                         && j.getCompany().equalsIgnoreCase(company.trim()))
@@ -124,6 +126,7 @@ public class Repository {
     }
 
     public Optional<Application> findApplication(String id) {
+        if (id == null || !id.matches("A\\d+")) throw new IllegalArgumentException("Invalid application ID.");
         Path file = applicationsDirectory.resolve(id + ".json");
         if (!Files.exists(file)) return Optional.empty();
         return Optional.of(readApplication(file));
@@ -262,11 +265,20 @@ public class Repository {
     }
 
     private void write(Path file, String content) {
+        Path temporary = null;
         try {
             Files.createDirectories(file.getParent());
-            Files.writeString(file, content, StandardCharsets.UTF_8);
+            temporary = Files.createTempFile(file.getParent(), ".save-", ".tmp");
+            Files.writeString(temporary, content, StandardCharsets.UTF_8);
+            try { Files.move(temporary, file, java.nio.file.StandardCopyOption.ATOMIC_MOVE, java.nio.file.StandardCopyOption.REPLACE_EXISTING); }
+            catch (java.nio.file.AtomicMoveNotSupportedException e) { Files.move(temporary, file, java.nio.file.StandardCopyOption.REPLACE_EXISTING); }
         } catch (IOException e) {
             throw new IllegalStateException("Could not save " + file, e);
+        } finally {
+            if (temporary != null) {
+                try { Files.deleteIfExists(temporary); }
+                catch (IOException e) { temporary.toFile().deleteOnExit(); }
+            }
         }
     }
 

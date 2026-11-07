@@ -46,6 +46,8 @@ public class AgentController {
     public String submitRequest(String action, Map<String, String> input) {
         try {
             return switch (action) {
+                case "ai.status" -> facade.aiStatus();
+                case "ai.verify" -> facade.verifyAI();
                 case "deadlines.list" -> facade.listDeadlines().stream().map(Object::toString)
                         .collect(Collectors.collectingAndThen(Collectors.joining(System.lineSeparator()),
                                 result -> result.isEmpty() ? "No outstanding application deadlines." : result));

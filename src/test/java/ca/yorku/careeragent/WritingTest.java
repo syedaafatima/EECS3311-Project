@@ -85,4 +85,15 @@ class WritingTest {
         assertThrows(IllegalStateException.class, () -> records.put("interviews", "S-example", Map.of("id", "S-example")));
         assertEquals(1, records.list("documents").size());
     }
+
+    @Test void interruptedCliDocumentEditingCancelsThePendingReviewWithoutSaving() {
+        var facade = facade(this::model);
+        var resume = facade.importResume(facade.previewResumeText("Java projects"));
+        var controller = new AgentController(facade);
+        String commands = "resume suggest\n" + resume.getId() + "\nJ01\nyes\nedit\nIncomplete edit\n";
+        new ca.yorku.careeragent.ui.JobSearchCLI(controller, new java.util.Scanner(commands)).run();
+        assertTrue(facade.listDocuments().isEmpty());
+        assertTrue(controller.submitRequest("document.save", Map.of("confirmed", "yes")).startsWith("ERROR:"));
+    }
+
 }
