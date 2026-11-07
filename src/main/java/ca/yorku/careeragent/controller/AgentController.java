@@ -72,6 +72,10 @@ public class AgentController {
                 case "application.add" -> addApplication(input);
                 case "application.update" -> updateApplication(input);
                 case "application.list" -> listApplications();
+                case "job.gaps.explain" -> facade.explainGaps(input.get("jobId")).toString();
+                case "job.match.explain" -> facade.explainMatches(input.get("strategy")).toString();
+                case "job.compare" -> facade.compareJobs(java.util.Arrays.stream(input.getOrDefault("jobIds", "").split(","))
+                        .map(String::trim).toList(), input.get("strategy")).toString();
                 case "job.gaps" -> formatGaps(input.get("jobId"));
                 case "job.match" -> formatMatches(input.get("strategy"));
                 default -> "Unknown request: " + action;

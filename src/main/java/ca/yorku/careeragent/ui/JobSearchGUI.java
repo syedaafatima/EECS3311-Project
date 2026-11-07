@@ -187,6 +187,20 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         button(matching, "Rank jobs", "job.match", () -> execute("job.match", Map.of("strategy", (String) strategy.getSelectedItem()), result, null));
         button(matching, "Refresh jobs", "job.refresh", this::refreshChoices);
         form.add(matching);
+        JPanel interpretations = actions();
+        button(interpretations, "Explain gaps…", "job.gaps.explain", () -> withChoice(jobs, id -> {
+            if (allowAI("your profile skills and the selected job requirements")) execute("job.gaps.explain", Map.of("jobId", id), result, null);
+        }));
+        button(interpretations, "Explain ranking…", "job.match.explain", () -> {
+            if (allowAI("your profile skills and analyzed jobs")) execute("job.match.explain", Map.of("strategy", (String) strategy.getSelectedItem()), result, null);
+        });
+        button(interpretations, "Compare jobs…", "job.compare", () -> {
+            String ids = JOptionPane.showInputDialog(this, "Enter 2-4 job ids, comma-separated (for example J01,J02)");
+            if (ids != null && allowAI("the selected job details and your compatibility results")) {
+                execute("job.compare", Map.of("jobIds", ids, "strategy", (String) strategy.getSelectedItem()), result, null);
+            }
+        });
+        form.add(interpretations);
         return split(form, result);
     }
 

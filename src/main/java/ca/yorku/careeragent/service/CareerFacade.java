@@ -261,7 +261,7 @@ public class CareerFacade {
         List<Map.Entry<Job, Double>> scored = repository.listJobs().stream()
                 .filter(Job::isAnalyzed)
                 .map(job -> Map.entry(job, toolManager.calculateMatch(job.getId())))
-                .sorted(Map.Entry.<Job, Double>comparingByValue(Comparator.reverseOrder()))
+                .sorted(Map.Entry.<Job, Double>comparingByValue(Comparator.reverseOrder()).thenComparing(e -> e.getKey().getId()))
                 .toList();
 
         if (scored.isEmpty()) {
@@ -271,4 +271,49 @@ public class CareerFacade {
         scored.forEach(entry -> ranked.put(entry.getKey(), entry.getValue()));
         return ranked;
     }
+
+    public ca.yorku.careeragent.domain.Assessment explainGaps(String jobId) {
+        var gaps = identifyGaps(jobId); // Input errors are not disguised as provider failures.
+        String facts = "Matched: " + gaps.get("matched") + "\nMissing: " + gaps.get("missing") + "\nUncertain: " + gaps.get("uncertain");
+        return new ca.yorku.careeragent.domain.Assessment("F06 Skill gaps", facts, optionalExplanation(() -> agent.explainGaps(jobId)));
+    }
+
+    public ca.yorku.careeragent.domain.Assessment explainMatches(String strategy) {
+        Map<Job, Double> ranked = matchJobs(strategy);
+        String facts = ranked.entrySet().stream().map(e -> String.format(java.util.Locale.ROOT,
+                "%s | %.1f%% | %s", e.getKey(), e.getValue(), toolManager.compareSkills(e.getKey().getId())))
+                .collect(java.util.stream.Collectors.joining("\n"));
+        return new ca.yorku.careeragent.domain.Assessment("F07 Ranked jobs", facts, optionalExplanation(() -> agent.explainMatches(ranked)));
+    }
+
+    public ca.yorku.careeragent.domain.Assessment compareJobs(List<String> jobIds, String strategy) {
+        if (jobIds == null || jobIds.size() < 2 || jobIds.size() > 4 || Set.copyOf(jobIds).size() != jobIds.size()) {
+            throw new IllegalArgumentException("Select 2-4 distinct jobs for comparison.");
+        }
+        List<Job> selected = jobIds.stream().map(toolManager::readJob).toList();
+        toolManager.readProfile();
+        if ("required".equalsIgnoreCase(strategy)) toolManager.setMatchingStrategy(new RequiredSkillMatching());
+        else if (strategy == null || strategy.isBlank() || "weighted".equalsIgnoreCase(strategy)) toolManager.setMatchingStrategy(new WeightedMatching());
+        else throw new IllegalArgumentException("Matching strategy must be 'weighted' or 'required'.");
+        StringBuilder table = new StringBuilder("Job | Title | Company | Salary | Location | Deadline | Compatibility | Gaps\n");
+        for (Job job : selected) {
+            table.append(job.getId()).append(" | ").append(job.getTitle()).append(" | ").append(job.getCompany())
+                    .append(" | ").append(known(job.getSalary())).append(" | ").append(known(job.getLocation()))
+                    .append(" | ").append(job.getDeadline() == null ? "Unknown" : job.getDeadline()).append(" | ")
+                    .append(job.isAnalyzed() ? String.format(java.util.Locale.ROOT, "%.1f%%", toolManager.calculateMatch(job.getId())) : "Not analyzed")
+                    .append(" | ").append(job.isAnalyzed() ? toolManager.compareSkills(job.getId()) : "Unknown").append('\n');
+        }
+        String facts = table.toString();
+        return new ca.yorku.careeragent.domain.Assessment("F08 Job comparison", facts, optionalExplanation(() -> agent.summarizeComparison(facts)));
+    }
+
+    private static String known(String text) { return text == null || text.isBlank() ? "Unknown" : text; }
+
+    private static String optionalExplanation(java.util.function.Supplier<String> request) {
+        try { return request.get(); }
+        catch (IllegalArgumentException | IllegalStateException e) {
+            return "AI explanation unavailable: " + e.getMessage() + " Deterministic results remain available.";
+        }
+    }
+
 }

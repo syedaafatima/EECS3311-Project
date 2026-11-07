@@ -158,3 +158,13 @@ Observer/Adapter signatures. It describes the planned full system; the separate
 Stage 2 diagram describes the implemented subset. Other original Stage 1 diagrams
 are design references. The Stage 2 report and feature demonstration videos are
 still required; this checkpoint is not a completed final submission.
+
+## Period 3: explanations and job comparison (F06–F08)
+
+`job gaps explain` and `job match explain` add an optional AI interpretation to
+computed gaps/rankings. `job compare` accepts 2–4 distinct job IDs and a matching
+policy; the comparison preserves unknown salary/location/deadline and unanalyzed
+compatibility. Corresponding buttons are available in Jobs & matching. Scores and
+skill sets are always computed locally. Provider/schema/evidence failures leave the
+deterministic result available with an explicit warning. AI explanations are
+interpretations requiring review, rather than verified additional job facts.

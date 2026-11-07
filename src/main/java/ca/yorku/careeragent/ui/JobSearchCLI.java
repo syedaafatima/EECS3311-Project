@@ -61,6 +61,9 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
                             "preferred", ask("Reviewed preferred skills (comma-separated)")));
                     case "job show" -> print("job.show", Map.of("jobId", ask("Job id")));
                     case "job list" -> print("job.list", Map.of());
+                    case "job gaps explain" -> aiRequest("job.gaps.explain", Map.of("jobId", ask("Job id")));
+                    case "job match explain" -> aiRequest("job.match.explain", Map.of("strategy", ask("Strategy [weighted/required]")));
+                    case "job compare" -> aiRequest("job.compare", Map.of("jobIds", ask("2-4 job ids (comma-separated)"), "strategy", ask("Strategy [weighted/required]")));
                     case "job gaps" -> print("job.gaps", Map.of("jobId", ask("Job id")));
                     case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
                     case "application add" -> addApplication();
@@ -178,6 +181,10 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         return scanner.nextLine();
     }
 
+    private void aiRequest(String action, Map<String, String> input) {
+        if ("yes".equalsIgnoreCase(ask("Send the relevant saved records to OpenAI? [yes/no]"))) print(action, input);
+    }
+
     private void printHelp() {
         System.out.println("resume import [path] - preview PDF/DOCX and confirm import");
         System.out.println("resume paste       - paste text from a scanned resume and review");
@@ -191,6 +198,8 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         System.out.println("job requirements   - manually enter reviewed skill requirements");
         System.out.println("job show           - show posting, reviewed requirements, and evidence");
         System.out.println("job list           - list imported jobs");
+        System.out.println("job gaps explain / job match explain - add AI interpretations to deterministic results");
+        System.out.println("job compare        - compare 2-4 jobs, preserving unknown values");
         System.out.println("job gaps           - compare profile skills with a reviewed job analysis");
         System.out.println("job match          - rank reviewed jobs using a Strategy implementation");
         System.out.println("application add    - track a job application");
