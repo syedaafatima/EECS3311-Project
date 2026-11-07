@@ -30,6 +30,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     private final AgentController controller;
     private final List<JComboBox<Choice>> jobChoices = new ArrayList<>();
     private final JComboBox<Choice> resumes = new JComboBox<>();
+    private final List<JComboBox<Choice>> resumeChoices = new ArrayList<>(List.of(resumes));
     private final JLabel status = new JLabel("Ready. Local data is shared with the CLI.");
     private final JTextArea reminders = output("deadline.reminders");
     private final Map<String, JTextComponent> profileFields = new LinkedHashMap<>();
@@ -50,6 +51,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         tabs.addTab("Resumes", resumeTab());
         tabs.addTab("Jobs & matching", jobsTab());
         tabs.addTab("Applications & deadlines", applicationsTab());
+        tabs.addTab("Writing assistant", writingTab());
         add(tabs, BorderLayout.CENTER);
         add(status, BorderLayout.SOUTH);
         deadlineTimer = new Timer(60_000, e -> {
@@ -248,10 +250,13 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
             jobs.forEach(job -> selector.addItem(new Choice(job.getId(), job.toString())));
             restoreSelection(selector, previous);
         }
-        String previous = selectedId(resumes);
-        resumes.removeAllItems();
-        controller.listResumes().forEach(resume -> resumes.addItem(new Choice(resume.getId(), resume.getId() + " | " + resume.getOriginalPath())));
-        restoreSelection(resumes, previous);
+        var savedResumes = controller.listResumes();
+        for (JComboBox<Choice> selector : resumeChoices) {
+            String previous = selectedId(selector);
+            selector.removeAllItems();
+            savedResumes.forEach(resume -> selector.addItem(new Choice(resume.getId(), resume.getId() + " | " + resume.getOriginalPath())));
+            restoreSelection(selector, previous);
+        }
     }
 
     private static String selectedId(JComboBox<Choice> choices) {
@@ -451,4 +456,50 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
             }
         });
     }
+
+    private JPanel writingTab() {
+        JPanel form = form();
+        form.add(new JLabel("Review candidate claims before saving generated writing."));
+        JComboBox<Choice> resume = new JComboBox<>();
+        resumeChoices.add(resume);
+        resume.setName("writing.resume");
+        form.add(new JLabel("Saved resume")); form.add(resume);
+        JComboBox<Choice> job = jobSelector(form, "writing.job");
+        JComboBox<String> tone = new JComboBox<>(new String[]{"professional", "warm", "concise"});
+        form.add(new JLabel("Cover letter tone")); form.add(tone);
+        JTextArea result = output("writing.result");
+        result.setText("Select a saved resume and job. The original resume is preserved; reviewed writing is saved as a separate document.");
+        JPanel generation = actions();
+        for (String task : List.of("resume.suggest", "letter.draft")) {
+            button(generation, task.equals("resume.suggest") ? "Resume suggestions…" : "Cover letter…", "writing." + task,
+                    () -> withChoice(resume, resumeId -> withChoice(job, jobId -> {
+                        if (!allowAI("the selected resume, approved profile and job")) return;
+                        execute(task, Map.of("resumeId", resumeId, "jobId", jobId, "tone", tone.getSelectedItem().toString()),
+                                result, response -> reviewDocumentDialog(response, result));
+                    })));
+        }
+        form.add(generation);
+        JPanel saved = actions();
+        button(saved, "List documents", "writing.list", () -> execute("document.list", Map.of(), result, null));
+        button(saved, "Open / edit document…", "writing.open", () -> {
+            String id = JOptionPane.showInputDialog(this, "Document id from List documents");
+            if (id != null) execute("document.show", Map.of("documentId", id.strip()), result,
+                    response -> reviewDocumentDialog(response, result));
+        });
+        form.add(saved);
+        return split(form, result);
+    }
+
+    private void reviewDocumentDialog(String preview, JTextArea result) {
+        JTextArea editor = new JTextArea(controller.pendingDocumentContent(), 18, 60);
+        editor.setLineWrap(true); editor.setWrapStyleWord(true);
+        JTabbedPane review = new JTabbedPane();
+        review.addTab("Edit content", new JScrollPane(editor));
+        review.addTab("Source evidence", scrollPreview(preview));
+        review.setPreferredSize(new Dimension(720, 470));
+        boolean approved = JOptionPane.showConfirmDialog(this, review, "Review facts and approve document",
+                JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION;
+        execute("document.save", Map.of("confirmed", approved ? "yes" : "no", "content", editor.getText()), result, null);
+    }
+
 }

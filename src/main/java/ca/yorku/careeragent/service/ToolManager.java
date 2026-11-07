@@ -88,4 +88,23 @@ public class ToolManager {
     private static String normalize(String value) {
         return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
     }
+
+    public String candidateEvidence(String resumeId) {
+        var profile = readProfile();
+        return "Name: " + profile.getName() + "\nEducation: " + profile.getEducationLevel() + "\nExperience: " + profile.getExperience()
+                + "\nApproved skills: " + profile.getSkills() + "\nResume:\n" + readResume(resumeId).getText();
+    }
+
+    public String writingFingerprint(String resumeId, String jobId) {
+        Job job = readJob(jobId);
+        return fingerprint(candidateEvidence(resumeId) + job.getDescription() + job.getRequiredSkills() + job.getPreferredSkills());
+    }
+
+    public static String fingerprint(String source) {
+        try {
+            return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256")
+                    .digest(source.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+        } catch (java.security.NoSuchAlgorithmException e) { throw new IllegalStateException("SHA-256 unavailable."); }
+    }
+
 }

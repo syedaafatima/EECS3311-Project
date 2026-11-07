@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 /** Routes GUI/CLI requests to the shared CareerFacade. */
 public class AgentController {
     private final CareerFacade facade;
+    private ca.yorku.careeragent.domain.CareerDocument pendingDocument;
     private ca.yorku.careeragent.domain.JobAnalysis pendingAnalysis;
     private Resume pendingResume;
     private java.util.List<ca.yorku.careeragent.domain.SkillProposal> pendingSkills;
@@ -72,6 +73,17 @@ public class AgentController {
                 case "application.add" -> addApplication(input);
                 case "application.update" -> updateApplication(input);
                 case "application.list" -> listApplications();
+                case "resume.suggest" -> previewDocument("resume", input);
+                case "letter.draft" -> previewDocument("letter", input);
+                case "document.save" -> saveDocument(input);
+                case "document.cancel" -> { pendingDocument = null; yield "Document review cancelled."; }
+                case "document.show" -> {
+                    pendingDocument = null;
+                    pendingDocument = facade.getDocument(input.get("documentId"));
+                    yield pendingDocument.toString();
+                }
+                case "document.list" -> facade.listDocuments().stream().map(d -> d.id() + " | " + d.type() + " | job=" + d.jobId())
+                        .collect(Collectors.collectingAndThen(Collectors.joining(System.lineSeparator()), s -> s.isBlank() ? "No reviewed documents saved." : s));
                 case "job.gaps.explain" -> facade.explainGaps(input.get("jobId")).toString();
                 case "job.match.explain" -> facade.explainMatches(input.get("strategy")).toString();
                 case "job.compare" -> facade.compareJobs(java.util.Arrays.stream(input.getOrDefault("jobIds", "").split(","))
@@ -243,4 +255,24 @@ public class AgentController {
         for (String item : value.split(",")) if (!item.isBlank()) result.add(item.trim());
         return result;
     }
+
+    public String pendingDocumentContent() { return pendingDocument == null ? "" : pendingDocument.content(); }
+
+    private String previewDocument(String task, Map<String, String> input) {
+        pendingDocument = null;
+        pendingDocument = "resume".equals(task) ? facade.suggestResume(input.get("resumeId"), input.get("jobId"))
+                : facade.draftLetter(input.get("resumeId"), input.get("jobId"), input.getOrDefault("tone", "professional"));
+        return pendingDocument.toString();
+    }
+
+    private String saveDocument(Map<String, String> input) {
+        if (!"yes".equalsIgnoreCase(input.get("confirmed"))) {
+            pendingDocument = null;
+            return "Document review cancelled.";
+        }
+        var saved = facade.saveDocument(pendingDocument, input.get("content"));
+        pendingDocument = null;
+        return "Reviewed document saved: " + saved.id();
+    }
+
 }

@@ -66,6 +66,11 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
                     case "job compare" -> aiRequest("job.compare", Map.of("jobIds", ask("2-4 job ids (comma-separated)"), "strategy", ask("Strategy [weighted/required]")));
                     case "job gaps" -> print("job.gaps", Map.of("jobId", ask("Job id")));
                     case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
+                    case "resume suggest" -> writingRequest("resume.suggest");
+                    case "letter draft" -> writingRequest("letter.draft");
+                    case "document list" -> print("document.list", Map.of());
+                    case "document show" -> print("document.show", Map.of("documentId", ask("Document id")));
+                    case "document edit" -> editDocument();
                     case "application add" -> addApplication();
                     case "application update" -> updateApplication();
                     case "deadlines list" -> print("deadlines.list", Map.of());
@@ -78,6 +83,7 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
             } catch (NoSuchElementException e) {
                 controller.submitRequest("resume.cancel", Map.of());
                 controller.submitRequest("skills.cancel", Map.of());
+                controller.submitRequest("document.cancel", Map.of());
                 controller.submitRequest("job.analysis.cancel", Map.of());
                 System.out.println("Input ended. Current command cancelled.");
                 return;
@@ -202,6 +208,8 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         System.out.println("job compare        - compare 2-4 jobs, preserving unknown values");
         System.out.println("job gaps           - compare profile skills with a reviewed job analysis");
         System.out.println("job match          - rank reviewed jobs using a Strategy implementation");
+        System.out.println("resume suggest / letter draft - generate an evidence-backed editable draft");
+        System.out.println("document list / document show / document edit - retrieve and review saved drafts");
         System.out.println("application add    - track a job application");
         System.out.println("application update - update application status");
         System.out.println("application list   - list tracked applications");
@@ -216,4 +224,41 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         AgentController controller = new AgentController(facade);
         new JobSearchCLI(controller, new Scanner(System.in)).run();
     }
+
+    private void writingRequest(String action) {
+        Map<String, String> input = new LinkedHashMap<>();
+        input.put("resumeId", ask("Resume id"));
+        input.put("jobId", ask("Job id"));
+        if (action.equals("letter.draft")) input.put("tone", ask("Tone [professional/warm/concise]"));
+        if (!"yes".equalsIgnoreCase(ask("Send candidate and job records to OpenAI? [yes/no]"))) return;
+        String preview = controller.submitRequest(action, input);
+        System.out.println(preview);
+        if (!preview.startsWith("ERROR:")) reviewDocument();
+    }
+
+    private void editDocument() {
+        String result = controller.submitRequest("document.show", Map.of("documentId", ask("Document id")));
+        System.out.println(result);
+        if (!result.startsWith("ERROR:")) reviewDocument();
+    }
+
+    private void reviewDocument() {
+        String choice = ask("Review all claims and evidence. [save/edit/cancel]");
+        if (choice.equalsIgnoreCase("save")) print("document.save", Map.of("confirmed", "yes"));
+        else if (choice.equalsIgnoreCase("edit")) {
+            System.out.println("Enter the full reviewed document; finish with a line containing only .");
+            String content = multiline();
+            print("document.save", Map.of("confirmed", "yes", "content", content));
+        } else print("document.cancel", Map.of());
+    }
+
+    private String multiline() {
+        StringBuilder content = new StringBuilder();
+        while (true) {
+            String line = scanner.nextLine();
+            if (line.equals(".")) return content.toString().strip();
+            content.append(line).append('\n');
+        }
+    }
+
 }

@@ -316,4 +316,31 @@ public class CareerFacade {
         }
     }
 
+
+    public ca.yorku.careeragent.domain.CareerDocument suggestResume(String resumeId, String jobId) {
+        return agent.suggestResume(resumeId, jobId);
+    }
+    public ca.yorku.careeragent.domain.CareerDocument draftLetter(String resumeId, String jobId, String tone) {
+        return agent.draftLetter(resumeId, jobId, tone);
+    }
+    public ca.yorku.careeragent.domain.CareerDocument saveDocument(ca.yorku.careeragent.domain.CareerDocument draft, String editedContent) {
+        if (draft == null) throw new IllegalArgumentException("Generate or load a document before saving.");
+        if (!draft.sourceId().isEmpty() && (draft.type() == ca.yorku.careeragent.domain.CareerDocument.Type.COVER_LETTER
+                || draft.type() == ca.yorku.careeragent.domain.CareerDocument.Type.RESUME_SUGGESTIONS)) {
+            if (!draft.sourceFingerprint().equals(toolManager.writingFingerprint(draft.sourceId(), draft.jobId()))) {
+                throw new IllegalArgumentException("Candidate or job records changed. Regenerate the draft before approval.");
+            }
+        }
+        var approved = draft.approve(editedContent == null ? draft.content() : editedContent);
+        repository.records().put("documents", approved.id(), approved.toRecord());
+        return approved;
+    }
+    public ca.yorku.careeragent.domain.CareerDocument getDocument(String id) {
+        return ca.yorku.careeragent.domain.CareerDocument.fromRecord(repository.records().get("documents", id)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown document: " + id)));
+    }
+    public List<ca.yorku.careeragent.domain.CareerDocument> listDocuments() {
+        return repository.records().list("documents").stream().map(ca.yorku.careeragent.domain.CareerDocument::fromRecord).toList();
+    }
+
 }

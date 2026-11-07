@@ -168,3 +168,16 @@ compatibility. Corresponding buttons are available in Jobs & matching. Scores an
 skill sets are always computed locally. Provider/schema/evidence failures leave the
 deterministic result available with an explicit warning. AI explanations are
 interpretations requiring review, rather than verified additional job facts.
+
+## Reviewed writing (F09–F10)
+
+Use `resume suggest` or `letter draft` after importing a resume and job. Resume
+suggestions require reviewed job requirements. Letter tone is professional, warm,
+or concise; the application supplies a generic greeting and the candidate's name.
+Both tasks validate verbatim candidate evidence, preview editable content, and save
+only after review. `document list`, `document show` and `document edit` retrieve
+reviewed documents after restart. The Writing assistant GUI tab offers the same
+workflows. Saved documents are separate from original resumes. Changed source
+records invalidate an unsaved draft; provider failure preserves older documents.
+Verbatim evidence checking is a guard against unsupported source citations, not a
+proof that every generated sentence is true: review candidate claims before approval.

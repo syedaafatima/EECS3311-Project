@@ -277,4 +277,7 @@ public class Repository {
             throw new IllegalStateException("Could not read " + file, e);
         }
     }
+
+    public LocalRecords records() { return new LocalRecords(dataDirectory); }
+
 }
