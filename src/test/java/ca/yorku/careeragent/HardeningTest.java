@@ -76,4 +76,17 @@ class HardeningTest {
         });
         assertTrue(new AgentController(facade).submitRequest("ai.verify", Map.of()).contains("succeeded"));
     }
+
+    @Test void trackerDisplaysPersistedStatusHistoryThroughTheSharedController() {
+        var facade = new CareerFacade(new Repository(data));
+        facade.importJob("Developer", "Example", "Java required", "", "Toronto", null);
+        var application = facade.trackApplication("J01", LocalDate.now(ZoneId.of("America/Toronto")), Application.Status.SAVED);
+        facade.updateApplicationStatus(application.getId(), Application.Status.APPLIED);
+        facade.updateApplicationStatus(application.getId(), Application.Status.INTERVIEW);
+        String result = new AgentController(new CareerFacade(new Repository(data))).submitRequest("application.list", Map.of());
+        assertTrue(result.contains("Status history:"));
+        assertTrue(result.indexOf("| SAVED") < result.indexOf("| APPLIED"));
+        assertTrue(result.contains("| INTERVIEW"));
+    }
+
 }
