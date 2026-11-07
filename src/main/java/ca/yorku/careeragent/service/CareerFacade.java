@@ -44,7 +44,7 @@ public class CareerFacade {
     }
 
     public CareerFacade(Repository repository, ToolManager toolManager, ResumeParser parser) {
-        this(repository, toolManager, parser, new ca.yorku.careeragent.llm.OpenAIAdapter());
+        this(repository, toolManager, parser, new ca.yorku.careeragent.llm.ConfiguredLLMClient());
     }
 
     public CareerFacade(Repository repository, ToolManager toolManager, ResumeParser parser,

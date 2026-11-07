@@ -290,8 +290,8 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     }
 
     private boolean allowAI(String source) {
-        return JOptionPane.showConfirmDialog(this, "Send " + source + " to the configured OpenAI model?\n"
-                + "This uses your local API key and may incur provider charges.", "AI request",
+        return JOptionPane.showConfirmDialog(this, "Send " + source + " to the configured LLM provider?\n"
+                + "The provider processes this text under your account quotas and billing terms.", "AI request",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
 
@@ -609,12 +609,12 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
 
     private JPanel aiSetupTab() {
         JPanel form = form();
-        form.add(new JLabel("OpenAI API access is billed separately from a ChatGPT subscription."));
+        form.add(new JLabel("Groq offers a quota-limited Free plan. Select your provider in local .env."));
         JTextArea result = output("ai.result");
-        result.setText("1. Create an API key at https://platform.openai.com/api-keys\n"
-                + "2. Add API billing/credits if required and set a usage budget alert.\n"
+        result.setText("1. Create an API key at https://console.groq.com/keys\n"
+                + "2. Use the Groq Free plan; check its account quotas before recording.\n"
                 + "3. Copy .env.example to .env in this project's directory.\n"
-                + "4. Set OPENAI_API_KEY locally. Keep .env private and ignored by Git.\n"
+                + "4. Set LLM_PROVIDER=groq and GROQ_API_KEY locally. Keep .env private and ignored by Git.\n"
                 + "5. Check setup, then verify live access. The verification sends no personal records.\n\n"
                 + "Manual workflows remain available without an API key.");
         JPanel actions = actions();

@@ -213,7 +213,7 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
     }
 
     private void aiRequest(String action, Map<String, String> input) {
-        if ("yes".equalsIgnoreCase(ask("Send the relevant saved records to OpenAI? [yes/no]"))) print(action, input);
+        if ("yes".equalsIgnoreCase(ask("Send the relevant saved records to the configured LLM provider? [yes/no]"))) print(action, input);
     }
 
     private void printHelp() {
@@ -261,7 +261,7 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         input.put("resumeId", ask("Resume id"));
         input.put("jobId", ask("Job id"));
         if (action.equals("letter.draft")) input.put("tone", ask("Tone [professional/warm/concise]"));
-        if (!"yes".equalsIgnoreCase(ask("Send candidate and job records to OpenAI? [yes/no]"))) return;
+        if (!"yes".equalsIgnoreCase(ask("Send candidate and job records to the configured LLM provider? [yes/no]"))) return;
         String preview = controller.submitRequest(action, input);
         System.out.println(preview);
         if (!preview.startsWith("ERROR:")) reviewDocument();
@@ -294,7 +294,7 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
 
 
     private void researchRequest(String action, Map<String, String> input) {
-        if (!"yes".equalsIgnoreCase(ask("Send relevant saved records to OpenAI? [yes/no]"))) return;
+        if (!"yes".equalsIgnoreCase(ask("Send relevant saved records to the configured LLM provider? [yes/no]"))) return;
         String preview = controller.submitRequest(action, input);
         System.out.println(preview);
         if (!preview.startsWith("ERROR:")) reviewDocument();

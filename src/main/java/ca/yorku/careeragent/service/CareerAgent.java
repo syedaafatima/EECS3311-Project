@@ -337,7 +337,7 @@ public final class CareerAgent {
 
 
     public String aiStatus() {
-        return llm instanceof ca.yorku.careeragent.llm.OpenAIAdapter adapter ? adapter.configurationStatus() : "A test LLM client is active.";
+        return llm.configurationStatus();
     }
     public String verifyAI() {
         Map<?, ?> response = Json.object(Json.parse(llm.complete("Return exactly the JSON object {\"status\":\"ok\"}.",

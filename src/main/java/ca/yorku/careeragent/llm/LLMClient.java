@@ -4,4 +4,5 @@ package ca.yorku.careeragent.llm;
 @FunctionalInterface
 public interface LLMClient {
     String complete(String instructions, String context);
+    default String configurationStatus() { return "An LLM client is configured. Verify live provider access before using AI features."; }
 }
