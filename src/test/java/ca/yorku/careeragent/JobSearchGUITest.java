@@ -153,4 +153,32 @@ class JobSearchGUITest {
                 ZoneId.of("America/Toronto")));
         SwingUtilities.invokeAndWait(() -> assertFalse(((JTextArea) named(view, "deadline.reminders")).getText().contains("J02")));
     }
+
+    @Test void interviewAndResearchFormsInvokeTheSharedPersistenceWorkflows() throws Exception {
+        Repository repo = new Repository(data);
+        CareerFacade facade = new CareerFacade(repo, new ca.yorku.careeragent.service.ToolManager(repo),
+                new ca.yorku.careeragent.parser.DocumentParserAdapter(), (i, c) -> ca.yorku.careeragent.llm.Json.encode(Map.of("questions", java.util.List.of(
+                        Map.of("kind", "TECHNICAL", "text", "Explain Java memory management", "rubric", "Explain garbage collection", "evidence", "Java required"),
+                        Map.of("kind", "BEHAVIOURAL", "text", "Describe Java teamwork", "rubric", "Describe actions and results", "evidence", "Java required")))));
+        var job = facade.importJob("Developer", "Example", "Java required", "", "Toronto", null);
+        facade.saveManualRequirements(job.getId(), java.util.Set.of("Java"), java.util.Set.of());
+        facade.generateQuestions(job.getId(), 2);
+        JobSearchGUI view = gui(new AgentController(facade));
+        try {
+            clickAndAwait(view, "interview.start", "interview.result", "Next question: 1");
+            fill(view, Map.of("interview.answerText", "Java uses garbage collection"));
+            clickAndAwait(view, "interview.answer", "interview.result", "Next question: 2");
+            clickAndAwait(view, "interview.pause", "interview.result", "PAUSED");
+            clickAndAwait(view, "interview.resume", "interview.result", "IN_PROGRESS");
+            clickAndAwait(view, "interview.skip", "interview.result", "[SKIPPED]");
+            clickAndAwait(view, "interview.finish", "interview.result", "FINISHED");
+            assertEquals(1, facade.listInterviews().get(0).answers().size());
+            fill(view, Map.of("research.text", "Builds data products", "research.sources", "https://example.com/about"));
+            clickAndAwait(view, "research.save", "research.result", "Builds data products");
+            fill(view, Map.of("research.text", ""));
+            clickAndAwait(view, "research.load", "research.result", "Provided sources");
+            SwingUtilities.invokeAndWait(() -> assertEquals("Builds data products", ((JTextComponent) named(view, "research.text")).getText()));
+        } finally { SwingUtilities.invokeAndWait(view::close); }
+    }
+
 }

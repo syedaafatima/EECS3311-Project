@@ -28,17 +28,19 @@ Course periods use **Toronto local time**. Select five distinct meaningful imple
 
 | Commit | Development change | Upload status |
 |---|---|---|
-| [a73d1ac](https://github.com/syedaafatima/EECS3311-Project/commit/a73d1ac) | F06–F08 AI explanations and job comparison | Local checkpoint only; push not confirmed |
-| [bbe8de8](https://github.com/syedaafatima/EECS3311-Project/commit/bbe8de8) | F09–F10 editable evidence-backed writing | Local checkpoint only; push not confirmed |
-| [7bd7015](https://github.com/syedaafatima/EECS3311-Project/commit/7bd7015) | F11–F13 question sets, sessions and feedback | Local checkpoint only; push not confirmed |
-| [579f50a](https://github.com/syedaafatima/EECS3311-Project/commit/579f50a) | F16–F17 company research and career plans | Local checkpoint only; push not confirmed |
-| Pending fifth code commit | Stable cross-process source fingerprints, atomic updates, safe identifiers/date validation, AI setup/verification, GUI/persistence regression tests | Changes tested; final commit/push interrupted by unavailable workspace |
+| [a73d1ac](https://github.com/syedaafatima/EECS3311-Project/commit/a73d1acb612ee4f6960ba6d7ad0224cae2565010) | Complete F06-F08 AI explanations and deterministic job comparison | Pushed November 7, 18:00:29 Toronto |
+| [bbe8de8](https://github.com/syedaafatima/EECS3311-Project/commit/bbe8de8eaee101f27fc26d4357b56f570f55a25f) | Implement F09-F10 editable evidence-backed resume and cover-letter drafts | Pushed November 7, 18:00:29 Toronto |
+| [7bd7015](https://github.com/syedaafatima/EECS3311-Project/commit/7bd701565a6de56f4ce1aa3fe2bc185f26c8a927) | Implement F11-F13 interview questions, persistent sessions and rubric feedback | Pushed November 7, 18:00:29 Toronto |
+| [579f50a](https://github.com/syedaafatima/EECS3311-Project/commit/579f50ab29664dc0f949ea0aeadf20bbcbec7c5a) | Implement F16-F17 source-cited company research and budgeted career plans | Pushed November 7, 18:00:29 Toronto |
+| [0f2b00a](https://github.com/syedaafatima/EECS3311-Project/commit/0f2b00a3611cc0ad830ab2b7f36b90ebf51366fa) | Harden restart-safe drafts, persistence and API setup with desktop verification | Pushed November 7, 18:00:29 Toronto |
+
+All five selected substantive development changes are on main. [6979590](https://github.com/syedaafatima/EECS3311-Project/commit/6979590) additionally fixes tracker-history display. The user-requested free-provider adapter is additionally recorded in [8d52ea2](https://github.com/syedaafatima/EECS3311-Project/commit/8d52ea2). Documentation changes are excluded from the selected five.
 
 ## Evidence and counting notes
 
 - Period 1's Strategy/verification commit was pushed at approximately 2026-10-27 03:31 UTC, which is **October 26 at 11:31 p.m. Toronto**, inside Period 1. Do not classify it using UTC calendar dates.
 - F02 appears in the history as an original imported commit plus a merge/import copy. It represents one selected development change here.
 - The four November 1 additions were confirmed on main, pushed on **November 1 at 4:02:39 p.m. Toronto**, advancing main from d0f9e9f to 12fc14a. GitHub's repository Activity API recorded the push, independently of profile-calendar indexing.
-- Period 3's four local commits were created on November 7. They are not claimed as uploaded. The workspace disconnected before a fifth code commit and final push could be verified.
+- All five selected Period 3 code commits were pushed November 7 at 23:00:29 UTC / 18:00:29 Toronto, advancing main from 12fc14a to 0f2b00a. The repository Activity API and matching remote SHA confirm this upload.
 - The report/checklist files on branch stage2-report-draft-nov7 are documentation changes and are not counted toward the five-code-commit minimum.
-- Before final submission, verify actual remote commit hashes and upload activity for Period 3, add the fifth code-commit URL, and regenerate the final report. Do not change dates or create empty commits to fill a period.
+- Before final submission, retain these direct commit links in the reviewed report and verify the final source/report/video links. Dates and history have not been changed.

@@ -1,160 +1,168 @@
-# EECS 3311 - AI Job Search and Career Agent Project
+# AI Job Search and Career Agent — EECS3311
 
-EECS3311 Stage 2 implementation of the Stage 1 design.
+Java implementation of the 17 Stage 1 features, with Swing GUI and CLI sharing
+`AgentController`, `CareerFacade`, local JSON records and feature-specific AI tasks.
+Implemented patterns: **MVC, Facade, Adapter, Strategy and Observer**.
 
-## Implemented functionality
+**November 7 status:** F01–F17 have connected implementations. A desktop-enabled
+run passed all 61 tests. Live provider verification, feature demonstration videos,
+usage/cost figures and final report review remain pending before submission.
+Injected model responses are used only in tests and are not live demonstrations.
 
-- Candidate profile creation and updates (F01)
-- PDF/DOCX resume import with preview and confirmation (F02)
-- Evidence-backed LLM resume skill extraction with selective approval (F03)
-- Reviewed LLM job-description analysis and a manual fallback (F05)
-- Toronto deadline tracking and active-view Observer reminders (F15)
-- Swing GUI and CLI using the same controller and persistence
-- Job import and duplicate updates (F04)
-- Reviewed skill comparison and Strategy-based matching
-- Application tracking and status history (F14)
-- Local JSON persistence and a shared controller/facade CLI workflow
+## Build and launch
 
-## F02 — Resume Import (Commit 6)
+Requires Java 17+ and Maven 3.9+. Use a full desktop JDK for the GUI; a headless-only
+Java installation supports the CLI and non-desktop tests. Internet access is needed
+for the first Maven dependency download and live AI requests.
 
-Requires Java 17 or newer and Maven 3.9+. The cloud environment has Java 21.
-PDFBox 3.0.5 extracts PDF text; Apache POI 5.4.1 extracts DOCX text. Maven
-resolves these dependencies from Maven Central. No API key is needed for F02.
-
-Build and run verification:
+From the repository root, run one interface at a time:
 
 ```sh
-mvn test
-```
-
-Launch the CLI from the repository root (so local data stays in `data/`):
-
-```sh
+mvn package
 mvn exec:java
+mvn exec:java -Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI
 ```
 
-In this prepared cloud environment Maven is available at
-`/workspace/tools/apache-maven-3.9.9/bin/mvn`. Use it with
-`-s /workspace/tools/maven-settings.xml` to use the configured cloud proxy, e.g.:
+Both interfaces use local `data/`. The compiler runs in-process and targets Java 17
+syntax/bytecode. Cloud verification uses Java 21. In the prepared cloud workspace:
 
 ```sh
-/workspace/tools/apache-maven-3.9.9/bin/mvn -s /workspace/tools/maven-settings.xml test
+/workspace/tools/apache-maven-3.9.9/bin/mvn -s /workspace/tools/maven-settings.xml package
 /workspace/tools/apache-maven-3.9.9/bin/mvn -s /workspace/tools/maven-settings.xml exec:java
 ```
 
-The Maven compiler runs in-process, so it also works when the cloud image includes
-the Java compiler module without a `javac` launcher. The build uses Java 17
-source/target options because this image omits the symbol archive needed by
-`--release`; verification here runs on Java 21.
+The original cloud JDK lacks desktop support. Native-window verification used an
+Xorg dummy display and an official Adoptium Java 21 desktop JRE installed locally
+under `work/`; neither is a project dependency on a normal desktop computer.
 
+## Configure free API access locally
 
-### Verification
+The default is **Groq**, with Groq-hosted `openai/gpt-oss-20b`. Groq offers a
+quota-limited Free plan. An API key is required; use the Free plan for this project.
+The model's `openai/` identifier identifies an open-weight model hosted by Groq;
+requests use the Groq endpoint and Groq account.
 
-The current suite executes 33 tests with assertions enabled. The F02 checkpoint
-introduced 15 of them, including the
-existing Period 1 verification. Coverage includes PDF and DOCX extraction,
-paragraphs and tables, Unicode/control-character persistence, invalid and
-password-protected files, blank/oversized files, misleading file extensions,
-preview cancellation and confirmation, parser replacement, saved versions,
-persistence failure, long resume text loaded after restart, and interrupted CLI
-input. The long-text and interrupted-input checks reproduce defects found and
-fixed during review. `mvn package` builds the application JAR; use `mvn exec:java`
-to launch with the required runtime dependencies.
+1. Create a free Groq account and key at <https://console.groq.com/keys>.
+2. Copy `.env.example` to `.env`: `cp .env.example .env` on macOS/Linux, or
+   `Copy-Item .env.example .env` in PowerShell.
+3. Set these values locally, replacing the key placeholder only in ignored `.env`:
 
-## F03 — Evidence-backed resume skills
-
-Copy `.env.example` to `.env` in the repository root, then replace the placeholder
-with your own OpenAI API key locally. `OPENAI_MODEL` defaults to `gpt-4.1-mini`.
-Environment variables override `.env`. Both files and environment variables are
-read only when an AI feature is invoked; profile/import/tracking work without a key.
-`.env` and local data are ignored by Git. Never put credentials in screenshots or videos.
-
-In the CLI, create a profile, import/paste a resume, then use `resume list` to obtain
-its ID. Run `resume extract-skills`, consent to sending that resume's text to OpenAI,
-and enter its ID. Review the numbered proposals and their verbatim evidence; enter
-only the numbers you accept. A blank selection cancels. Unsupported proposals are
-removed, duplicates collapse, and approved skills merge with existing profile skills.
-Use `profile edit` to enter or edit skills manually if generation fails. Source text
-is limited to 60,000 characters for AI tasks; larger resumes remain available locally.
-
-`CareerAgent` retrieves through `ToolManager`, invokes the provider-independent
-`LLMClient`, checks evidence against the source, and returns proposals to the shared
-controller. `OpenAIAdapter` translates the OpenAI HTTP API (Adapter); saved records
-change only after candidate review through the Facade/MVC workflow. No model response
-is treated as an executable tool instruction. The automated suite uses fake model
-responses and a local HTTP server, never a real key or paid generation.
-
-## F05 — Reviewed job analysis
-
-After `job import`, run `job analyze`, consent to sending the description to OpenAI,
-and select a job ID. Review and accept only the numbered requirements you want to
-save. Required/preferred skills affect matching; education, experience, and vague
-(`UNCERTAIN`) requirements retain their evidence but do not become scored skills.
-Unsupported excerpts are discarded. `job show` displays saved evidence and unknown
-salary/deadline values. `job requirements` is an explicit manual fallback.
-
-F05 uses `CareerAgent.analyzeJob` with job-specific retrieval/schema validation,
-separate from `extractSkills`' resume-specific branch. `JobAnalysis` captures the
-source description; `CareerFacade.approveJobAnalysis` rejects stale previews.
-Changing a posting's description invalidates its old reviewed requirements. Saved
-analysis is reloaded by `Repository`, making the existing `job gaps` and `job match`
-commands usable from ordinary imported jobs without modifying JSON by hand.
-These checks validate literal evidence, not the model's interpretation of a sentence:
-the user must still review whether a skill is actually required or merely mentioned.
-F06/F07 currently provide deterministic comparisons/scores; their planned AI
-explanations are still outstanding.
-
-## F15 — Deadline tracking (Observer)
-
-`deadlines list` displays outstanding jobs, including overdue and unknown deadlines,
-sorted by date. A date is inclusive in `America/Toronto`; it remains due today until
-local midnight, including daylight-saving changes. Untracked jobs and SAVED
-applications are outstanding; APPLIED and later/closed statuses have fulfilled or
-closed the submission task and receive no deadline reminders.
-
-`deadlines check` notifies subscribed views for today through seven days ahead.
-The CLI also checks at each prompt. Past, missing, and distant dates do not notify.
-`DeadlineManager` is the Observer subject, with concrete `subscribe(DeadlineObserver)`,
-`unsubscribe(DeadlineObserver)`, and `checkDeadlines()` operations;
-`DeadlineObserver.onDeadline(DeadlineReminder)` is the callback. Views register only
-while active. Checks deduplicate by job/deadline for the current local day in memory;
-restarting the process allows a fresh reminder. `Clock` injection makes timezone and
-boundary verification independent of the machine's current date. No email or external
-notifications are sent.
-
-## GUI and current Stage 2 status
-
-Launch the Swing GUI on a desktop with Java 17+ and Maven 3.9+:
-
-```sh
-mvn compile exec:java -Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI
+```dotenv
+LLM_PROVIDER=groq
+GROQ_API_KEY=YOUR_LOCAL_API_KEY_HERE
+GROQ_MODEL=openai/gpt-oss-20b
 ```
 
-The default `mvn compile exec:java` starts the CLI. Run from the repository root;
-both interfaces use the same local `data/` directory. Use one interface at a time.
-The GUI offers Skills profile, Resumes, Jobs & matching, and Applications & deadlines
-tabs. Import a resume and review its preview before saving. AI extraction/analysis
-asks before sending text to OpenAI, shows source evidence, and lets you approve
-only selected numbered proposals. AI work runs in a background worker. Deadline
-checks run every minute while the GUI is open, and stop when it closes.
+4. Run `ai status`, then `ai verify`, or use the GUI's AI setup tab. The verification
+   makes a small actual provider call without candidate/job records.
+5. Pace model requests and use short demo inputs to stay within free-plan limits.
+   An HTTP 429 stops the task with recovery advice; check quota and wait before retrying.
 
-Use `.env.example` as the safe template (`cp .env.example .env` on macOS/Linux;
-`Copy-Item .env.example .env` in PowerShell). Enter your real key only in `.env`.
-No key is needed for manual profile/requirements editing, file parsing, matching,
-tracking, or deadlines. On a machine without a desktop display, use the CLI;
-GUI automated tests exercise Swing forms headlessly.
+Environment variables override `.env`; provider/configuration is reloaded per
+request. There is no automatic fallback to another provider. Keys are kept in
+separate settings, so a Groq request cannot use an OpenAI key. `.env`,
+`config.local.json` and `data/` are ignored by Git. Keep keys out of chat, source,
+reports and recordings. Manual workflows work without any API key.
 
-See [the implementation checkpoint](docs/stage2-progress.md) for all 17 Stage 1
-features, remaining work, pattern roles, verification limitations, and the response
-to Stage 1 feedback. Updated diagrams:
+Optional OpenAI support is retained: explicitly set `LLM_PROVIDER=openai`,
+`OPENAI_API_KEY` and `OPENAI_MODEL` (default `gpt-4.1-mini`). OpenAI API billing is
+separate from a ChatGPT subscription. HTTP 401 means a rejected key; 403 means
+access restrictions; 413 means an oversized request; 429 means provider rate/quota
+limits or account billing restrictions. Provider response bodies are not displayed.
 
+Provider references checked November 7, 2026: [Groq Free-plan FAQ](https://community.groq.com/t/do-i-get-charged-for-anything-on-the-groq-free-plan/832),
+[free-plan limits](https://console.groq.com/docs/rate-limits),
+[model documentation](https://console.groq.com/docs/model/openai/gpt-oss-20b),
+and [OpenAI-compatible API](https://console.groq.com/docs/openai).
+
+## First run and GUI
+
+Create a profile, then import a PDF/DOCX resume or paste text from a scanned resume.
+Review and confirm the preview. Use the displayed saved IDs for subsequent tasks.
+Import jobs and review requirements, using the model or explicit manual input.
+The GUI tabs cover Skills profile, Resumes, Jobs & matching, Applications & deadlines,
+Writing assistant, Interview preparation, Company research, Career plan and AI setup.
+Long requests run in background workers; generated writing opens an editable review
+dialog. Original resumes are retained as separate immutable versions.
+
+## CLI feature guide
+
+Type `help` for commands. Commands prompt for their inputs; multiline text ends
+with a line containing only `.`. Use list commands to obtain actual saved IDs.
+AI tasks request consent before sending relevant records to the configured provider.
+
+| ID | Commands and behavior |
+|---|---|
+| F01 | `profile edit`, `profile show`: validated candidate details and approved skills |
+| F02 | `resume import [path]`, `resume paste`, `resume list`, `resume show`: preview then confirm |
+| F03 | `resume extract-skills`: numbered evidence-backed proposals; approve a subset |
+| F04 | `job import`, `job list`, `job show`: a matching title/company updates the posting |
+| F05 | `job analyze`, `job requirements`: reviewed skill/qualification/experience categories and evidence |
+| F06 | `job gaps`, `job gaps explain`: matched/missing/uncertain skills and optional AI interpretation |
+| F07 | `job match`, `job match explain`: required/weighted Strategy ranking and optional explanation |
+| F08 | `job compare`: compare 2–4 distinct jobs, preserving unknown fields |
+| F09 | `resume suggest`: editable suggestions with candidate evidence |
+| F10 | `letter draft`: professional/warm/concise letter with generic greeting and evidence |
+| F11 | `interview questions`, `interview question-sets`, `interview questions show`: 1–20 distinct questions with rubrics |
+| F12 | `interview start`, `interview answer`, `interview skip`, `interview pause`, `interview resume`, `interview finish`, `interview show`, `interview list` |
+| F13 | `interview feedback`: rubric-based strengths/weaknesses/improvements, 0–100 score and answer excerpt |
+| F14 | `application add`, `application update`, `application list`: dates, transitions and status history |
+| F15 | `deadlines list`, `deadlines check`: outstanding, overdue and unknown dates; active-view reminders |
+| F16 | `company notes`, `company show`, `company summarize`: research, supplied URLs and reviewed summary |
+| F17 | `career plan`: 1–4 target jobs, specific goal, weekly time and cost limits |
+
+`document list`, `document show` and `document edit` reload reviewed letters,
+suggestions, summaries and plans. At a preview choose `save`, `edit` or `cancel`.
+Editing supplies the entire reviewed content. An interrupted CLI command cancels
+pending reviews. Saved records survive restart.
+
+## Behavior and limits
+
+- Deterministic code owns skill sets, scores, status transitions, deadlines and
+  budget totals. AI supplies reviewed suggestions and interpretations.
+- Extracted skills/requirements must have literal supporting text. Writing and
+  feedback validate source excerpts; human review is still required for semantic
+  accuracy and fabricated qualifications. A quotation alone does not prove a claim.
+- Provider failures preserve older records. Failed optional gap/ranking/comparison
+  explanations retain deterministic results with a warning. Manual requirements,
+  matching, tracking and parsing remain available without API access.
+- Description changes invalidate reviewed job analysis. Source fingerprints reject
+  stale document approval and remain stable across Java-process restarts.
+- Weighted scores use 70% required and 30% preferred coverage when both categories
+  exist; otherwise they use the available category. Required matching uses required
+  coverage. Unanalyzed jobs have unknown compatibility in comparison.
+- Interviews reuse saved question sets and retain their original job/rubric snapshot.
+  Answers/skips save after every action; paused sessions must resume before answering.
+  Finish requires every question answered or skipped. Skips receive no feedback.
+- Company research uses user-supplied notes/URLs; the app does not browse or verify
+  websites. Career plans cover one week, validate total hours/cost, and retrieve prior
+  reviewed resume advice as advice memory. A cost budget of 0 requests free activities.
+- Dates/reminders use America/Toronto. Untracked/SAVED jobs remain outstanding;
+  submitted or closed applications receive no submission reminders. GUI checks every
+  minute; CLI checks each prompt. Due dates within 0–7 days notify once per local
+  day/process. Overdue/unknown dates are listed without notifications.
+- AI context is limited to 60,000 characters; resume files to 20 MiB. No applications,
+  letters, email or external notifications are sent automatically.
+- Storage is single-candidate local JSON with atomic writes and no cross-process
+  locking. Use one interface at a time and back up `data/` privately.
+
+## Verification and submission records
+
+`mvn test` runs 61 checks. With no desktop runtime/display, the native-window test is
+skipped (60 pass, 1 skip). On November 7 a desktop-enabled run passed all 61 with no
+failures/errors/skips. Coverage includes parsing, review/cancellation, malformed and
+unsupported model data, HTTP/configuration redaction, persistence and separate-JVM
+restart, gaps/ranking, interviews, notes/plans, budgets, dates, Observer lifecycle,
+GUI saves/responsiveness, actual window/file-picker behavior and interrupted input.
+Tests use injected responses/local HTTP, not paid model calls.
+
+- [Implementation checkpoint and change record](docs/stage2-progress.md)
+- [Report draft PDF](stage2-report.pdf) and [editable Word draft](stage2-report.docx)
+- [Report source](docs/stage2-report-working-draft.md)
+- [Weekly commit evidence](docs/weekly-commit-summary.md)
+- [Demonstration recording checklist](docs/demonstration-guide.md)
 - [Implemented class diagram](Diagrams/stage2_class_diagram.png)
-- [Feature-specific F03 and F05 sequences](Diagrams/stage2_ai_workflows.md)
-- [Concrete Observer sequence](Diagrams/stage2_deadlines.md)
-- [Current GUI/CLI use cases](Diagrams/stage2_use_cases.md)
+- [Feature-specific sequences](Diagrams/stage2_ai_workflows.md)
 
-The original Stage 1 class diagram source/export has refined role labels and
-Observer/Adapter signatures. It describes the planned full system; the separate
-Stage 2 diagram describes the implemented subset. Other original Stage 1 diagrams
-are design references. The Stage 2 report and feature demonstration videos are
-still required; this checkpoint is not a completed final submission.
+The report is a draft until live verification, demonstration links and actual AI
+usage/cost fields are completed. Original Stage 1 artifacts remain design references.

@@ -32,6 +32,7 @@ public class CareerFacade {
     private final ToolManager toolManager;
     private final ResumeParser parser;
     private final CareerAgent agent;
+    private final InterviewService interviews;
     private final ca.yorku.careeragent.deadline.DeadlineManager deadlines;
 
     public CareerFacade(Repository repository) {
@@ -43,7 +44,7 @@ public class CareerFacade {
     }
 
     public CareerFacade(Repository repository, ToolManager toolManager, ResumeParser parser) {
-        this(repository, toolManager, parser, new ca.yorku.careeragent.llm.OpenAIAdapter());
+        this(repository, toolManager, parser, new ca.yorku.careeragent.llm.ConfiguredLLMClient());
     }
 
     public CareerFacade(Repository repository, ToolManager toolManager, ResumeParser parser,
@@ -52,6 +53,7 @@ public class CareerFacade {
         this.toolManager = java.util.Objects.requireNonNull(toolManager);
         this.parser = java.util.Objects.requireNonNull(parser);
         this.agent = new CareerAgent(toolManager, llm);
+        this.interviews = new InterviewService(repository.records(), agent);
         this.deadlines = new ca.yorku.careeragent.deadline.DeadlineManager(repository);
     }
 
@@ -220,6 +222,9 @@ public class CareerFacade {
     }
 
     public Application trackApplication(String jobId, LocalDate submissionDate, Application.Status requestedStatus) {
+        if (submissionDate == null || submissionDate.isAfter(LocalDate.now(java.time.ZoneId.of("America/Toronto")))) {
+            throw new IllegalArgumentException("Submission/saved date must not be in the future (Toronto time).");
+        }
         repository.findJob(jobId).orElseThrow(() -> new IllegalArgumentException("Unknown job: " + jobId));
         Optional<Application> existing = repository.findApplicationByJobId(jobId);
         Application application;
@@ -261,7 +266,7 @@ public class CareerFacade {
         List<Map.Entry<Job, Double>> scored = repository.listJobs().stream()
                 .filter(Job::isAnalyzed)
                 .map(job -> Map.entry(job, toolManager.calculateMatch(job.getId())))
-                .sorted(Map.Entry.<Job, Double>comparingByValue(Comparator.reverseOrder()))
+                .sorted(Map.Entry.<Job, Double>comparingByValue(Comparator.reverseOrder()).thenComparing(e -> e.getKey().getId()))
                 .toList();
 
         if (scored.isEmpty()) {
@@ -271,4 +276,112 @@ public class CareerFacade {
         scored.forEach(entry -> ranked.put(entry.getKey(), entry.getValue()));
         return ranked;
     }
+
+    public ca.yorku.careeragent.domain.Assessment explainGaps(String jobId) {
+        var gaps = identifyGaps(jobId); // Input errors are not disguised as provider failures.
+        String facts = "Matched: " + gaps.get("matched") + "\nMissing: " + gaps.get("missing") + "\nUncertain: " + gaps.get("uncertain");
+        return new ca.yorku.careeragent.domain.Assessment("F06 Skill gaps", facts, optionalExplanation(() -> agent.explainGaps(jobId)));
+    }
+
+    public ca.yorku.careeragent.domain.Assessment explainMatches(String strategy) {
+        Map<Job, Double> ranked = matchJobs(strategy);
+        String facts = ranked.entrySet().stream().map(e -> String.format(java.util.Locale.ROOT,
+                "%s | %.1f%% | %s", e.getKey(), e.getValue(), toolManager.compareSkills(e.getKey().getId())))
+                .collect(java.util.stream.Collectors.joining("\n"));
+        return new ca.yorku.careeragent.domain.Assessment("F07 Ranked jobs", facts, optionalExplanation(() -> agent.explainMatches(ranked)));
+    }
+
+    public ca.yorku.careeragent.domain.Assessment compareJobs(List<String> jobIds, String strategy) {
+        if (jobIds == null || jobIds.size() < 2 || jobIds.size() > 4 || Set.copyOf(jobIds).size() != jobIds.size()) {
+            throw new IllegalArgumentException("Select 2-4 distinct jobs for comparison.");
+        }
+        List<Job> selected = jobIds.stream().map(toolManager::readJob).toList();
+        toolManager.readProfile();
+        if ("required".equalsIgnoreCase(strategy)) toolManager.setMatchingStrategy(new RequiredSkillMatching());
+        else if (strategy == null || strategy.isBlank() || "weighted".equalsIgnoreCase(strategy)) toolManager.setMatchingStrategy(new WeightedMatching());
+        else throw new IllegalArgumentException("Matching strategy must be 'weighted' or 'required'.");
+        StringBuilder table = new StringBuilder("Job | Title | Company | Salary | Location | Deadline | Compatibility | Gaps\n");
+        for (Job job : selected) {
+            table.append(job.getId()).append(" | ").append(job.getTitle()).append(" | ").append(job.getCompany())
+                    .append(" | ").append(known(job.getSalary())).append(" | ").append(known(job.getLocation()))
+                    .append(" | ").append(job.getDeadline() == null ? "Unknown" : job.getDeadline()).append(" | ")
+                    .append(job.isAnalyzed() ? String.format(java.util.Locale.ROOT, "%.1f%%", toolManager.calculateMatch(job.getId())) : "Not analyzed")
+                    .append(" | ").append(job.isAnalyzed() ? toolManager.compareSkills(job.getId()) : "Unknown").append('\n');
+        }
+        String facts = table.toString();
+        return new ca.yorku.careeragent.domain.Assessment("F08 Job comparison", facts, optionalExplanation(() -> agent.summarizeComparison(facts)));
+    }
+
+    private static String known(String text) { return text == null || text.isBlank() ? "Unknown" : text; }
+
+    private static String optionalExplanation(java.util.function.Supplier<String> request) {
+        try { return request.get(); }
+        catch (IllegalArgumentException | IllegalStateException e) {
+            return "AI explanation unavailable: " + e.getMessage() + " Deterministic results remain available.";
+        }
+    }
+
+
+    public ca.yorku.careeragent.domain.CareerDocument suggestResume(String resumeId, String jobId) {
+        return agent.suggestResume(resumeId, jobId);
+    }
+    public ca.yorku.careeragent.domain.CareerDocument draftLetter(String resumeId, String jobId, String tone) {
+        return agent.draftLetter(resumeId, jobId, tone);
+    }
+    public ca.yorku.careeragent.domain.CareerDocument saveDocument(ca.yorku.careeragent.domain.CareerDocument draft, String editedContent) {
+        if (draft == null) throw new IllegalArgumentException("Generate or load a document before saving.");
+        if (!draft.sourceId().isEmpty() && (draft.type() == ca.yorku.careeragent.domain.CareerDocument.Type.COVER_LETTER
+                || draft.type() == ca.yorku.careeragent.domain.CareerDocument.Type.RESUME_SUGGESTIONS)) {
+            if (!draft.sourceFingerprint().equals(toolManager.writingFingerprint(draft.sourceId(), draft.jobId()))) {
+                throw new IllegalArgumentException("Candidate or job records changed. Regenerate the draft before approval.");
+            }
+        }
+        if (draft.type() == ca.yorku.careeragent.domain.CareerDocument.Type.COMPANY_SUMMARY
+                && !draft.sourceFingerprint().equals(toolManager.readNotesById(draft.sourceId()).fingerprint())) {
+            throw new IllegalArgumentException("Research notes changed. Generate a fresh summary before approval.");
+        }
+        if (draft.type() == ca.yorku.careeragent.domain.CareerDocument.Type.CAREER_PLAN
+                && !draft.sourceFingerprint().equals(ToolManager.fingerprint(toolManager.planEvidence(List.of(draft.sourceId().split(",")))))) {
+            throw new IllegalArgumentException("Profile, target jobs or reviewed advice changed. Generate a fresh plan before approval.");
+        }
+        var approved = draft.approve(editedContent == null ? draft.content() : editedContent);
+        repository.records().put("documents", approved.id(), approved.toRecord());
+        return approved;
+    }
+    public ca.yorku.careeragent.domain.CareerDocument getDocument(String id) {
+        return ca.yorku.careeragent.domain.CareerDocument.fromRecord(repository.records().get("documents", id)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown document: " + id)));
+    }
+    public List<ca.yorku.careeragent.domain.CareerDocument> listDocuments() {
+        return repository.records().list("documents").stream().map(ca.yorku.careeragent.domain.CareerDocument::fromRecord).toList();
+    }
+
+
+    public ca.yorku.careeragent.domain.QuestionSet generateQuestions(String jobId, int count) { return interviews.generateQuestions(jobId, count); }
+    public List<ca.yorku.careeragent.domain.QuestionSet> listQuestionSets() { return interviews.listQuestions(); }
+    public ca.yorku.careeragent.domain.QuestionSet getQuestionSet(String id) { return interviews.questions(id); }
+    public ca.yorku.careeragent.domain.InterviewSession startInterview(String setId) { return interviews.start(setId); }
+    public List<ca.yorku.careeragent.domain.InterviewSession> listInterviews() { return interviews.listSessions(); }
+    public ca.yorku.careeragent.domain.InterviewSession getInterview(String id) { return interviews.session(id); }
+    public ca.yorku.careeragent.domain.InterviewSession answerInterview(String id, String text, boolean skip) { return interviews.answer(id, text, skip); }
+    public ca.yorku.careeragent.domain.InterviewSession transitionInterview(String id, String action) { return interviews.transition(id, action); }
+    public ca.yorku.careeragent.domain.InterviewSession interviewFeedback(String id) { return interviews.feedback(id); }
+
+
+    public ca.yorku.careeragent.domain.CompanyNotes saveCompanyNotes(String jobId, String text, List<String> sources) {
+        String company = toolManager.readJob(jobId).getCompany();
+        var notes = new ca.yorku.careeragent.domain.CompanyNotes(ca.yorku.careeragent.domain.CompanyNotes.idFor(company), company, text, sources);
+        repository.records().put("company-notes", notes.id(), notes.toRecord());
+        return notes;
+    }
+    public ca.yorku.careeragent.domain.CompanyNotes getCompanyNotes(String jobId) { return toolManager.readNotes(jobId); }
+    public ca.yorku.careeragent.domain.CareerDocument summarizeCompanyNotes(String jobId) { return agent.summarizeNotes(jobId); }
+    public ca.yorku.careeragent.domain.CareerDocument generateCareerPlan(List<String> jobIds, String goals, int hours, java.math.BigDecimal budget) {
+        return agent.generateCareerPlan(jobIds, goals, hours, budget);
+    }
+
+
+    public String aiStatus() { return agent.aiStatus(); }
+    public String verifyAI() { return agent.verifyAI(); }
+
 }

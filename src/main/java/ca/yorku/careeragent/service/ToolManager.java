@@ -53,7 +53,7 @@ public class ToolManager {
         List<String> uncertain = new ArrayList<>();
         List<String> candidate = profile.getSkills().stream().map(ToolManager::normalize).toList();
 
-        for (String requirement : job.getRequiredSkills()) {
+        for (String requirement : job.getRequiredSkills().stream().sorted(String.CASE_INSENSITIVE_ORDER).toList()) {
             String normalizedRequirement = normalize(requirement);
             if (candidate.contains(normalizedRequirement)) {
                 matched.add(requirement);
@@ -88,4 +88,52 @@ public class ToolManager {
     private static String normalize(String value) {
         return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
     }
+
+    public String candidateEvidence(String resumeId) {
+        return profileContext() + "\nResume:\n" + readResume(resumeId).getText();
+    }
+
+    public String writingFingerprint(String resumeId, String jobId) {
+        Job job = readJob(jobId);
+        return fingerprint(candidateEvidence(resumeId) + job + job.getDescription()
+                + job.getRequiredSkills().stream().sorted(String.CASE_INSENSITIVE_ORDER).toList()
+                + job.getPreferredSkills().stream().sorted(String.CASE_INSENSITIVE_ORDER).toList());
+    }
+
+    public static String fingerprint(String source) {
+        return ca.yorku.careeragent.domain.SourceFingerprint.of(source);
+    }
+
+
+    public ca.yorku.careeragent.domain.CompanyNotes readNotes(String jobId) {
+        return readNotesById(ca.yorku.careeragent.domain.CompanyNotes.idFor(readJob(jobId).getCompany()));
+    }
+
+    public ca.yorku.careeragent.domain.CompanyNotes readNotesById(String id) {
+        return ca.yorku.careeragent.domain.CompanyNotes.fromRecord(repository.records().get("company-notes", id)
+                .orElseThrow(() -> new IllegalArgumentException("Save company research notes first.")));
+    }
+
+    public String planEvidence(List<String> jobIds) {
+        StringBuilder context = new StringBuilder(profileContext());
+        for (String id : jobIds) {
+            Job job = readJob(id);
+            context.append("\n").append(job).append("\n").append(compareSkills(id));
+        }
+        repository.records().list("documents").stream().map(ca.yorku.careeragent.domain.CareerDocument::fromRecord)
+                .filter(d -> d.approved() && d.type() == ca.yorku.careeragent.domain.CareerDocument.Type.RESUME_SUGGESTIONS && jobIds.contains(d.jobId()))
+                .sorted(java.util.Comparator.comparing(ca.yorku.careeragent.domain.CareerDocument::createdAt).reversed()).limit(5)
+                .forEach(d -> context.append("\nPrior reviewed resume advice (not candidate facts): ").append(d.content()));
+        return context.toString();
+    }
+
+
+    public String profileContext() {
+        var profile = readProfile();
+        return "Name: " + profile.getName() + "\nEducation: " + profile.getEducationLevel() + "\nExperience: " + profile.getExperience()
+                + "\nApproved skills: " + profile.getSkills().stream().sorted(String.CASE_INSENSITIVE_ORDER).toList()
+                + "\nInterests: " + profile.getInterests().stream().sorted(String.CASE_INSENSITIVE_ORDER).toList()
+                + "\nPreferred location: " + profile.getLocationPreference();
+    }
+
 }

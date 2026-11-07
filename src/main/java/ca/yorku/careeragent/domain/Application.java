@@ -72,6 +72,7 @@ public class Application {
 
     @Override
     public String toString() {
-        return id + " | job=" + jobId + " | submitted=" + submissionDate + " | status=" + status;
+        return id + " | job=" + jobId + " | submitted=" + submissionDate + " | status=" + status
+                + System.lineSeparator() + "Status history: " + statusHistory;
     }
 }

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 /** Routes GUI/CLI requests to the shared CareerFacade. */
 public class AgentController {
     private final CareerFacade facade;
+    private ca.yorku.careeragent.domain.CareerDocument pendingDocument;
     private ca.yorku.careeragent.domain.JobAnalysis pendingAnalysis;
     private Resume pendingResume;
     private java.util.List<ca.yorku.careeragent.domain.SkillProposal> pendingSkills;
@@ -29,6 +30,11 @@ public class AgentController {
     public java.util.List<Job> getJobs() { return facade.listJobs(); }
     public java.util.List<Resume> listResumes() { return facade.listResumes(); }
 
+    public java.util.List<ca.yorku.careeragent.domain.QuestionSet> listQuestionSets() { return facade.listQuestionSets(); }
+    public java.util.List<ca.yorku.careeragent.domain.InterviewSession> listInterviews() { return facade.listInterviews(); }
+
+    public ca.yorku.careeragent.domain.CompanyNotes getCompanyNotes(String jobId) { return facade.getCompanyNotes(jobId); }
+
     public void subscribeDeadlines(ca.yorku.careeragent.deadline.DeadlineObserver observer) {
         facade.subscribeDeadlines(observer);
     }
@@ -40,6 +46,8 @@ public class AgentController {
     public String submitRequest(String action, Map<String, String> input) {
         try {
             return switch (action) {
+                case "ai.status" -> facade.aiStatus();
+                case "ai.verify" -> facade.verifyAI();
                 case "deadlines.list" -> facade.listDeadlines().stream().map(Object::toString)
                         .collect(Collectors.collectingAndThen(Collectors.joining(System.lineSeparator()),
                                 result -> result.isEmpty() ? "No outstanding application deadlines." : result));
@@ -72,6 +80,36 @@ public class AgentController {
                 case "application.add" -> addApplication(input);
                 case "application.update" -> updateApplication(input);
                 case "application.list" -> listApplications();
+                case "company.notes" -> facade.saveCompanyNotes(input.get("jobId"), input.get("text"), java.util.List.copyOf(csv(input.get("sources")))).toString();
+                case "company.show" -> facade.getCompanyNotes(input.get("jobId")).toString();
+                case "company.summarize" -> researchDocument(input, false);
+                case "career.plan" -> researchDocument(input, true);
+                case "interview.questions" -> facade.generateQuestions(input.get("jobId"), Integer.parseInt(input.getOrDefault("count", "5"))).toString();
+                case "interview.question-sets" -> facade.listQuestionSets().stream().map(q -> q.id() + " | job=" + q.jobId() + " | count=" + q.questions().size())
+                        .collect(Collectors.joining(System.lineSeparator()));
+                case "interview.questions.show" -> facade.getQuestionSet(input.get("questionSetId")).toString();
+                case "interview.start" -> facade.startInterview(input.get("questionSetId")).toString();
+                case "interview.list" -> facade.listInterviews().stream().map(s -> s.id() + " | job=" + s.questionSet().jobId() + " | " + s.status())
+                        .collect(Collectors.joining(System.lineSeparator()));
+                case "interview.show" -> facade.getInterview(input.get("sessionId")).toString();
+                case "interview.answer", "interview.skip" -> facade.answerInterview(input.get("sessionId"), input.get("answer"), action.equals("interview.skip")).toString();
+                case "interview.pause", "interview.resume", "interview.finish" -> facade.transitionInterview(input.get("sessionId"), action.substring("interview.".length())).toString();
+                case "interview.feedback" -> facade.interviewFeedback(input.get("sessionId")).toString();
+                case "resume.suggest" -> previewDocument("resume", input);
+                case "letter.draft" -> previewDocument("letter", input);
+                case "document.save" -> saveDocument(input);
+                case "document.cancel" -> { pendingDocument = null; yield "Document review cancelled."; }
+                case "document.show" -> {
+                    pendingDocument = null;
+                    pendingDocument = facade.getDocument(input.get("documentId"));
+                    yield pendingDocument.toString();
+                }
+                case "document.list" -> facade.listDocuments().stream().map(d -> d.id() + " | " + d.type() + " | job=" + d.jobId())
+                        .collect(Collectors.collectingAndThen(Collectors.joining(System.lineSeparator()), s -> s.isBlank() ? "No reviewed documents saved." : s));
+                case "job.gaps.explain" -> facade.explainGaps(input.get("jobId")).toString();
+                case "job.match.explain" -> facade.explainMatches(input.get("strategy")).toString();
+                case "job.compare" -> facade.compareJobs(java.util.Arrays.stream(input.getOrDefault("jobIds", "").split(","))
+                        .map(String::trim).toList(), input.get("strategy")).toString();
                 case "job.gaps" -> formatGaps(input.get("jobId"));
                 case "job.match" -> formatMatches(input.get("strategy"));
                 default -> "Unknown request: " + action;
@@ -239,4 +277,33 @@ public class AgentController {
         for (String item : value.split(",")) if (!item.isBlank()) result.add(item.trim());
         return result;
     }
+
+    public String pendingDocumentContent() { return pendingDocument == null ? "" : pendingDocument.content(); }
+
+    private String previewDocument(String task, Map<String, String> input) {
+        pendingDocument = null;
+        pendingDocument = "resume".equals(task) ? facade.suggestResume(input.get("resumeId"), input.get("jobId"))
+                : facade.draftLetter(input.get("resumeId"), input.get("jobId"), input.getOrDefault("tone", "professional"));
+        return pendingDocument.toString();
+    }
+
+    private String saveDocument(Map<String, String> input) {
+        if (!"yes".equalsIgnoreCase(input.get("confirmed"))) {
+            pendingDocument = null;
+            return "Document review cancelled.";
+        }
+        var saved = facade.saveDocument(pendingDocument, input.get("content"));
+        pendingDocument = null;
+        return "Reviewed document saved: " + saved.id();
+    }
+
+
+    private String researchDocument(Map<String, String> input, boolean careerPlan) {
+        pendingDocument = null;
+        pendingDocument = careerPlan ? facade.generateCareerPlan(java.util.Arrays.stream(input.getOrDefault("jobIds", "").split(","))
+                .map(String::trim).toList(), input.get("goals"), Integer.parseInt(input.getOrDefault("hours", "0")),
+                new java.math.BigDecimal(input.getOrDefault("budget", "0"))) : facade.summarizeCompanyNotes(input.get("jobId"));
+        return pendingDocument.toString();
+    }
+
 }

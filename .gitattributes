@@ -1,0 +1,4 @@
+# Documents and raster images are binary assets, including ASCII-encoded PDFs.
+*.pdf binary
+*.docx binary
+*.png binary

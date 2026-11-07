@@ -47,6 +47,8 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
                 }
                 switch (command) {
                     case "help" -> printHelp();
+                    case "ai status" -> print("ai.status", Map.of());
+                    case "ai verify" -> aiRequest("ai.verify", Map.of());
                     case "profile edit" -> editProfile();
                     case "profile show" -> print("profile.show", Map.of());
                     case "resume import" -> importResume(ask("PDF/DOCX resume path"));
@@ -61,8 +63,39 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
                             "preferred", ask("Reviewed preferred skills (comma-separated)")));
                     case "job show" -> print("job.show", Map.of("jobId", ask("Job id")));
                     case "job list" -> print("job.list", Map.of());
+                    case "job gaps explain" -> aiRequest("job.gaps.explain", Map.of("jobId", ask("Job id")));
+                    case "job match explain" -> aiRequest("job.match.explain", Map.of("strategy", ask("Strategy [weighted/required]")));
+                    case "job compare" -> aiRequest("job.compare", Map.of("jobIds", ask("2-4 job ids (comma-separated)"), "strategy", ask("Strategy [weighted/required]")));
                     case "job gaps" -> print("job.gaps", Map.of("jobId", ask("Job id")));
                     case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
+                    case "company notes" -> {
+                        String id = ask("Job id");
+                        System.out.println("Enter research notes, ending with a line containing only .");
+                        String notes = multiline();
+                        print("company.notes", Map.of("jobId", id, "text", notes, "sources", ask("Source URLs (comma-separated, optional)")));
+                    }
+                    case "company show" -> print("company.show", Map.of("jobId", ask("Job id")));
+                    case "company summarize" -> researchRequest("company.summarize", Map.of("jobId", ask("Job id")));
+                    case "career plan" -> researchRequest("career.plan", Map.of("jobIds", ask("Target job ids (1-4, comma-separated)"),
+                            "goals", ask("Specific career goal"), "hours", ask("Weekly study hours 1-80"), "budget", ask("Weekly cost budget (0 for free activities)")));
+                    case "interview questions" -> aiRequest("interview.questions", Map.of("jobId", ask("Job id"), "count", ask("Question count 1-20")));
+                    case "interview question-sets" -> print("interview.question-sets", Map.of());
+                    case "interview questions show" -> print("interview.questions.show", Map.of("questionSetId", ask("Question-set id")));
+                    case "interview start" -> print("interview.start", Map.of("questionSetId", ask("Saved question-set id")));
+                    case "interview list" -> print("interview.list", Map.of());
+                    case "interview show" -> print("interview.show", Map.of("sessionId", ask("Session id")));
+                    case "interview answer" -> {
+                        String id = ask("Session id");
+                        System.out.println("Enter answer, ending with a line containing only .");
+                        print("interview.answer", Map.of("sessionId", id, "answer", multiline()));
+                    }
+                    case "interview skip", "interview pause", "interview resume", "interview finish" -> print(command.replace(' ', '.'), Map.of("sessionId", ask("Session id")));
+                    case "interview feedback" -> aiRequest("interview.feedback", Map.of("sessionId", ask("Session id")));
+                    case "resume suggest" -> writingRequest("resume.suggest");
+                    case "letter draft" -> writingRequest("letter.draft");
+                    case "document list" -> print("document.list", Map.of());
+                    case "document show" -> print("document.show", Map.of("documentId", ask("Document id")));
+                    case "document edit" -> editDocument();
                     case "application add" -> addApplication();
                     case "application update" -> updateApplication();
                     case "deadlines list" -> print("deadlines.list", Map.of());
@@ -75,6 +108,7 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
             } catch (NoSuchElementException e) {
                 controller.submitRequest("resume.cancel", Map.of());
                 controller.submitRequest("skills.cancel", Map.of());
+                controller.submitRequest("document.cancel", Map.of());
                 controller.submitRequest("job.analysis.cancel", Map.of());
                 System.out.println("Input ended. Current command cancelled.");
                 return;
@@ -178,7 +212,12 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         return scanner.nextLine();
     }
 
+    private void aiRequest(String action, Map<String, String> input) {
+        if ("yes".equalsIgnoreCase(ask("Send the relevant saved records to the configured LLM provider? [yes/no]"))) print(action, input);
+    }
+
     private void printHelp() {
+        System.out.println("ai status / ai verify - inspect local key setup (redacted) and verify live model access");
         System.out.println("resume import [path] - preview PDF/DOCX and confirm import");
         System.out.println("resume paste       - paste text from a scanned resume and review");
         System.out.println("resume extract-skills - propose evidence-backed skills using the LLM; review before saving");
@@ -191,8 +230,17 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         System.out.println("job requirements   - manually enter reviewed skill requirements");
         System.out.println("job show           - show posting, reviewed requirements, and evidence");
         System.out.println("job list           - list imported jobs");
+        System.out.println("job gaps explain / job match explain - add AI interpretations to deterministic results");
+        System.out.println("job compare        - compare 2-4 jobs, preserving unknown values");
         System.out.println("job gaps           - compare profile skills with a reviewed job analysis");
         System.out.println("job match          - rank reviewed jobs using a Strategy implementation");
+        System.out.println("company notes / company show / company summarize - save research and review source-cited summaries");
+        System.out.println("career plan - propose a reviewed learning plan within weekly time/cost limits");
+        System.out.println("interview questions / interview question-sets / interview start - create questions and start a mock session");
+        System.out.println("interview answer / skip / pause / resume / finish / show / list - manage saved mock interviews");
+        System.out.println("interview feedback - evaluate submitted answers against stored rubrics");
+        System.out.println("resume suggest / letter draft - generate an evidence-backed editable draft");
+        System.out.println("document list / document show / document edit - retrieve and review saved drafts");
         System.out.println("application add    - track a job application");
         System.out.println("application update - update application status");
         System.out.println("application list   - list tracked applications");
@@ -207,4 +255,49 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         AgentController controller = new AgentController(facade);
         new JobSearchCLI(controller, new Scanner(System.in)).run();
     }
+
+    private void writingRequest(String action) {
+        Map<String, String> input = new LinkedHashMap<>();
+        input.put("resumeId", ask("Resume id"));
+        input.put("jobId", ask("Job id"));
+        if (action.equals("letter.draft")) input.put("tone", ask("Tone [professional/warm/concise]"));
+        if (!"yes".equalsIgnoreCase(ask("Send candidate and job records to the configured LLM provider? [yes/no]"))) return;
+        String preview = controller.submitRequest(action, input);
+        System.out.println(preview);
+        if (!preview.startsWith("ERROR:")) reviewDocument();
+    }
+
+    private void editDocument() {
+        String result = controller.submitRequest("document.show", Map.of("documentId", ask("Document id")));
+        System.out.println(result);
+        if (!result.startsWith("ERROR:")) reviewDocument();
+    }
+
+    private void reviewDocument() {
+        String choice = ask("Review all claims and evidence. [save/edit/cancel]");
+        if (choice.equalsIgnoreCase("save")) print("document.save", Map.of("confirmed", "yes"));
+        else if (choice.equalsIgnoreCase("edit")) {
+            System.out.println("Enter the full reviewed document; finish with a line containing only .");
+            String content = multiline();
+            print("document.save", Map.of("confirmed", "yes", "content", content));
+        } else print("document.cancel", Map.of());
+    }
+
+    private String multiline() {
+        StringBuilder content = new StringBuilder();
+        while (true) {
+            String line = scanner.nextLine();
+            if (line.equals(".")) return content.toString().strip();
+            content.append(line).append('\n');
+        }
+    }
+
+
+    private void researchRequest(String action, Map<String, String> input) {
+        if (!"yes".equalsIgnoreCase(ask("Send relevant saved records to the configured LLM provider? [yes/no]"))) return;
+        String preview = controller.submitRequest(action, input);
+        System.out.println(preview);
+        if (!preview.startsWith("ERROR:")) reviewDocument();
+    }
+
 }

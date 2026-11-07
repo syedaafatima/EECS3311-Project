@@ -30,6 +30,9 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     private final AgentController controller;
     private final List<JComboBox<Choice>> jobChoices = new ArrayList<>();
     private final JComboBox<Choice> resumes = new JComboBox<>();
+    private final List<JComboBox<Choice>> resumeChoices = new ArrayList<>(List.of(resumes));
+    private final JComboBox<Choice> questionSets = new JComboBox<>();
+    private final JComboBox<Choice> sessions = new JComboBox<>();
     private final JLabel status = new JLabel("Ready. Local data is shared with the CLI.");
     private final JTextArea reminders = output("deadline.reminders");
     private final Map<String, JTextComponent> profileFields = new LinkedHashMap<>();
@@ -50,6 +53,11 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         tabs.addTab("Resumes", resumeTab());
         tabs.addTab("Jobs & matching", jobsTab());
         tabs.addTab("Applications & deadlines", applicationsTab());
+        tabs.addTab("Writing assistant", writingTab());
+        tabs.addTab("Interview preparation", interviewTab());
+        tabs.addTab("Company research", researchTab());
+        tabs.addTab("Career plan", careerPlanTab());
+        tabs.addTab("AI setup", aiSetupTab());
         add(tabs, BorderLayout.CENTER);
         add(status, BorderLayout.SOUTH);
         deadlineTimer = new Timer(60_000, e -> {
@@ -187,6 +195,20 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         button(matching, "Rank jobs", "job.match", () -> execute("job.match", Map.of("strategy", (String) strategy.getSelectedItem()), result, null));
         button(matching, "Refresh jobs", "job.refresh", this::refreshChoices);
         form.add(matching);
+        JPanel interpretations = actions();
+        button(interpretations, "Explain gaps…", "job.gaps.explain", () -> withChoice(jobs, id -> {
+            if (allowAI("your profile skills and the selected job requirements")) execute("job.gaps.explain", Map.of("jobId", id), result, null);
+        }));
+        button(interpretations, "Explain ranking…", "job.match.explain", () -> {
+            if (allowAI("your profile skills and analyzed jobs")) execute("job.match.explain", Map.of("strategy", (String) strategy.getSelectedItem()), result, null);
+        });
+        button(interpretations, "Compare jobs…", "job.compare", () -> {
+            String ids = JOptionPane.showInputDialog(this, "Enter 2-4 job ids, comma-separated (for example J01,J02)");
+            if (ids != null && allowAI("the selected job details and your compatibility results")) {
+                execute("job.compare", Map.of("jobIds", ids, "strategy", (String) strategy.getSelectedItem()), result, null);
+            }
+        });
+        form.add(interpretations);
         return split(form, result);
     }
 
@@ -234,10 +256,21 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
             jobs.forEach(job -> selector.addItem(new Choice(job.getId(), job.toString())));
             restoreSelection(selector, previous);
         }
-        String previous = selectedId(resumes);
-        resumes.removeAllItems();
-        controller.listResumes().forEach(resume -> resumes.addItem(new Choice(resume.getId(), resume.getId() + " | " + resume.getOriginalPath())));
-        restoreSelection(resumes, previous);
+        String selectedQuestions = selectedId(questionSets);
+        questionSets.removeAllItems();
+        controller.listQuestionSets().forEach(q -> questionSets.addItem(new Choice(q.id(), q.id() + " | job=" + q.jobId() + " | count=" + q.questions().size())));
+        restoreSelection(questionSets, selectedQuestions);
+        String selectedSession = selectedId(sessions);
+        sessions.removeAllItems();
+        controller.listInterviews().forEach(s -> sessions.addItem(new Choice(s.id(), s.id() + " | " + s.status())));
+        restoreSelection(sessions, selectedSession);
+        var savedResumes = controller.listResumes();
+        for (JComboBox<Choice> selector : resumeChoices) {
+            String previous = selectedId(selector);
+            selector.removeAllItems();
+            savedResumes.forEach(resume -> selector.addItem(new Choice(resume.getId(), resume.getId() + " | " + resume.getOriginalPath())));
+            restoreSelection(selector, previous);
+        }
     }
 
     private static String selectedId(JComboBox<Choice> choices) {
@@ -257,8 +290,8 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     }
 
     private boolean allowAI(String source) {
-        return JOptionPane.showConfirmDialog(this, "Send " + source + " to the configured OpenAI model?\n"
-                + "This uses your local API key and may incur provider charges.", "AI request",
+        return JOptionPane.showConfirmDialog(this, "Send " + source + " to the configured LLM provider?\n"
+                + "The provider processes this text under your account quotas and billing terms.", "AI request",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
 
@@ -358,7 +391,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         };
     }
 
-    private static JPanel actions() { return new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 6)); }
+    private static JPanel actions() { return new JPanel(new GridLayout(0, 2, 6, 6)); }
 
     private static void field(JPanel form, Map<String, JTextComponent> fields, String prefix,
             String key, String label, boolean multiline) {
@@ -437,4 +470,160 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
             }
         });
     }
+
+    private JPanel writingTab() {
+        JPanel form = form();
+        form.add(new JLabel("Review candidate claims before saving generated writing."));
+        JComboBox<Choice> resume = new JComboBox<>();
+        resumeChoices.add(resume);
+        resume.setName("writing.resume");
+        form.add(new JLabel("Saved resume")); form.add(resume);
+        JComboBox<Choice> job = jobSelector(form, "writing.job");
+        JComboBox<String> tone = new JComboBox<>(new String[]{"professional", "warm", "concise"});
+        form.add(new JLabel("Cover letter tone")); form.add(tone);
+        JTextArea result = output("writing.result");
+        result.setText("Select a saved resume and job. The original resume is preserved; reviewed writing is saved as a separate document.");
+        JPanel generation = actions();
+        for (String task : List.of("resume.suggest", "letter.draft")) {
+            button(generation, task.equals("resume.suggest") ? "Resume suggestions…" : "Cover letter…", "writing." + task,
+                    () -> withChoice(resume, resumeId -> withChoice(job, jobId -> {
+                        if (!allowAI("the selected resume, approved profile and job")) return;
+                        execute(task, Map.of("resumeId", resumeId, "jobId", jobId, "tone", tone.getSelectedItem().toString()),
+                                result, response -> reviewDocumentDialog(response, result));
+                    })));
+        }
+        form.add(generation);
+        JPanel saved = actions();
+        button(saved, "List documents", "writing.list", () -> execute("document.list", Map.of(), result, null));
+        button(saved, "Open / edit document…", "writing.open", () -> {
+            String id = JOptionPane.showInputDialog(this, "Document id from List documents");
+            if (id != null) execute("document.show", Map.of("documentId", id.strip()), result,
+                    response -> reviewDocumentDialog(response, result));
+        });
+        form.add(saved);
+        return split(form, result);
+    }
+
+    private void reviewDocumentDialog(String preview, JTextArea result) {
+        JTextArea editor = new JTextArea(controller.pendingDocumentContent(), 18, 60);
+        editor.setLineWrap(true); editor.setWrapStyleWord(true);
+        JTabbedPane review = new JTabbedPane();
+        review.addTab("Edit content", new JScrollPane(editor));
+        review.addTab("Source evidence", scrollPreview(preview));
+        review.setPreferredSize(new Dimension(720, 470));
+        boolean approved = JOptionPane.showConfirmDialog(this, review, "Review facts and approve document",
+                JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION;
+        execute("document.save", Map.of("confirmed", approved ? "yes" : "no", "content", editor.getText()), result, null);
+    }
+
+
+    private JPanel interviewTab() {
+        JPanel form = form();
+        JComboBox<Choice> jobs = jobSelector(form, "interview.job");
+        JSpinner count = new JSpinner(new SpinnerNumberModel(5, 1, 20, 1));
+        count.setName("interview.count");
+        form.add(new JLabel("Question count (1-20)")); form.add(count);
+        JTextArea result = output("interview.result");
+        result.setText("Generate job-specific questions with rubrics, then start a saved interview. Answers and pause/resume progress persist locally.");
+        JPanel generation = actions();
+        button(generation, "Generate questions…", "interview.generate", () -> withChoice(jobs, id -> {
+            if (allowAI("the reviewed job requirements")) execute("interview.questions", Map.of("jobId", id, "count", count.getValue().toString()), result, null);
+        }));
+        form.add(generation);
+        questionSets.setName("interview.questionSets");
+        form.add(new JLabel("Saved question sets")); form.add(questionSets);
+        JPanel start = actions();
+        button(start, "Show questions", "interview.questions.show", () -> withChoice(questionSets, id -> execute("interview.questions.show", Map.of("questionSetId", id), result, null)));
+        button(start, "Start mock interview", "interview.start", () -> withChoice(questionSets, id -> execute("interview.start", Map.of("questionSetId", id), result, null)));
+        form.add(start);
+        sessions.setName("interview.sessions");
+        form.add(new JLabel("Saved interview sessions")); form.add(sessions);
+        Map<String, JTextComponent> fields = new LinkedHashMap<>();
+        field(form, fields, "interview", "answer", "Answer to the next question", true);
+        fields.get("answer").setName("interview.answerText");
+        JPanel answering = actions();
+        button(answering, "Save answer", "interview.answer", () -> withChoice(sessions, id ->
+                execute("interview.answer", Map.of("sessionId", id, "answer", fields.get("answer").getText()), result,
+                        response -> fields.get("answer").setText(""))));
+        button(answering, "Skip question", "interview.skip", () -> withChoice(sessions, id -> execute("interview.skip", Map.of("sessionId", id), result, null)));
+        button(answering, "Show session", "interview.show", () -> withChoice(sessions, id -> execute("interview.show", Map.of("sessionId", id), result, null)));
+        form.add(answering);
+        JPanel lifecycle = actions();
+        for (String action : List.of("pause", "resume", "finish")) {
+            button(lifecycle, action.substring(0, 1).toUpperCase() + action.substring(1), "interview." + action,
+                    () -> withChoice(sessions, id -> execute("interview." + action, Map.of("sessionId", id), result, null)));
+        }
+        button(lifecycle, "Answer feedback…", "interview.feedback", () -> withChoice(sessions, id -> {
+            if (allowAI("the stored interview questions, rubrics and submitted answers")) execute("interview.feedback", Map.of("sessionId", id), result, null);
+        }));
+        form.add(lifecycle);
+        return split(form, result);
+    }
+
+
+    private JPanel researchTab() {
+        JPanel form = form();
+        JComboBox<Choice> jobs = jobSelector(form, "research.job");
+        Map<String, JTextComponent> fields = new LinkedHashMap<>();
+        field(form, fields, "research", "text", "Your company research notes", true);
+        field(form, fields, "research", "sources", "Source URLs (comma-separated, optional)", true);
+        JTextArea result = output("research.result");
+        result.setText("Save your own company research and sources. AI summaries use these notes; the app does not browse or independently verify websites.");
+        JPanel notes = actions();
+        button(notes, "Save notes", "research.save", () -> withChoice(jobs, id -> execute("company.notes",
+                Map.of("jobId", id, "text", fields.get("text").getText(), "sources", fields.get("sources").getText()), result, null)));
+        button(notes, "Load notes", "research.load", () -> withChoice(jobs, id -> execute("company.show", Map.of("jobId", id), result, response -> {
+            var saved = controller.getCompanyNotes(id);
+            fields.get("text").setText(saved.text()); fields.get("sources").setText(String.join(", ", saved.sources()));
+        })));
+        button(notes, "Summarize…", "research.summarize", () -> withChoice(jobs, id -> {
+            if (allowAI("your saved company notes and supplied source URLs")) execute("company.summarize", Map.of("jobId", id), result,
+                    response -> reviewDocumentDialog(response, result));
+        }));
+        form.add(notes);
+        return split(form, result);
+    }
+
+    private JPanel careerPlanTab() {
+        JPanel form = form();
+        form.add(new JLabel("Use the reviewed gaps of 1-4 target jobs to plan one week."));
+        Map<String, JTextComponent> fields = new LinkedHashMap<>();
+        field(form, fields, "plan", "jobIds", "Target job IDs (comma-separated)", false);
+        field(form, fields, "plan", "goals", "Specific career goal", true);
+        field(form, fields, "plan", "hours", "Weekly study hours (1-80)", false);
+        field(form, fields, "plan", "budget", "Weekly cost budget (0 for free activities)", false);
+        fields.get("hours").setText("5"); fields.get("budget").setText("0");
+        JTextArea result = output("plan.result");
+        result.setText("The plan uses approved skills, reviewed job gaps and previously reviewed resume advice. Generated activity totals must fit your weekly hours and cost limits.");
+        JPanel actions = actions();
+        button(actions, "Generate career plan…", "plan.generate", () -> {
+            if (allowAI("your approved profile, selected job gaps and reviewed resume advice")) execute("career.plan", values(fields), result,
+                    response -> reviewDocumentDialog(response, result));
+        });
+        button(actions, "List target jobs", "plan.jobs", () -> execute("job.list", Map.of(), result, null));
+        button(actions, "List saved plans / documents", "plan.saved", () -> execute("document.list", Map.of(), result, null));
+        form.add(actions);
+        return split(form, result);
+    }
+
+
+    private JPanel aiSetupTab() {
+        JPanel form = form();
+        form.add(new JLabel("Groq offers a quota-limited Free plan. Select your provider in local .env."));
+        JTextArea result = output("ai.result");
+        result.setText("1. Create an API key at https://console.groq.com/keys\n"
+                + "2. Use the Groq Free plan; check its account quotas before recording.\n"
+                + "3. Copy .env.example to .env in this project's directory.\n"
+                + "4. Set LLM_PROVIDER=groq and GROQ_API_KEY locally. Keep .env private and ignored by Git.\n"
+                + "5. Check setup, then verify live access. The verification sends no personal records.\n\n"
+                + "Manual workflows remain available without an API key.");
+        JPanel actions = actions();
+        button(actions, "Check local setup", "ai.status", () -> execute("ai.status", Map.of(), result, null));
+        button(actions, "Verify live API access…", "ai.verify", () -> {
+            if (allowAI("a short connectivity check containing no personal records")) execute("ai.verify", Map.of(), result, null);
+        });
+        form.add(actions);
+        return split(form, result);
+    }
+
 }

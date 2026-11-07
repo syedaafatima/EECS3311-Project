@@ -149,4 +149,14 @@ public final class Json {
             throw invalid();
         }
     }
+
+    public static int integer(Object value, int minimum, int maximum) {
+        if (!(value instanceof Number)) throw invalid();
+        try {
+            int integer = new java.math.BigDecimal(value.toString()).intValueExact();
+            if (integer < minimum || integer > maximum) throw invalid();
+            return integer;
+        } catch (ArithmeticException | NumberFormatException e) { throw invalid(); }
+    }
+
 }

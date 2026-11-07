@@ -6,13 +6,13 @@ Prepared for the repository owner. Personal identifiers omitted from this public
 
 Implementation checkpoint: November 7, 2026 (Toronto). Submission due November 10, 2026.
 
-**Not ready for submission:** a live provider verification, all feature demonstration links/timestamps, exact AI usage/cost figures and final source upload checks remain pending. Four Period 3 code commits were created locally before the workspace became unavailable; a fifth tested hardening change still needs final commit/upload verification. Do not count unpushed changes as satisfying the weekly GitHub requirement.
+**Not ready for submission:** live provider verification, all feature demonstration links/timestamps, actual AI usage/cost figures and final human review remain pending. Five meaningful Period 3 code commits were pushed to main on November 7; the code/weekly-upload checkpoint is complete. The final report and videos must still be completed before submission.
 
 ## 1. Project overview and implementation status
 
-The application serves students, new graduates and career changers who need a single workspace for profiles, resumes, job comparison, application tracking, interview practice, research and career planning. Both Swing GUI and CLI route through AgentController and CareerFacade to the same local records. Source code now contains workflows for all 17 original Stage 1 features; deterministic behavior and injected-provider workflows were verified with 56 passing tests, including a real desktop window and file picker. A live OpenAI call is pending because the user's project key/API billing is not yet configured.
+The application serves students, new graduates and career changers who need a single workspace for profiles, resumes, job comparison, application tracking, interview practice, research and career planning. Both Swing GUI and CLI route through AgentController and CareerFacade to the same local records. Source code now contains workflows for all 17 original Stage 1 features; deterministic behavior and injected-provider workflows were verified with 61 passing tests, including a real desktop window and file picker. A live Groq call is pending until the user configures a private Free-plan API key locally.
 
-OpenAIAdapter implements provider-independent LLMClient and uses a configurable model (gpt-4.1-mini by default). The agent performs retrieval through ToolManager, task-specific generation, schema/evidence validation, review and persistence. It retrieves prior reviewed resume advice for career planning as durable advice memory. It is a bounded task agent, not an autonomous planner or unrestricted model-selected tool executor. Generated content never sends applications/messages or modifies the original resume automatically.
+ConfiguredLLMClient selects a concrete GroqAdapter by default (Groq-hosted openai/gpt-oss-20b) or an explicitly selected OpenAIAdapter (gpt-4.1-mini). Both use shared ChatCompletionAdapter HTTP translation behind provider-independent LLMClient. The Groq option was added after the user requested free access. Keys are provider-specific, and failures never trigger an automatic switch to a paid provider. The agent performs retrieval through ToolManager, task-specific generation, schema/evidence validation, review and persistence. It retrieves prior reviewed resume advice for career planning as durable advice memory. It is a bounded task agent, not an autonomous planner or unrestricted model-selected tool executor. Generated content never sends applications/messages or modifies the original resume automatically.
 
 ## 2. Feature-to-implementation mapping
 
@@ -200,7 +200,7 @@ CareerFacade coordinates CareerAgent, ToolManager, ResumeParser, DeadlineManager
 
 ### Adapter
 
-LLMClient is the target interface and OpenAIAdapter translates complete(instructions,context) to configured OpenAI HTTP requests, validates completion status and redacts provider errors. ResumeParser is a second target with DocumentParserAdapter wrapping PDFBox/Apache POI via extractText(Path). Both adapter families count as one distinct pattern. Provider/parsing libraries do not enter UI workflows.
+LLMClient is the target interface. GroqAdapter and OpenAIAdapter are concrete provider Adapters, sharing ChatCompletionAdapter for compatible HTTP translation, completion validation and error redaction. ConfiguredLLMClient reads the explicit provider choice locally for each request. The current default is Groq Free-plan access; optional OpenAI support is retained. ResumeParser is a second target with DocumentParserAdapter wrapping PDFBox/Apache POI via extractText(Path). Both adapter families count as one distinct pattern. Provider/parsing libraries do not enter UI workflows.
 
 ### Strategy
 
@@ -210,7 +210,11 @@ MatchingStrategy defines calculateMatch(profile,job) and getName. WeightedMatchi
 
 DeadlineManager is the subject, maintaining subscribed DeadlineObserver instances. Views implement onDeadline(DeadlineReminder), register while active and unsubscribe on close. checkDeadlines retrieves current records and Clock-based Toronto dates; the subject does not import either UI. Injected Clock supports tests at local-day and seven-day boundaries. This refines the originally abstract notification signatures into concrete operations.
 
-The updated implemented UML and feature-specific sequence/use-case diagrams must be regenerated to include the November 7 additions before finalizing this report. Original Stage 1 exports remain historical planned-design references.
+The implemented UML includes the November 7 writing, interview, research, planning and storage classes. Concrete Adapter/Observer operations and role labels are used; feature-specific sequences show retrieval, validation, failure and review paths. Original Stage 1 artifacts remain historical planned-design references.
+
+![Implemented class diagram, November 7](../Diagrams/stage2_class_diagram.png)
+
+The [full-resolution class diagram](https://github.com/syedaafatima/EECS3311-Project/blob/main/Diagrams/stage2_class_diagram.png), [vector diagram](https://github.com/syedaafatima/EECS3311-Project/blob/main/Diagrams/stage2_class_diagram.svg), [feature sequences](https://github.com/syedaafatima/EECS3311-Project/blob/main/Diagrams/stage2_ai_workflows.md) and [use cases](https://github.com/syedaafatima/EECS3311-Project/blob/main/Diagrams/stage2_use_cases.md) accompany this report.
 
 ## 4. Changes and rationale
 
@@ -284,15 +288,23 @@ The updated implemented UML and feature-specific sequence/use-case diagrams must
 - Reason: Protect earlier records on save failure and keep approved documents editable after restart.
 - Impact: Repository/LocalRecords, SourceFingerprint, ToolManager; bracket-containing/long array values round-trip.
 
+### Planned OpenAI-only integration → configurable free-provider default
+
+- Original design: OpenAIAdapter with GPT-4.1 mini as the proposed runtime provider/model.
+- Implemented change: GroqAdapter and ConfiguredLLMClient add Groq-hosted `openai/gpt-oss-20b` as the default; OpenAIAdapter remains an explicit optional selection. ChatCompletionAdapter shares compatible HTTP handling, with separate key/model namespaces and no automatic provider fallback.
+- Reason: the user requested a free-provider option. Groq's documented Free plan and JSON-capable production model fit the existing task schemas. The Stage 2 instructions permit a cheap/free model and documented provider changes.
+- Impact: all AI features use the same LLMClient boundary; per-feature retrieval/validation/review remains unchanged. Consent text is provider-neutral. The AI setup tab, CLI, safe example configuration, HTTP tests and model/provider report mapping were updated.
+- Sources checked November 7, 2026: [Groq Free-plan FAQ](https://community.groq.com/t/do-i-get-charged-for-anything-on-the-groq-free-plan/832), [rate limits](https://console.groq.com/docs/rate-limits), [model](https://console.groq.com/docs/model/openai/gpt-oss-20b), [API compatibility](https://console.groq.com/docs/openai). Availability and quotas are account/provider controlled; a live key check remains pending.
+
 ## 5. AI tools and collaboration log
 
-Development tool: OpenAI Codex, GPT-6-based assistant; exact deployed model identifier is not exposed to this workspace. It assisted with implementation, code review, tests, fault diagnosis, design mapping and report drafting. The application's runtime model is independently configured through OpenAIAdapter and defaults to gpt-4.1-mini.
+Development tool: OpenAI Codex, GPT-6-based assistant; exact deployed model identifier is not exposed to this workspace. It assisted with implementation, code review, tests, fault diagnosis, design mapping and report drafting. The application runtime now defaults to Groq-hosted openai/gpt-oss-20b through GroqAdapter; optional OpenAI remains configurable through OpenAIAdapter. These runtime models are separate from the development-tool model.
 
 Representative interactions:
 
 - October 29 checkpoint: PDF/DOCX import through Adapter, preview/confirmation, versioned persistence and tests.
 - November 1: user requested four meaningful Period 2 commits and supplied Stage 1/Stage 2 PDFs. Professor feedback required role labels and feature-specific retrieval/validation. Implemented F03, F05, F15 and shared GUI; 33 tests passed; pushed four commits November 1.
-- November 7: user requested continuation with November 10 deadline. Implemented F06–F08, F09–F10, F11–F13 and F16–F17; hardened cross-process fingerprints and persistence, added AI setup/status/verification, GUI integration and native-window checks; 56 tests passed before a workspace disconnect interrupted final packaging/upload.
+- November 7: implemented F06–F08, F09–F10, F11–F13 and F16–F17, then hardened cross-process source verification, persistence, identifiers/date validation and API setup. Five substantive code commits were pushed to main. A temporary workspace disconnect was recovered. A further tracker-history display regression was corrected; the desktop-enabled suite passed 61 checks after adding the free-provider adapter and its HTTP/configuration/quota tests.
 
 Human responsibilities: review and understand generated code, validate real provider access/output, record running feature demonstrations and review final submission. Exact total development-tool token use and monetary cost are **pending actual session usage/billing data**. Do not substitute guessed figures or zero. Runtime API verification and demonstration costs are also pending actual provider usage/billing.
 
@@ -320,29 +332,30 @@ Only five distinct substantive development changes are selected for each complet
 
 #### Period 3 — November 3–9, 2026
 
-- [a73d1ac](https://github.com/syedaafatima/EECS3311-Project/commit/a73d1ac) — F06–F08 AI explanations and job comparison (local; not yet pushed).
-- [bbe8de8](https://github.com/syedaafatima/EECS3311-Project/commit/bbe8de8) — F09–F10 editable evidence-backed writing (local; not yet pushed).
-- [7bd7015](https://github.com/syedaafatima/EECS3311-Project/commit/7bd7015) — F11–F13 question sets, sessions and feedback (local; not yet pushed).
-- [579f50a](https://github.com/syedaafatima/EECS3311-Project/commit/579f50a) — F16–F17 company research and career plans (local; not yet pushed).
+- [a73d1ac](https://github.com/syedaafatima/EECS3311-Project/commit/a73d1acb612ee4f6960ba6d7ad0224cae2565010) — Complete F06-F08 AI explanations and deterministic job comparison. Created November 07 at 16:48 Toronto.
+- [bbe8de8](https://github.com/syedaafatima/EECS3311-Project/commit/bbe8de8eaee101f27fc26d4357b56f570f55a25f) — Implement F09-F10 editable evidence-backed resume and cover-letter drafts. Created November 07 at 16:52 Toronto.
+- [7bd7015](https://github.com/syedaafatima/EECS3311-Project/commit/7bd701565a6de56f4ce1aa3fe2bc185f26c8a927) — Implement F11-F13 interview questions, persistent sessions and rubric feedback. Created November 07 at 16:57 Toronto.
+- [579f50a](https://github.com/syedaafatima/EECS3311-Project/commit/579f50ab29664dc0f949ea0aeadf20bbcbec7c5a) — Implement F16-F17 source-cited company research and budgeted career plans. Created November 07 at 17:01 Toronto.
+- [0f2b00a](https://github.com/syedaafatima/EECS3311-Project/commit/0f2b00a3611cc0ad830ab2b7f36b90ebf51366fa) — Harden restart-safe drafts, persistence and API setup with desktop verification. Created November 07 at 18:00 Toronto.
 
-Period 3 is **not yet confirmed complete**: the four listed November 7 commits are local and a fifth hardening commit/upload still needs completion after reconnecting the workspace. Replace this note with confirmed hashes and push evidence once verified. Commit dates must remain actual dates; extra commits in other periods do not compensate for a deficient period.
+All five selected code commits were pushed together on **November 7 at 18:00:29 Toronto** (23:00:29 UTC), advancing main from 12fc14a to 0f2b00a. The GitHub repository Activity API and remote branch SHA confirmed the upload. An additional tracker-history display regression was fixed in [6979590](https://github.com/syedaafatima/EECS3311-Project/commit/6979590). The free-provider option was added in [8d52ea2](https://github.com/syedaafatima/EECS3311-Project/commit/8d52ea2) after the user requested it. The five selected commits already satisfy the Period 3 minimum; report-only changes are excluded. Extra commits in other periods do not compensate for a deficient period.
 
 ### Verification
 
-On November 7, 56 tests passed with zero failures/errors/skips using a desktop-capable Java 21 test runtime and virtual X display. The suite covers PDF/DOCX parsing; preview/confirmation/cancellation; long text, Unicode and control characters; malformed and unsupported model evidence; HTTP contract/configuration precedence and credential redaction; original resume preservation; stale-source rejection; budget checks; exact interview question counts and duplicate detection; session pause/resume/skip/finish and feedback validation; deadline timezone/Observer lifecycle; GUI forms, background responsiveness, actual window and native file-picker cancellation; a separate JVM editing reviewed records; invalid future application dates; and interrupted document editing.
+On November 7, 61 tests passed with zero failures/errors/skips using a desktop-capable Java 21 test runtime and virtual X display. The suite covers PDF/DOCX parsing; preview/confirmation/cancellation; long text, Unicode and control characters; malformed and unsupported model evidence; HTTP contract/configuration precedence and credential redaction; original resume preservation; stale-source rejection; budget checks; exact interview question counts and duplicate detection; session pause/resume/skip/finish and feedback validation; deadline timezone/Observer lifecycle; GUI forms, background responsiveness, actual window and native file-picker cancellation; a separate JVM editing reviewed records; invalid future application dates; and interrupted document editing.
 
-Tests use injected model responses/local HTTP endpoints. They do not establish live OpenAI account access or prove the truth/quality of every model-generated sentence. Live verification and human review remain necessary. Full Stage 3 deterministic/KUMA requirements are outside this Stage 2 checkpoint.
+Tests use injected model responses/local HTTP endpoints. They do not establish live Groq/OpenAI account access or prove the truth/quality of every model-generated sentence. Live verification and human review remain necessary. Full Stage 3 deterministic/KUMA requirements are outside this Stage 2 checkpoint.
 
-Important corrected defects: long-text JSON regex stack risk; interrupted input retaining stale review state; edited posting descriptions retaining old requirements; unordered collection iteration changing source fingerprints after restart; bracket-containing array values truncating; direct record writes risking partial content; unchecked future application dates; provider error bodies risking disclosure; and native GUI prerequisites missing from the original cloud JRE.
+Important corrected defects: long-text JSON regex stack risk; interrupted input retaining stale review state; edited posting descriptions retaining old requirements; unordered collection iteration changing source fingerprints after restart; bracket-containing array values truncating; direct record writes risking partial content; unchecked future application dates; provider error bodies risking disclosure; saved tracker history not appearing in interface output; and native GUI prerequisites missing from the original cloud JRE.
 
 ### Remaining limitations and finalization work
 
-- Configure a local API key and API billing, then run ai verify and each AI workflow against the real model.
+- Configure a private Groq Free-plan key locally, then run ai verify and each AI workflow against the real model. Allow time between requests and use short demonstration inputs to fit free-tier quotas.
 - Human-review source evidence and qualifications; quotation checks do not guarantee semantic truth.
 - Single-candidate local JSON storage; run one interface at a time because there is no cross-process file locking.
 - No web browsing/source verification, external application sending or OS/email notifications.
 - AI context limit is 60,000 characters. Date reminders use Toronto; interviews use captured original job/rubric context.
-- Complete all videos and accessible links, exact AI usage/cost figures, regenerated diagrams, final PDF review and commit/push verification before submission.
+- Complete all videos and accessible links, exact AI usage/cost figures and final PDF/human review before submission. Updated diagrams and the five-code-commit Period 3 upload are now present.
 
 ## 7. Demonstration index
 
@@ -365,3 +378,29 @@ Every feature requires an actual running demonstration; screenshots, tests and t
 - F15 Deadline Tracking: deadlines list / deadlines check. **Video/timestamp pending.**
 - F16 Company Research Notes: company notes / company show / company summarize. **Video/timestamp pending.**
 - F17 Career Development Plan: career plan / Career plan. **Video/timestamp pending.**
+
+
+## Appendix A. Source-file index
+
+All Java source paths are under `src/main/java/ca/yorku/careeragent/`. Each class referenced above is implemented in its same-named Java file in the package below. This index ties feature/class names to actual files rather than implying unconnected design-only classes.
+
+- `ui/`: `JobSearchCLI.java`, `JobSearchGUI.java`.
+- `controller/`: `AgentController.java`.
+- `service/`: `CareerAgent.java`, `CareerFacade.java`, `InterviewService.java`, `ToolManager.java`.
+- `domain/`: `AnswerFeedback.java`, `Application.java`, `Assessment.java`, `CandidateProfile.java`, `CareerDocument.java`, `CompanyNotes.java`, `InterviewSession.java`, `Job.java`, `JobAnalysis.java`, `QuestionSet.java`, `Requirement.java`, `Resume.java`, `SkillProposal.java`, `SourceFingerprint.java`.
+- `persistence/`: `JsonSupport.java`, `LocalRecords.java`, `Repository.java`.
+- `parser/`: `DocumentParserAdapter.java`, `ResumeParser.java`.
+- `llm/`: `ChatCompletionAdapter.java`, `ConfiguredLLMClient.java`, `GroqAdapter.java`, `Json.java`, `LLMClient.java`, `OpenAIAdapter.java`.
+- `strategy/`: `MatchingStrategy.java`, `RequiredSkillMatching.java`, `WeightedMatching.java`.
+- `deadline/`: `DeadlineManager.java`, `DeadlineObserver.java`, `DeadlineReminder.java`.
+
+
+## Appendix B. Reproduction and desktop verification
+
+Normal desktop prerequisites: full Java 17+ JDK, Maven 3.9+, local provider API key for model tasks (Groq Free plan by default). Run `mvn package`, then `mvn exec:java` for the CLI or `mvn exec:java -Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI` for Swing. `ai status` reports configuration without printing the key; `ai verify` performs a small actual model call with no personal records, once a key is configured. The API setup section of README explains free Groq configuration and optional OpenAI configuration.
+
+The cloud's original Java runtime is headless-only. Native checks used a user-owned official Adoptium Java 21 desktop JRE and a virtual Xorg dummy display. Standard headless builds skip the one native-window check; desktop-enabled verification runs it. Local/private configuration and data are ignored by Git. Safe fictional sample files are in `examples/`.
+
+![Actual desktop window from automated smoke verification; not a feature demonstration video](images/gui-native-smoke.png)
+
+No live-key value, private candidate data or invented demonstration links are included in this draft.

@@ -1,19 +1,21 @@
 # Stage 2 demonstration recording guide — working draft
 
-The November 7 implementation is still awaiting workspace reconnection, final commit and push. The new commands below must be available in your checked-out code before recording. This guide is not evidence that recordings or live AI checks have already happened.
+The November 7 implementation is pushed to main. Pull the latest code before recording. This checklist is preparation, not evidence that recordings or live AI checks have already happened.
 
-Use the actual application and your configured model. Test fixtures, simulated model responses, slides and static screenshots do not substitute for running feature demonstrations. Record both GUI and CLI across your videos.
+Use the actual application and your configured Groq model (or explicitly selected optional provider). Test fixtures, simulated model responses, slides and static screenshots do not substitute for running feature demonstrations. Record both GUI and CLI across your videos.
 
 ## Preparation
 
 1. Use a demo checkout with fictional candidate/job details. Keep any existing personal data backed up privately.
 2. Install a full desktop Java 17+ JDK and Maven 3.9+. Run `mvn package`.
-3. Create an OpenAI project key at https://platform.openai.com/api-keys. API billing is separate from ChatGPT billing; add credits if requested and set a usage budget alert.
-4. Copy `.env.example` to local `.env`. Enter the key only there. Never put it in source, GitHub, this report, a recording or this chat.
+3. Create a Groq Free-plan account and private key at https://console.groq.com/keys. Free-tier quotas apply; use short demo inputs and pace requests.
+4. Copy `.env.example` to local `.env`. Set `LLM_PROVIDER=groq`, `GROQ_MODEL=openai/gpt-oss-20b` and `GROQ_API_KEY` to your private key only there. Never put it in source, GitHub, this report, a recording or this chat.
 5. Run `mvn exec:java`, then `ai status` and `ai verify`. A successful connectivity check is necessary but does not replace feature-by-feature demonstrations.
 6. Launch the GUI with `mvn exec:java -Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI`. Run one interface at a time because they share local data.
 7. Choose a deadline two days after the actual recording date and use today's Toronto date for application tracking. Avoid stale fixed dates.
 8. Use the list commands to obtain actual resume, document, question-set and session IDs. Do not copy sample UUIDs from tests.
+
+Safe PDF/DOCX resume examples are in `examples/`; use them instead of private personal documents when recording.
 
 Safe example candidate: Demo Candidate, BSc Computer Science, Java coursework and a task-tracker project, approved skills Java and Git, software-development interests, Toronto location.
 
@@ -43,7 +45,7 @@ For F06/F07, either do the job-analysis segment first or enter explicit reviewed
 
 | Feature | Show invocation/input | Show result/review and error or alternative |
 |---|---|---|
-| F03 Skills | Resume extraction from a saved example resume | Show live proposed skills and source excerpts; approve only a subset; show profile update |
+| F03 Skills | Resume extraction from a saved example resume | Show live proposed skills and source excerpts; approve only a subset, including JUnit from the example resume; show the new skill in the profile |
 | F05 Job analysis | Analyze saved J01 through the live model | Show required/preferred/education/experience/uncertain categories where present and supporting excerpts; selectively approve; show manual fallback as an alternative |
 | F06 AI explanation | Explain gaps for J01 | Show the recorded gaps with an AI interpretation/evidence; explain that AI does not own the underlying comparison |
 | F07 AI explanation | Explain the computed ranking | Show fixed scores plus model interpretation; avoid presenting the score as an objective hiring probability |
@@ -94,6 +96,6 @@ Replace every pending value with a real accessible URL and exact segment timesta
 - Finish live model verification and human code review.
 - Replace pending video fields with real timestamped URLs.
 - Obtain actual development-tool model/usage/cost and provider usage/billing figures; do not invent totals.
-- Update the implemented UML/sequence/use-case diagrams for the November 7 classes/workflows.
-- Confirm five meaningful code commits were actually pushed during Period 3, November 3–9 Toronto time.
+- Review the updated implemented UML and feature-specific sequence/use-case diagrams against the final code.
+- Retain the five confirmed November 7 code-commit links from the weekly summary in the final report.
 - Export the completed implementation report as `stage2-report.pdf` or Word, push it and submit the public repository URL by November 10.
