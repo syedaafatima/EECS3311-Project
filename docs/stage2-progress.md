@@ -1,116 +1,74 @@
-# Stage 2 implementation checkpoint — November 1, 2026 (Toronto)
+# Stage 2 implementation checkpoint — November 7, 2026 (Toronto)
 
-This is a development record for the next four code commits, not the final Stage 2
-submission report. The original Stage 1 PDF remains the design baseline.
+All 17 Stage 1 features have connected implementations in both CLI and Swing GUI.
+Five meaningful Period 3 code commits were pushed to main November 7 at 18:00:29 Toronto.
+The five selected code commits end at `0f2b00a`; `6979590` additionally exposes persisted tracker history. Report artifacts follow these code checkpoints.
 
-## Feature accounting
+**Submission remains unfinished:** live AI verification, feature videos and links,
+actual AI usage/cost figures and final human report/code review are pending.
+Injected provider responses test workflows; they are not claimed as live model demonstrations.
 
-| Stage 1 ID | Current behavior and status | Main files / methods |
-|---|---|---|
-| F01 Profile | Implemented, deterministic; GUI/CLI validate and save shared profile | AgentController, CareerFacade.updateProfile, CandidateProfile, Repository |
-| F02 Resume import | Implemented, deterministic; PDF/DOCX or manual text, preview then confirm, saved versions | DocumentParserAdapter.extractText, CareerFacade.previewResume / importResume, Resume |
-| F03 Resume skills | Implemented, AI-based with deterministic evidence checks; select proposals and merge approved skills | CareerAgent.extractSkills, ToolManager.readResume / readProfile, SkillProposal, CareerFacade.approveSkills |
-| F04 Job import | Implemented, deterministic; title/company duplicate updates; GUI explicitly labels update behavior | CareerFacade.importJob, Job.updateDetails, Repository |
-| F05 Job analysis | Implemented, AI-based with deterministic evidence checks; reviewed skills/education/experience and uncertain statements | CareerAgent.analyzeJob, ToolManager.readJob, JobAnalysis, Requirement, CareerFacade.approveJobAnalysis, Job.updateReviewedAnalysis |
-| F06 Gaps | Partial; deterministic matched/missing/uncertain lists work; AI explanation remains outstanding | ToolManager.compareSkills, CareerFacade.identifyGaps |
-| F07 Matching | Partial; selectable required/weighted scores and ranking work; AI explanations remain outstanding | MatchingStrategy, RequiredSkillMatching, WeightedMatching, CareerFacade.matchJobs |
-| F08 Comparison | Not implemented | Planned |
-| F09 Resume suggestions | Not implemented | Planned |
-| F10 Cover letters | Not implemented | Planned |
-| F11 Interview questions | Not implemented | Planned |
-| F12 Mock interviews | Not implemented | Planned |
-| F13 Interview feedback | Not implemented | Planned |
-| F14 Applications | Implemented core deterministic tracking/history and transition checks; richer date rules still need review | CareerFacade.trackApplication / updateApplicationStatus, Application, Repository |
-| F15 Deadlines | Implemented, deterministic; Toronto calendar dates, overdue/unknown listing, active-view reminders | DeadlineManager.listDeadlines / checkDeadlines, DeadlineObserver.onDeadline, DeadlineReminder |
-| F16 Company research | Not implemented | Planned |
-| F17 Career plan | Not implemented | Planned |
+## Feature status
 
-Both `JobSearchGUI` and `JobSearchCLI` expose these current workflows through the
-same `AgentController` and `CareerFacade`. This checkpoint does **not** claim the
-final minimum of ten completed features or the entire Stage 2 submission is ready.
-Every feature still needs a labeled demonstration video/segment and a direct link
-in the final report; no videos were fabricated or recorded in this checkpoint.
+| ID | Feature | Mode | Invocation |
+|---|---|---|---|
+| F01 | Candidate Profile Management | Deterministic | profile edit / Skills profile |
+| F02 | Resume Import | Deterministic | resume import / resume paste / Resumes |
+| F03 | Resume Skill Extraction | AI with deterministic validation | resume extract-skills / Resumes |
+| F04 | Job Import | Deterministic | job import / Jobs & matching |
+| F05 | Job Description Analysis | AI with deterministic validation | job analyze / job requirements / Jobs & matching |
+| F06 | Skill Gap Identification | Hybrid | job gaps / job gaps explain |
+| F07 | Job Matching | Hybrid | job match / job match explain |
+| F08 | Job Comparison | Hybrid | job compare / Compare jobs |
+| F09 | Customized Resume Suggestions | AI with review | resume suggest / Writing assistant |
+| F10 | Cover Letter Drafting | AI with review | letter draft / Writing assistant |
+| F11 | Interview Question Generation | AI with validation | interview questions / Interview preparation |
+| F12 | Mock Interview | Hybrid | interview start / answer / skip / pause / resume / finish |
+| F13 | Interview Answer Feedback | AI with validation | interview feedback / Interview preparation |
+| F14 | Application Tracking | Deterministic | application add / application update / Applications & deadlines |
+| F15 | Deadline Tracking | Deterministic | deadlines list / deadlines check |
+| F16 | Company Research Notes | Hybrid | company notes / company show / company summarize |
+| F17 | Career Development Plan | AI with deterministic constraints and review | career plan / Career plan |
 
-## Changes from Stage 1 and professor feedback
+## Architecture and professor feedback
 
-- **Generic agent loop → feature-specific bounded tasks.** Instead of implementing
-  the planned `executeTask(goal, context)`/dynamic `executeTool`, `CareerAgent`
-  has separate `extractSkills(resumeId)` and `analyzeJob(jobId)` paths. F03 retrieves
-  a profile and immutable saved resume, validates the skills schema, rejects
-  unsupported evidence/partial tokens, and merges reviewed selections. F05 retrieves
-  a saved posting, validates requirement categories, preserves supporting quotations,
-  and rejects approval if the description changed. This follows the professor's
-  refinement and makes each feature's validation and errors inspectable.
-- **Multi-step agent scope.** Retrieval, LLM extraction/analysis, deterministic
-  evidence validation, review, and persistence are connected workflows. This is
-  bounded retrieval/tool use; autonomous planning, model-selected tools, run-memory
-  persistence, and the remaining grouped AI tasks are not implemented or claimed.
-- **Profile ownership → repository records.** This implementation uses one local
-  candidate profile and independent versioned resumes/jobs/applications, rather
-  than collections owned directly by CandidateProfile. Repository persistence and
-  facade coordination serve the same single-candidate workflows; multiuser support
-  is outside the current implementation.
-- **Job analysis now retains evidence.** `Requirement` and `JobAnalysis` are new
-  immutable value types supporting F05's review. Job stores reviewed skill sets
-  for existing Strategy code and categorized evidence for display. A description
-  change invalidates previous analysis; metadata-only edits retain it.
-- **Concrete Observer contract.** `DeadlineManager.subscribe(DeadlineObserver)`,
-  `unsubscribe(DeadlineObserver)`, `listDeadlines()`, `checkDeadlines()` use an
-  injected Clock; views receive `onDeadline(DeadlineReminder)`. CLI checks on each
-  prompt; GUI checks every minute while open. This replaces the abstract planned
-  `checkDeadlines(now)`/`notifyObservers(application)` signatures. Reminders are
-  in-process and deduplicated per local day, not operating-system notifications.
-- **Concrete Adapter contracts.** `ResumeParser.extractText(Path): String` is
-  implemented by DocumentParserAdapter; `LLMClient.complete(String, String): String`
-  is implemented by OpenAIAdapter. These signatures appear in updated diagrams.
-- **Relation labels.** The refined Stage 1 source/export replaces R-number labels
-  with role names. `Diagrams/stage2_class_diagram.*` shows only implemented classes
-  and relationships. `Diagrams/stage2_ai_workflows.md` separates F03/F05 retrieval,
-  validation, missing-input, failure, stale-preview, approval and cancellation
-  branches; `Diagrams/stage2_deadlines.md` documents actual Observer lifecycle.
-  Other original Stage 1 diagrams remain planned-design references.
+Five patterns are implemented: MVC, Facade, Adapter, Strategy and Observer. CareerFacade
+coordinates feature-specific CareerAgent methods, ToolManager retrieval, InterviewService,
+ResumeParser, DeadlineManager and Repository/LocalRecords. The bounded tasks retrieve,
+generate, validate, review and persist; career planning also retrieves prior reviewed
+advice as memory. Autonomous dynamic tool execution is not claimed.
 
-## Five implemented patterns
+Updated diagrams use role labels and concrete Adapter/Observer operations. AI sequences
+include separate feature retrieval/validation/error branches. Original design changes
+and reasons are recorded in section 4 of the report source.
 
-| Pattern | Participants and actual design problem |
-|---|---|
-| MVC | JobSearchGUI / JobSearchCLI (views), AgentController (input routing and pending review state), CareerFacade / domain / Repository (application model). Both views use the same rules and storage. |
-| Facade | CareerFacade coordinates parser, agent, tools, deadline subject and repository; views do not call provider or persistence libraries directly. |
-| Adapter | LLMClient / OpenAIAdapter and ResumeParser / DocumentParserAdapter isolate external HTTP/document-library formats. Both adapter families count as one distinct pattern. |
-| Strategy | MatchingStrategy, WeightedMatching, RequiredSkillMatching, ToolManager context. Policy choice changes scores without changing feature routing. |
-| Observer | DeadlineManager subject, DeadlineObserver contract, JobSearchGUI / JobSearchCLI concrete observers. Notifications reach subscribed views without UI dependencies in deadline rules. |
+## Free-provider change
 
-## Verification and limitations
+The user requested a free API option. GroqAdapter now defaults to Groq-hosted
+`openai/gpt-oss-20b` on a quota-limited Free plan. ConfiguredLLMClient reloads the
+explicit provider choice per request; OpenAIAdapter remains optional. Shared HTTP
+translation keeps provider keys isolated and does not automatically fall back after
+errors. This is documented as a Stage 1 provider change, with official references
+in README and the report. A private local key and live verification are still pending.
 
-- A fresh-output `mvn package` build passes all 33 tests (zero failures/errors).
-  Automated checks cover file import, persistence/restart, provider HTTP request
-  shape/configuration precedence, error redaction, invalid JSON, evidence rejection,
-  selective review/cancellation, stale analysis, matching/gaps, deadline timezone and
-  subscription rules, GUI form persistence and event-thread responsiveness.
-- Tests use injected LLM responses and a local HTTP server. A live OpenAI call has
-  not been made: the developer must configure a local key and verify model access
-  before recording AI demonstrations. Evidence matching cannot establish whether a
-  sentence actually requires a skill; human review is still necessary.
-- GUI forms are exercised and rendered headlessly in this environment. A desktop
-  window, file picker, and modal approval dialogs must also be tried on a desktop
-  when making the GUI demonstration recordings.
-- CLI and GUI share `data/` but simultaneous independent processes do not have
-  database transactions or file locking; run one interface at a time.
-- Local changes must be pushed to the public GitHub repository during the relevant
-  reporting period. New commits use their actual dates; no dates/history are altered.
-  Use `git log --date=iso-strict --format='%h %ad %s'` and GitHub commit URLs in the
-  final weekly summary after upload. Four local commits alone do not establish
-  that the GitHub weekly-push requirement has been met.
+## Verification and corrected defects
 
-## AI collaboration record for this checkpoint
+The desktop-enabled suite passes 61 checks, including actual Swing-window/file-picker
+verification. A headless run skips that one native test. Important fixes cover stale
+job analysis, cross-process source fingerprints, bracket-containing/long array values,
+atomic JSON writes, invalid record IDs, future application dates, interrupted review,
+provider-error redaction and displaying saved application history in the interfaces.
 
-Tool: OpenAI Codex. Tasks: repository/design review, F03 OpenAI Adapter and reviewed
-skill extraction, F05 job-analysis validation, F15 Observer deadlines, shared Swing
-GUI, tests and diagram refinements. Representative user guidance: follow Stage 2
-according to Stage 1; remove meaningless relation labels; give grouped AI features
-feature-specific retrieval/validation paths. The human must review, understand,
-run, and validate these changes. Exact model identifier, total token usage and
-monetary cost are not exposed to this workspace; obtain them from the session's
-usage/billing record for the final report rather than guessing or reporting zero.
-Application runtime model is configurable (`gpt-4.1-mini` by default); this is distinct
-from the model used by the development tool.
+## Submission records
+
+- [Report source](stage2-report-working-draft.md)
+- [PDF draft](../stage2-report.pdf) and [editable Word draft](../stage2-report.docx)
+- [Weekly commit summary](weekly-commit-summary.md)
+- [Demonstration guide and pending link worksheet](demonstration-guide.md)
+- [Implemented UML](../Diagrams/stage2_class_diagram.png)
+- [Feature-specific sequences](../Diagrams/stage2_ai_workflows.md)
+
+Keep actual model/token/money usage from the development-tool and provider billing
+records. Those values are not exposed to this workspace and must not be guessed.
+Recordings must show real GUI/CLI behavior and live AI where applicable. The report
+is deliberately labeled DRAFT until these remaining fields and checks are complete.
