@@ -55,6 +55,8 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         tabs.addTab("Applications & deadlines", applicationsTab());
         tabs.addTab("Writing assistant", writingTab());
         tabs.addTab("Interview preparation", interviewTab());
+        tabs.addTab("Company research", researchTab());
+        tabs.addTab("Career plan", careerPlanTab());
         add(tabs, BorderLayout.CENTER);
         add(status, BorderLayout.SOUTH);
         deadlineTimer = new Timer(60_000, e -> {
@@ -553,6 +555,52 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
             if (allowAI("the stored interview questions, rubrics and submitted answers")) execute("interview.feedback", Map.of("sessionId", id), result, null);
         }));
         form.add(lifecycle);
+        return split(form, result);
+    }
+
+
+    private JPanel researchTab() {
+        JPanel form = form();
+        JComboBox<Choice> jobs = jobSelector(form, "research.job");
+        Map<String, JTextComponent> fields = new LinkedHashMap<>();
+        field(form, fields, "research", "text", "Your company research notes", true);
+        field(form, fields, "research", "sources", "Source URLs (comma-separated, optional)", true);
+        JTextArea result = output("research.result");
+        result.setText("Save your own company research and sources. AI summaries use these notes; the app does not browse or independently verify websites.");
+        JPanel notes = actions();
+        button(notes, "Save notes", "research.save", () -> withChoice(jobs, id -> execute("company.notes",
+                Map.of("jobId", id, "text", fields.get("text").getText(), "sources", fields.get("sources").getText()), result, null)));
+        button(notes, "Load notes", "research.load", () -> withChoice(jobs, id -> execute("company.show", Map.of("jobId", id), result, response -> {
+            var saved = controller.getCompanyNotes(id);
+            fields.get("text").setText(saved.text()); fields.get("sources").setText(String.join(", ", saved.sources()));
+        })));
+        button(notes, "Summarize…", "research.summarize", () -> withChoice(jobs, id -> {
+            if (allowAI("your saved company notes and supplied source URLs")) execute("company.summarize", Map.of("jobId", id), result,
+                    response -> reviewDocumentDialog(response, result));
+        }));
+        form.add(notes);
+        return split(form, result);
+    }
+
+    private JPanel careerPlanTab() {
+        JPanel form = form();
+        form.add(new JLabel("Use the reviewed gaps of 1-4 target jobs to plan one week."));
+        Map<String, JTextComponent> fields = new LinkedHashMap<>();
+        field(form, fields, "plan", "jobIds", "Target job IDs (comma-separated)", false);
+        field(form, fields, "plan", "goals", "Specific career goal", true);
+        field(form, fields, "plan", "hours", "Weekly study hours (1-80)", false);
+        field(form, fields, "plan", "budget", "Weekly cost budget (0 for free activities)", false);
+        fields.get("hours").setText("5"); fields.get("budget").setText("0");
+        JTextArea result = output("plan.result");
+        result.setText("The plan uses approved skills, reviewed job gaps and previously reviewed resume advice. Generated activity totals must fit your weekly hours and cost limits.");
+        JPanel actions = actions();
+        button(actions, "Generate career plan…", "plan.generate", () -> {
+            if (allowAI("your approved profile, selected job gaps and reviewed resume advice")) execute("career.plan", values(fields), result,
+                    response -> reviewDocumentDialog(response, result));
+        });
+        button(actions, "List target jobs", "plan.jobs", () -> execute("job.list", Map.of(), result, null));
+        button(actions, "List saved plans / documents", "plan.saved", () -> execute("document.list", Map.of(), result, null));
+        form.add(actions);
         return split(form, result);
     }
 

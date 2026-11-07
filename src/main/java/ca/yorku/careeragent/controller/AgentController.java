@@ -33,6 +33,8 @@ public class AgentController {
     public java.util.List<ca.yorku.careeragent.domain.QuestionSet> listQuestionSets() { return facade.listQuestionSets(); }
     public java.util.List<ca.yorku.careeragent.domain.InterviewSession> listInterviews() { return facade.listInterviews(); }
 
+    public ca.yorku.careeragent.domain.CompanyNotes getCompanyNotes(String jobId) { return facade.getCompanyNotes(jobId); }
+
     public void subscribeDeadlines(ca.yorku.careeragent.deadline.DeadlineObserver observer) {
         facade.subscribeDeadlines(observer);
     }
@@ -76,6 +78,10 @@ public class AgentController {
                 case "application.add" -> addApplication(input);
                 case "application.update" -> updateApplication(input);
                 case "application.list" -> listApplications();
+                case "company.notes" -> facade.saveCompanyNotes(input.get("jobId"), input.get("text"), java.util.List.copyOf(csv(input.get("sources")))).toString();
+                case "company.show" -> facade.getCompanyNotes(input.get("jobId")).toString();
+                case "company.summarize" -> researchDocument(input, false);
+                case "career.plan" -> researchDocument(input, true);
                 case "interview.questions" -> facade.generateQuestions(input.get("jobId"), Integer.parseInt(input.getOrDefault("count", "5"))).toString();
                 case "interview.question-sets" -> facade.listQuestionSets().stream().map(q -> q.id() + " | job=" + q.jobId() + " | count=" + q.questions().size())
                         .collect(Collectors.joining(System.lineSeparator()));
@@ -287,6 +293,15 @@ public class AgentController {
         var saved = facade.saveDocument(pendingDocument, input.get("content"));
         pendingDocument = null;
         return "Reviewed document saved: " + saved.id();
+    }
+
+
+    private String researchDocument(Map<String, String> input, boolean careerPlan) {
+        pendingDocument = null;
+        pendingDocument = careerPlan ? facade.generateCareerPlan(java.util.Arrays.stream(input.getOrDefault("jobIds", "").split(","))
+                .map(String::trim).toList(), input.get("goals"), Integer.parseInt(input.getOrDefault("hours", "0")),
+                new java.math.BigDecimal(input.getOrDefault("budget", "0"))) : facade.summarizeCompanyNotes(input.get("jobId"));
+        return pendingDocument.toString();
     }
 
 }

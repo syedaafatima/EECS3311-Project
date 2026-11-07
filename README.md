@@ -196,3 +196,16 @@ quotations; skipped answers are excluded. The Interview preparation GUI tab expo
 the same workflow. Original job/question snapshots remain attached to sessions.
 Provider or validation failure preserves earlier feedback; AI assessment is advice,
 not an objective prediction of interview performance.
+
+## Research and career planning (F16–F17)
+
+`company notes` saves research text and optional HTTP(S) source URLs for a selected
+job's company; `company show` reloads it. `company summarize` generates an editable
+summary that cites only supplied source URLs and quotes the saved notes. The app
+does not browse or claim independent source verification. Changed notes invalidate
+an unapproved summary. `career plan` retrieves approved skills, reviewed target-job
+gaps and previously reviewed resume advice, then validates every proposed activity's
+hours and cost against weekly totals. Choose 1–4 target jobs and a specific goal;
+a cost budget of 0 requests free activities. Unknown gaps, zero-time tasks and
+plans exceeding either limit are rejected. Review/edit/approve plans through the
+same document workflow. Company research and Career plan GUI tabs mirror the CLI.

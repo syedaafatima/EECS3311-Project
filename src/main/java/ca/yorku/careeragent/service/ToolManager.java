@@ -107,4 +107,27 @@ public class ToolManager {
         } catch (java.security.NoSuchAlgorithmException e) { throw new IllegalStateException("SHA-256 unavailable."); }
     }
 
+
+    public ca.yorku.careeragent.domain.CompanyNotes readNotes(String jobId) {
+        return readNotesById(ca.yorku.careeragent.domain.CompanyNotes.idFor(readJob(jobId).getCompany()));
+    }
+
+    public ca.yorku.careeragent.domain.CompanyNotes readNotesById(String id) {
+        return ca.yorku.careeragent.domain.CompanyNotes.fromRecord(repository.records().get("company-notes", id)
+                .orElseThrow(() -> new IllegalArgumentException("Save company research notes first.")));
+    }
+
+    public String planEvidence(List<String> jobIds) {
+        StringBuilder context = new StringBuilder(readProfile().toString());
+        for (String id : jobIds) {
+            Job job = readJob(id);
+            context.append("\n").append(job).append("\n").append(compareSkills(id));
+        }
+        repository.records().list("documents").stream().map(ca.yorku.careeragent.domain.CareerDocument::fromRecord)
+                .filter(d -> d.approved() && d.type() == ca.yorku.careeragent.domain.CareerDocument.Type.RESUME_SUGGESTIONS && jobIds.contains(d.jobId()))
+                .sorted(java.util.Comparator.comparing(ca.yorku.careeragent.domain.CareerDocument::createdAt).reversed()).limit(5)
+                .forEach(d -> context.append("\nPrior reviewed resume advice (not candidate facts): ").append(d.content()));
+        return context.toString();
+    }
+
 }

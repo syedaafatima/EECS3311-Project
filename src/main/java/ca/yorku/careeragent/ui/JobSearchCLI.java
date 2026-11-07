@@ -66,6 +66,16 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
                     case "job compare" -> aiRequest("job.compare", Map.of("jobIds", ask("2-4 job ids (comma-separated)"), "strategy", ask("Strategy [weighted/required]")));
                     case "job gaps" -> print("job.gaps", Map.of("jobId", ask("Job id")));
                     case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
+                    case "company notes" -> {
+                        String id = ask("Job id");
+                        System.out.println("Enter research notes, ending with a line containing only .");
+                        String notes = multiline();
+                        print("company.notes", Map.of("jobId", id, "text", notes, "sources", ask("Source URLs (comma-separated, optional)")));
+                    }
+                    case "company show" -> print("company.show", Map.of("jobId", ask("Job id")));
+                    case "company summarize" -> researchRequest("company.summarize", Map.of("jobId", ask("Job id")));
+                    case "career plan" -> researchRequest("career.plan", Map.of("jobIds", ask("Target job ids (1-4, comma-separated)"),
+                            "goals", ask("Specific career goal"), "hours", ask("Weekly study hours 1-80"), "budget", ask("Weekly cost budget (0 for free activities)")));
                     case "interview questions" -> aiRequest("interview.questions", Map.of("jobId", ask("Job id"), "count", ask("Question count 1-20")));
                     case "interview question-sets" -> print("interview.question-sets", Map.of());
                     case "interview questions show" -> print("interview.questions.show", Map.of("questionSetId", ask("Question-set id")));
@@ -221,6 +231,8 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         System.out.println("job compare        - compare 2-4 jobs, preserving unknown values");
         System.out.println("job gaps           - compare profile skills with a reviewed job analysis");
         System.out.println("job match          - rank reviewed jobs using a Strategy implementation");
+        System.out.println("company notes / company show / company summarize - save research and review source-cited summaries");
+        System.out.println("career plan - propose a reviewed learning plan within weekly time/cost limits");
         System.out.println("interview questions / interview question-sets / interview start - create questions and start a mock session");
         System.out.println("interview answer / skip / pause / resume / finish / show / list - manage saved mock interviews");
         System.out.println("interview feedback - evaluate submitted answers against stored rubrics");
@@ -275,6 +287,14 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
             if (line.equals(".")) return content.toString().strip();
             content.append(line).append('\n');
         }
+    }
+
+
+    private void researchRequest(String action, Map<String, String> input) {
+        if (!"yes".equalsIgnoreCase(ask("Send relevant saved records to OpenAI? [yes/no]"))) return;
+        String preview = controller.submitRequest(action, input);
+        System.out.println(preview);
+        if (!preview.startsWith("ERROR:")) reviewDocument();
     }
 
 }

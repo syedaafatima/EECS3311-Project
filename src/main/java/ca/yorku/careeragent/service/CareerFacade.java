@@ -333,6 +333,14 @@ public class CareerFacade {
                 throw new IllegalArgumentException("Candidate or job records changed. Regenerate the draft before approval.");
             }
         }
+        if (draft.type() == ca.yorku.careeragent.domain.CareerDocument.Type.COMPANY_SUMMARY
+                && !draft.sourceFingerprint().equals(toolManager.readNotesById(draft.sourceId()).fingerprint())) {
+            throw new IllegalArgumentException("Research notes changed. Generate a fresh summary before approval.");
+        }
+        if (draft.type() == ca.yorku.careeragent.domain.CareerDocument.Type.CAREER_PLAN
+                && !draft.sourceFingerprint().equals(ToolManager.fingerprint(toolManager.planEvidence(List.of(draft.sourceId().split(",")))))) {
+            throw new IllegalArgumentException("Profile, target jobs or reviewed advice changed. Generate a fresh plan before approval.");
+        }
         var approved = draft.approve(editedContent == null ? draft.content() : editedContent);
         repository.records().put("documents", approved.id(), approved.toRecord());
         return approved;
@@ -355,5 +363,18 @@ public class CareerFacade {
     public ca.yorku.careeragent.domain.InterviewSession answerInterview(String id, String text, boolean skip) { return interviews.answer(id, text, skip); }
     public ca.yorku.careeragent.domain.InterviewSession transitionInterview(String id, String action) { return interviews.transition(id, action); }
     public ca.yorku.careeragent.domain.InterviewSession interviewFeedback(String id) { return interviews.feedback(id); }
+
+
+    public ca.yorku.careeragent.domain.CompanyNotes saveCompanyNotes(String jobId, String text, List<String> sources) {
+        String company = toolManager.readJob(jobId).getCompany();
+        var notes = new ca.yorku.careeragent.domain.CompanyNotes(ca.yorku.careeragent.domain.CompanyNotes.idFor(company), company, text, sources);
+        repository.records().put("company-notes", notes.id(), notes.toRecord());
+        return notes;
+    }
+    public ca.yorku.careeragent.domain.CompanyNotes getCompanyNotes(String jobId) { return toolManager.readNotes(jobId); }
+    public ca.yorku.careeragent.domain.CareerDocument summarizeCompanyNotes(String jobId) { return agent.summarizeNotes(jobId); }
+    public ca.yorku.careeragent.domain.CareerDocument generateCareerPlan(List<String> jobIds, String goals, int hours, java.math.BigDecimal budget) {
+        return agent.generateCareerPlan(jobIds, goals, hours, budget);
+    }
 
 }
