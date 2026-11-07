@@ -66,6 +66,19 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
                     case "job compare" -> aiRequest("job.compare", Map.of("jobIds", ask("2-4 job ids (comma-separated)"), "strategy", ask("Strategy [weighted/required]")));
                     case "job gaps" -> print("job.gaps", Map.of("jobId", ask("Job id")));
                     case "job match" -> print("job.match", Map.of("strategy", ask("Strategy [weighted/required]")));
+                    case "interview questions" -> aiRequest("interview.questions", Map.of("jobId", ask("Job id"), "count", ask("Question count 1-20")));
+                    case "interview question-sets" -> print("interview.question-sets", Map.of());
+                    case "interview questions show" -> print("interview.questions.show", Map.of("questionSetId", ask("Question-set id")));
+                    case "interview start" -> print("interview.start", Map.of("questionSetId", ask("Saved question-set id")));
+                    case "interview list" -> print("interview.list", Map.of());
+                    case "interview show" -> print("interview.show", Map.of("sessionId", ask("Session id")));
+                    case "interview answer" -> {
+                        String id = ask("Session id");
+                        System.out.println("Enter answer, ending with a line containing only .");
+                        print("interview.answer", Map.of("sessionId", id, "answer", multiline()));
+                    }
+                    case "interview skip", "interview pause", "interview resume", "interview finish" -> print(command.replace(' ', '.'), Map.of("sessionId", ask("Session id")));
+                    case "interview feedback" -> aiRequest("interview.feedback", Map.of("sessionId", ask("Session id")));
                     case "resume suggest" -> writingRequest("resume.suggest");
                     case "letter draft" -> writingRequest("letter.draft");
                     case "document list" -> print("document.list", Map.of());
@@ -208,6 +221,9 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
         System.out.println("job compare        - compare 2-4 jobs, preserving unknown values");
         System.out.println("job gaps           - compare profile skills with a reviewed job analysis");
         System.out.println("job match          - rank reviewed jobs using a Strategy implementation");
+        System.out.println("interview questions / interview question-sets / interview start - create questions and start a mock session");
+        System.out.println("interview answer / skip / pause / resume / finish / show / list - manage saved mock interviews");
+        System.out.println("interview feedback - evaluate submitted answers against stored rubrics");
         System.out.println("resume suggest / letter draft - generate an evidence-backed editable draft");
         System.out.println("document list / document show / document edit - retrieve and review saved drafts");
         System.out.println("application add    - track a job application");

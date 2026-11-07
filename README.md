@@ -181,3 +181,18 @@ workflows. Saved documents are separate from original resumes. Changed source
 records invalidate an unsaved draft; provider failure preserves older documents.
 Verbatim evidence checking is a guard against unsupported source citations, not a
 proof that every generated sentence is true: review candidate claims before approval.
+
+## Interview preparation (F11–F13)
+
+`interview questions` generates 1–20 distinct technical/behavioural questions and
+rubrics from a reviewed job. `interview question-sets` lists saved sets;
+`interview start` creates a session from a chosen set. `interview answer` accepts
+multiline input ending in a single `.`, while `interview skip` explicitly skips a
+question. Use `interview pause`, `interview resume`, `interview show`,
+`interview finish` and `interview list` to manage persisted sessions. Finish requires
+every question to be answered or explicitly skipped. `interview feedback` evaluates
+submitted answers against stored rubrics and validates 0–100 scores and answer
+quotations; skipped answers are excluded. The Interview preparation GUI tab exposes
+the same workflow. Original job/question snapshots remain attached to sessions.
+Provider or validation failure preserves earlier feedback; AI assessment is advice,
+not an objective prediction of interview performance.

@@ -32,6 +32,7 @@ public class CareerFacade {
     private final ToolManager toolManager;
     private final ResumeParser parser;
     private final CareerAgent agent;
+    private final InterviewService interviews;
     private final ca.yorku.careeragent.deadline.DeadlineManager deadlines;
 
     public CareerFacade(Repository repository) {
@@ -52,6 +53,7 @@ public class CareerFacade {
         this.toolManager = java.util.Objects.requireNonNull(toolManager);
         this.parser = java.util.Objects.requireNonNull(parser);
         this.agent = new CareerAgent(toolManager, llm);
+        this.interviews = new InterviewService(repository.records(), agent);
         this.deadlines = new ca.yorku.careeragent.deadline.DeadlineManager(repository);
     }
 
@@ -342,5 +344,16 @@ public class CareerFacade {
     public List<ca.yorku.careeragent.domain.CareerDocument> listDocuments() {
         return repository.records().list("documents").stream().map(ca.yorku.careeragent.domain.CareerDocument::fromRecord).toList();
     }
+
+
+    public ca.yorku.careeragent.domain.QuestionSet generateQuestions(String jobId, int count) { return interviews.generateQuestions(jobId, count); }
+    public List<ca.yorku.careeragent.domain.QuestionSet> listQuestionSets() { return interviews.listQuestions(); }
+    public ca.yorku.careeragent.domain.QuestionSet getQuestionSet(String id) { return interviews.questions(id); }
+    public ca.yorku.careeragent.domain.InterviewSession startInterview(String setId) { return interviews.start(setId); }
+    public List<ca.yorku.careeragent.domain.InterviewSession> listInterviews() { return interviews.listSessions(); }
+    public ca.yorku.careeragent.domain.InterviewSession getInterview(String id) { return interviews.session(id); }
+    public ca.yorku.careeragent.domain.InterviewSession answerInterview(String id, String text, boolean skip) { return interviews.answer(id, text, skip); }
+    public ca.yorku.careeragent.domain.InterviewSession transitionInterview(String id, String action) { return interviews.transition(id, action); }
+    public ca.yorku.careeragent.domain.InterviewSession interviewFeedback(String id) { return interviews.feedback(id); }
 
 }

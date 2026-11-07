@@ -30,6 +30,9 @@ public class AgentController {
     public java.util.List<Job> getJobs() { return facade.listJobs(); }
     public java.util.List<Resume> listResumes() { return facade.listResumes(); }
 
+    public java.util.List<ca.yorku.careeragent.domain.QuestionSet> listQuestionSets() { return facade.listQuestionSets(); }
+    public java.util.List<ca.yorku.careeragent.domain.InterviewSession> listInterviews() { return facade.listInterviews(); }
+
     public void subscribeDeadlines(ca.yorku.careeragent.deadline.DeadlineObserver observer) {
         facade.subscribeDeadlines(observer);
     }
@@ -73,6 +76,17 @@ public class AgentController {
                 case "application.add" -> addApplication(input);
                 case "application.update" -> updateApplication(input);
                 case "application.list" -> listApplications();
+                case "interview.questions" -> facade.generateQuestions(input.get("jobId"), Integer.parseInt(input.getOrDefault("count", "5"))).toString();
+                case "interview.question-sets" -> facade.listQuestionSets().stream().map(q -> q.id() + " | job=" + q.jobId() + " | count=" + q.questions().size())
+                        .collect(Collectors.joining(System.lineSeparator()));
+                case "interview.questions.show" -> facade.getQuestionSet(input.get("questionSetId")).toString();
+                case "interview.start" -> facade.startInterview(input.get("questionSetId")).toString();
+                case "interview.list" -> facade.listInterviews().stream().map(s -> s.id() + " | job=" + s.questionSet().jobId() + " | " + s.status())
+                        .collect(Collectors.joining(System.lineSeparator()));
+                case "interview.show" -> facade.getInterview(input.get("sessionId")).toString();
+                case "interview.answer", "interview.skip" -> facade.answerInterview(input.get("sessionId"), input.get("answer"), action.equals("interview.skip")).toString();
+                case "interview.pause", "interview.resume", "interview.finish" -> facade.transitionInterview(input.get("sessionId"), action.substring("interview.".length())).toString();
+                case "interview.feedback" -> facade.interviewFeedback(input.get("sessionId")).toString();
                 case "resume.suggest" -> previewDocument("resume", input);
                 case "letter.draft" -> previewDocument("letter", input);
                 case "document.save" -> saveDocument(input);
