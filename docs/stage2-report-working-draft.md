@@ -4,23 +4,23 @@ AI Job Search and Career Agent — EECS3311
 
 Prepared for the repository owner. Personal identifiers omitted from this public working draft.
 
-Implementation checkpoint: November 8, 2026 (Toronto). Submission due November 10, 2026.
+Implementation checkpoint: November 8 UTC / November 7 Toronto, 2026. Submission due November 10, 2026.
 
-**Not ready for submission:** live feature checks, all feature demonstration links/timestamps, actual AI usage/cost figures and final human review remain pending. The user reported successful live Groq connectivity verification on November 8. Five meaningful Period 3 code commits were pushed to main on November 7; the code/weekly-upload checkpoint is complete. The final report and videos must still be completed before submission.
+**Not ready for submission:** remaining live feature checks, all feature demonstration links/timestamps, actual AI usage/cost figures and final human review remain pending. The user reported successful live Groq connectivity verification and F03/F05/F06/F07 checks on November 8 UTC (November 7 Toronto). Five meaningful Period 3 code commits were pushed to main on November 7; the code/weekly-upload checkpoint is complete. The final report and videos must still be completed before submission.
 
 ## 1. Project overview and implementation status
 
-The application serves students, new graduates and career changers who need a single workspace for profiles, resumes, job comparison, application tracking, interview practice, research and career planning. Both Swing GUI and CLI route through AgentController and CareerFacade to the same local records. Source code now contains workflows for all 17 original Stage 1 features; deterministic behavior and injected-provider workflows were verified with 61 passing tests, including a real desktop window and file picker. The user configured a private Free-plan key locally and reported a successful live Groq verification call on November 8; feature-level live checks remain pending.
+The application serves students, new graduates and career changers who need a single workspace for profiles, resumes, job comparison, application tracking, interview practice, research and career planning. Both Swing GUI and CLI route through AgentController and CareerFacade to the same local records. Source code now contains workflows for all 17 original Stage 1 features; deterministic behavior and injected-provider workflows were verified with 61 passing tests, including a real desktop window and file picker. The user configured a private Free-plan key locally and reported a successful live Groq verification call on November 8 UTC (November 7 Toronto); subsequent user-reported checks covered F03/F05/F06/F07. Other live feature checks remain pending.
 
 ConfiguredLLMClient selects a concrete GroqAdapter by default (Groq-hosted openai/gpt-oss-20b) or an explicitly selected OpenAIAdapter (gpt-4.1-mini). Both use shared ChatCompletionAdapter HTTP translation behind provider-independent LLMClient. The Groq option was added after the user requested free access. Keys are provider-specific, and failures never trigger an automatic switch to a paid provider. The agent performs retrieval through ToolManager, task-specific generation, schema/evidence validation, review and persistence. It retrieves prior reviewed resume advice for career planning as durable advice memory. It is a bounded task agent, not an autonomous planner or unrestricted model-selected tool executor. Generated content never sends applications/messages or modifies the original resume automatically.
 
 ## 2. Feature-to-implementation mapping
 
-All IDs below refer to the original Stage 1 feature with the same ID. “Implemented” describes connected source-code workflows, not a claim that live provider verification or feature videos have been completed. Every demonstration entry is pending recording and an accessible direct timestamped link.
+All IDs below refer to the original Stage 1 feature with the same ID. “Implemented” describes connected source-code workflows, not a claim that every live feature check or the feature videos have been completed. User-reported checks below are separate from automated tests and recordings. Every demonstration entry is pending recording and an accessible direct timestamped link.
 
 ### F01 — Candidate Profile Management
 
-- Stage 1 reference: F01. Status: implemented in code; live AI check pending where applicable.
+- Stage 1 reference: F01. Status: implemented; user-reported CLI creation and Windows GUI reload confirmed the saved demo profile.
 - Mode: Deterministic.
 - Participating classes/key methods: CareerFacade.updateProfile; CandidateProfile.updateProfile/updateSkills; Repository.save/loadProfile.
 - User invocation: profile edit / Skills profile.
@@ -30,7 +30,7 @@ All IDs below refer to the original Stage 1 feature with the same ID. “Impleme
 
 ### F02 — Resume Import
 
-- Stage 1 reference: F02. Status: implemented in code; live AI check pending where applicable.
+- Stage 1 reference: F02. Status: implemented; user-reported PDF preview/confirmation/save succeeded, and import without a profile was rejected. DOCX and other paths have automated coverage; recording remains pending.
 - Mode: Deterministic.
 - Participating classes/key methods: CareerFacade.previewResume/previewResumeText/importResume; ResumeParser; DocumentParserAdapter; Resume; Repository.
 - User invocation: resume import / resume paste / Resumes.
@@ -40,7 +40,7 @@ All IDs below refer to the original Stage 1 feature with the same ID. “Impleme
 
 ### F03 — Resume Skill Extraction
 
-- Stage 1 reference: F03. Status: implemented in code; live AI check pending where applicable.
+- Stage 1 reference: F03. Status: implemented; user-reported live Groq extraction, supporting quotations, approval of only JUnit and a subsequent persisted profile reload succeeded.
 - Mode: AI with deterministic validation.
 - Participating classes/key methods: CareerAgent.extractSkills; ToolManager.readProfile/readResume; SkillProposal; CareerFacade.approveSkills; AgentController.
 - User invocation: resume extract-skills / Resumes.
@@ -50,7 +50,7 @@ All IDs below refer to the original Stage 1 feature with the same ID. “Impleme
 
 ### F04 — Job Import
 
-- Stage 1 reference: F04. Status: implemented in code; live AI check pending where applicable.
+- Stage 1 reference: F04. Status: implemented; user-reported CLI import and Windows GUI retrieval of J01 succeeded.
 - Mode: Deterministic.
 - Participating classes/key methods: CareerFacade.importJob; Job.updateDetails; Repository.findJobByTitleAndCompany/save.
 - User invocation: job import / Jobs & matching.
@@ -60,7 +60,7 @@ All IDs below refer to the original Stage 1 feature with the same ID. “Impleme
 
 ### F05 — Job Description Analysis
 
-- Stage 1 reference: F05. Status: implemented in code; live AI check pending where applicable.
+- Stage 1 reference: F05. Status: implemented; user-reported live Groq analysis categorized Java/SQL as required and Git as preferred, with source quotations and explicit approval.
 - Mode: AI with deterministic validation.
 - Participating classes/key methods: CareerAgent.analyzeJob; ToolManager.readJob; JobAnalysis; Requirement; CareerFacade.approveJobAnalysis; Job.updateReviewedAnalysis.
 - User invocation: job analyze / job requirements / Jobs & matching.
@@ -70,7 +70,7 @@ All IDs below refer to the original Stage 1 feature with the same ID. “Impleme
 
 ### F06 — Skill Gap Identification
 
-- Stage 1 reference: F06. Status: implemented in code; live AI check pending where applicable.
+- Stage 1 reference: F06. Status: implemented; user-reported comparison returned matched Java/missing SQL/no uncertain skills, and the live AI explanation preserved those facts.
 - Mode: Hybrid.
 - Participating classes/key methods: ToolManager.compareSkills; CareerFacade.identifyGaps/explainGaps; CareerAgent.explainGaps; Assessment.
 - User invocation: job gaps / job gaps explain.
@@ -80,7 +80,7 @@ All IDs below refer to the original Stage 1 feature with the same ID. “Impleme
 
 ### F07 — Job Matching
 
-- Stage 1 reference: F07. Status: implemented in code; live AI check pending where applicable.
+- Stage 1 reference: F07. Status: implemented; user-reported Windows GUI ranking returned weighted 65% and required 50%, and the live AI explanation preserved the required score and gaps.
 - Mode: Hybrid.
 - Participating classes/key methods: MatchingStrategy; WeightedMatching; RequiredSkillMatching; ToolManager.calculateMatch/setMatchingStrategy; CareerFacade.matchJobs/explainMatches; CareerAgent.explainMatches.
 - User invocation: job match / job match explain.
@@ -192,7 +192,7 @@ All IDs below refer to the original Stage 1 feature with the same ID. “Impleme
 
 ### MVC
 
-JobSearchGUI and JobSearchCLI are views. AgentController routes action/input maps and holds pending review snapshots; CareerFacade and domain classes own workflow rules; Repository/LocalRecords persist state. This prevents either UI from implementing independent validation/provider/persistence workflows. Key boundary: submitRequest(action,input). Native GUI requests run in SwingWorker while controls prevent overlapping writes.
+JobSearchGUI and JobSearchCLI are views. AgentController routes action/input maps and holds pending review snapshots; CareerFacade and domain classes own workflow rules; Repository/LocalRecords persist state. This prevents either UI from implementing independent validation/provider/persistence workflows. Key boundary: submitRequest(action,input). Native GUI requests run in SwingWorker while controls prevent overlapping writes. CareerTheme provides styling and responsive action layout; sidebar navigation switches between nine workspaces without moving domain rules into the view.
 
 ### Facade
 
@@ -294,7 +294,14 @@ The [full-resolution class diagram](https://github.com/syedaafatima/EECS3311-Pro
 - Implemented change: GroqAdapter and ConfiguredLLMClient add Groq-hosted `openai/gpt-oss-20b` as the default; OpenAIAdapter remains an explicit optional selection. ChatCompletionAdapter shares compatible HTTP handling, with separate key/model namespaces and no automatic provider fallback.
 - Reason: the user requested a free-provider option. Groq's documented Free plan and JSON-capable production model fit the existing task schemas. The Stage 2 instructions permit a cheap/free model and documented provider changes.
 - Impact: all AI features use the same LLMClient boundary; per-feature retrieval/validation/review remains unchanged. Consent text is provider-neutral. The AI setup tab, CLI, safe example configuration, HTTP tests and model/provider report mapping were updated.
-- Sources checked November 7, 2026: [Groq Free-plan FAQ](https://community.groq.com/t/do-i-get-charged-for-anything-on-the-groq-free-plan/832), [rate limits](https://console.groq.com/docs/rate-limits), [model](https://console.groq.com/docs/model/openai/gpt-oss-20b), [API compatibility](https://console.groq.com/docs/openai). Availability and quotas are account/provider controlled; the user reported a successful live key check on November 8.
+- Sources checked November 7, 2026: [Groq Free-plan FAQ](https://community.groq.com/t/do-i-get-charged-for-anything-on-the-groq-free-plan/832), [rate limits](https://console.groq.com/docs/rate-limits), [model](https://console.groq.com/docs/model/openai/gpt-oss-20b), [API compatibility](https://console.groq.com/docs/openai). Availability and quotas are account/provider controlled; the user reported a successful live key check on November 8 UTC (November 7 Toronto).
+
+### Desktop layout refinement
+
+- Original design: shared Swing GUI with nine top tabs and equal-width button grids.
+- Implemented change: a persistent sidebar, consistent built-in Swing theme, separate form/result cards, readable multiline fields, buttons that reflow at smaller widths, a progress indicator and separate saved-job/posting-entry views.
+- Reason: the user's Windows screenshots showed wrapped navigation, clipped action labels and cramped fields, and the user requested a nicer layout.
+- Impact: JobSearchGUI and new presentation helper CareerTheme. Controller requests, explicit AI consent/review and local persistence retain their roles; no new design pattern or dependency is counted. Native desktop checks exercise navigation, file-picker cancellation, readable controls at two sizes and the visible deterministic ranking. An existing Period 1 test fixture was corrected to use Toronto dates consistently with application validation.
 
 ## 5. AI tools and collaboration log
 
@@ -305,7 +312,7 @@ Representative interactions:
 - October 29 checkpoint: PDF/DOCX import through Adapter, preview/confirmation, versioned persistence and tests.
 - November 1: user requested four meaningful Period 2 commits and supplied Stage 1/Stage 2 PDFs. Professor feedback required role labels and feature-specific retrieval/validation. Implemented F03, F05, F15 and shared GUI; 33 tests passed; pushed four commits November 1.
 - November 7: implemented F06–F08, F09–F10, F11–F13 and F16–F17, then hardened cross-process source verification, persistence, identifiers/date validation and API setup. Five substantive code commits were pushed to main. A temporary workspace disconnect was recovered. A further tracker-history display regression was corrected; the desktop-enabled suite passed 61 checks after adding the free-provider adapter and its HTTP/configuration/quota tests.
-- November 8: guided Windows JDK/Maven setup and private Groq configuration. The user supplied CLI output showing `ai status` selecting Groq and `ai verify` successfully receiving the expected JSON response. This establishes reported live connectivity; feature demonstrations and output review remain pending.
+- November 8 UTC (November 7 Toronto): guided Windows JDK/Maven setup and private Groq configuration. The user supplied CLI output showing `ai status` selecting Groq and `ai verify` successfully receiving the expected JSON response. Follow-up transcripts/screenshots confirmed F03 selective skill approval, F05 requirement approval, F06 gap explanation, F07 ranking/explanation and saved profile/job access across the CLI-to-GUI restart. The user requested the desktop layout refinement. Remaining live workflows, feature recordings and final review are pending.
 
 Human responsibilities: review and understand generated code, validate real provider access/output, record running feature demonstrations and review final submission. Exact total development-tool token use and monetary cost are **pending actual session usage/billing data**. Do not substitute guessed figures or zero. Runtime API verification and demonstration costs are also pending actual provider usage/billing.
 
@@ -339,19 +346,21 @@ Only five distinct substantive development changes are selected for each complet
 - [579f50a](https://github.com/syedaafatima/EECS3311-Project/commit/579f50ab29664dc0f949ea0aeadf20bbcbec7c5a) — Implement F16-F17 source-cited company research and budgeted career plans. Created November 07 at 17:01 Toronto.
 - [0f2b00a](https://github.com/syedaafatima/EECS3311-Project/commit/0f2b00a3611cc0ad830ab2b7f36b90ebf51366fa) — Harden restart-safe drafts, persistence and API setup with desktop verification. Created November 07 at 18:00 Toronto.
 
-All five selected code commits were pushed together on **November 7 at 18:00:29 Toronto** (23:00:29 UTC), advancing main from 12fc14a to 0f2b00a. The GitHub repository Activity API and remote branch SHA confirmed the upload. An additional tracker-history display regression was fixed in [6979590](https://github.com/syedaafatima/EECS3311-Project/commit/6979590). The free-provider option was added in [8d52ea2](https://github.com/syedaafatima/EECS3311-Project/commit/8d52ea2) after the user requested it. The five selected commits already satisfy the Period 3 minimum; report-only changes are excluded. Extra commits in other periods do not compensate for a deficient period.
+All five selected code commits were pushed together on **November 7 at 18:00:29 Toronto** (23:00:29 UTC), advancing main from 12fc14a to 0f2b00a. The GitHub repository Activity API and remote branch SHA confirmed the upload. An additional tracker-history display regression was fixed in [6979590](https://github.com/syedaafatima/EECS3311-Project/commit/6979590). The free-provider option was added in [8d52ea2](https://github.com/syedaafatima/EECS3311-Project/commit/8d52ea2) after the user requested it. An additional desktop usability refinement is recorded in [9b59fb2](https://github.com/syedaafatima/EECS3311-Project/commit/9b59fb2d40064fb581b5b0e82205e7daf56d49a4). The five selected commits already satisfy the Period 3 minimum; report-only changes are excluded. Extra commits in other periods do not compensate for a deficient period.
 
 ### Verification
 
 On November 7, 61 tests passed with zero failures/errors/skips using a desktop-capable Java 21 test runtime and virtual X display. The suite covers PDF/DOCX parsing; preview/confirmation/cancellation; long text, Unicode and control characters; malformed and unsupported model evidence; HTTP contract/configuration precedence and credential redaction; original resume preservation; stale-source rejection; budget checks; exact interview question counts and duplicate detection; session pause/resume/skip/finish and feedback validation; deadline timezone/Observer lifecycle; GUI forms, background responsiveness, actual window and native file-picker cancellation; a separate JVM editing reviewed records; invalid future application dates; and interrupted document editing.
 
-Tests use injected model responses/local HTTP endpoints. They do not establish live Groq/OpenAI account access or prove the truth/quality of every model-generated sentence. Separately, on November 8 the user supplied Windows CLI output reporting: "Live LLM verification succeeded. The configured model returned the expected JSON response." The preceding `ai status` output selected Groq and confirmed a locally configured key with its value hidden. PowerShell output confirmed Temurin JDK 21.0.13 and Maven 3.10.0. This user-reported connectivity check was not independently run in the cloud workspace and does not replace feature-level live checks, recordings or human review. Full Stage 3 deterministic/KUMA requirements are outside this Stage 2 checkpoint.
+Tests use injected model responses/local HTTP endpoints. They do not establish live Groq/OpenAI account access or prove the truth/quality of every model-generated sentence. Separately, on November 8 UTC (November 7 Toronto) the user supplied Windows CLI output reporting: "Live LLM verification succeeded. The configured model returned the expected JSON response." The preceding `ai status` output selected Groq and confirmed a locally configured key with its value hidden. PowerShell output confirmed Temurin JDK 21.0.13 and Maven 3.10.0. This user-reported connectivity check was not independently run in the cloud workspace and does not replace remaining feature-level live checks, recordings or human review. Follow-up user transcripts/screenshots confirmed the F03/F05/F06/F07 results described above; other live feature paths remain pending. Full Stage 3 deterministic/KUMA requirements are outside this Stage 2 checkpoint.
+
+The refreshed desktop was also checked at 900×650 and 1280×860: all nine workspaces were accessible, multiline fields retained readable height, long button labels fit, the native file picker cancelled correctly and the actual Rank jobs action displayed the expected 65% weighted result for fictional test data.
 
 Important corrected defects: long-text JSON regex stack risk; interrupted input retaining stale review state; edited posting descriptions retaining old requirements; unordered collection iteration changing source fingerprints after restart; bracket-containing array values truncating; direct record writes risking partial content; unchecked future application dates; provider error bodies risking disclosure; saved tracker history not appearing in interface output; and native GUI prerequisites missing from the original cloud JRE.
 
 ### Remaining limitations and finalization work
 
-- Complete each AI workflow against the real model; the user reported that local key setup and ai verify succeeded November 8. Allow time between requests and use short demonstration inputs to fit free-tier quotas.
+- Complete each AI workflow against the real model; the user reported that local key setup and ai verify succeeded November 8 UTC (November 7 Toronto), followed by F03/F05/F06/F07 checks. Allow time between requests and use short demonstration inputs to fit free-tier quotas.
 - Human-review source evidence and qualifications; quotation checks do not guarantee semantic truth.
 - Single-candidate local JSON storage; run one interface at a time because there is no cross-process file locking.
 - No web browsing/source verification, external application sending or OS/email notifications.
@@ -385,7 +394,7 @@ Every feature requires an actual running demonstration; screenshots, tests and t
 
 All Java source paths are under `src/main/java/ca/yorku/careeragent/`. Each class referenced above is implemented in its same-named Java file in the package below. This index ties feature/class names to actual files rather than implying unconnected design-only classes.
 
-- `ui/`: `JobSearchCLI.java`, `JobSearchGUI.java`.
+- `ui/`: `JobSearchCLI.java`, `JobSearchGUI.java`, `CareerTheme.java`.
 - `controller/`: `AgentController.java`.
 - `service/`: `CareerAgent.java`, `CareerFacade.java`, `InterviewService.java`, `ToolManager.java`.
 - `domain/`: `AnswerFeedback.java`, `Application.java`, `Assessment.java`, `CandidateProfile.java`, `CareerDocument.java`, `CompanyNotes.java`, `InterviewSession.java`, `Job.java`, `JobAnalysis.java`, `QuestionSet.java`, `Requirement.java`, `Resume.java`, `SkillProposal.java`, `SourceFingerprint.java`.
@@ -398,10 +407,10 @@ All Java source paths are under `src/main/java/ca/yorku/careeragent/`. Each clas
 
 ## Appendix B. Reproduction and desktop verification
 
-Normal desktop prerequisites: full Java 17+ JDK, Maven 3.9+, local provider API key for model tasks (Groq Free plan by default). Run `mvn package`, then `mvn exec:java` for the CLI or `mvn exec:java -Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI` for Swing. `ai status` reports configuration without printing the key; `ai verify` performs a small actual model call with no personal records, once a key is configured. The API setup section of README explains free Groq configuration and optional OpenAI configuration.
+Normal desktop prerequisites: full Java 17+ JDK, Maven 3.9+, local provider API key for model tasks (Groq Free plan by default). Run `mvn package`, then `mvn exec:java` for the CLI or `mvn exec:java "-Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI"` for Swing. `ai status` reports configuration without printing the key; `ai verify` performs a small actual model call with no personal records, once a key is configured. The API setup section of README explains free Groq configuration and optional OpenAI configuration.
 
 The cloud's original Java runtime is headless-only. Native checks used a user-owned official Adoptium Java 21 desktop JRE and a virtual Xorg dummy display. Standard headless builds skip the one native-window check; desktop-enabled verification runs it. Local/private configuration and data are ignored by Git. Safe fictional sample files are in `examples/`.
 
-![Actual desktop window from automated smoke verification; not a feature demonstration video](images/gui-native-smoke.png)
+![Refreshed desktop window from automated smoke verification with fictional sample data; not a feature demonstration video](images/gui-refreshed-workspace.png)
 
 No live-key value, private candidate data or invented demonstration links are included in this draft.

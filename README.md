@@ -4,9 +4,10 @@ Java implementation of the 17 Stage 1 features, with Swing GUI and CLI sharing
 `AgentController`, `CareerFacade`, local JSON records and feature-specific AI tasks.
 Implemented patterns: **MVC, Facade, Adapter, Strategy and Observer**.
 
-**November 7 status:** F01–F17 have connected implementations. A desktop-enabled
-run passed all 61 tests. Live provider verification, feature demonstration videos,
-usage/cost figures and final report review remain pending before submission.
+**Implementation status:** F01–F17 have connected implementations. A desktop-enabled
+run passed all 61 tests. The user reported successful live Groq verification and
+F03/F05/F06/F07 checks. Remaining live workflows, feature demonstration videos,
+usage/cost figures and final report review are still pending before submission.
 Injected model responses are used only in tests and are not live demonstrations.
 
 ## Build and launch
@@ -20,7 +21,7 @@ From the repository root, run one interface at a time:
 ```sh
 mvn package
 mvn exec:java
-mvn exec:java -Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI
+mvn exec:java "-Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI"
 ```
 
 Both interfaces use local `data/`. The compiler runs in-process and targets Java 17
@@ -80,10 +81,18 @@ and [OpenAI-compatible API](https://console.groq.com/docs/openai).
 Create a profile, then import a PDF/DOCX resume or paste text from a scanned resume.
 Review and confirm the preview. Use the displayed saved IDs for subsequent tasks.
 Import jobs and review requirements, using the model or explicit manual input.
-The GUI tabs cover Skills profile, Resumes, Jobs & matching, Applications & deadlines,
+The GUI sidebar covers Skills profile, Resumes, Jobs & matching, Applications & deadlines,
 Writing assistant, Interview preparation, Company research, Career plan and AI setup.
+Forms and results use separate cards; buttons reflow when the window is resized.
+Jobs & matching separates **Saved jobs** from **Add / update posting** so the ranking
+controls remain easy to reach. The built-in Swing theme needs no extra dependency.
 Long requests run in background workers; generated writing opens an editable review
 dialog. Original resumes are retained as separate immutable versions.
+
+![Desktop layout with fictional sample data](docs/images/gui-refreshed-workspace.png)
+
+If your Windows copy came from Download ZIP, use the [GUI update steps](docs/windows-gui-update.md)
+to update the two presentation files in your existing project folder.
 
 ## CLI feature guide
 

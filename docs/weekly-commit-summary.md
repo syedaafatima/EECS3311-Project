@@ -44,3 +44,7 @@ All five selected substantive development changes are on main. [6979590](https:/
 - All five selected Period 3 code commits were pushed November 7 at 23:00:29 UTC / 18:00:29 Toronto, advancing main from 12fc14a to 0f2b00a. The repository Activity API and matching remote SHA confirm this upload.
 - The report/checklist files on branch stage2-report-draft-nov7 are documentation changes and are not counted toward the five-code-commit minimum.
 - Before final submission, retain these direct commit links in the reviewed report and verify the final source/report/video links. Dates and history have not been changed.
+
+## Additional desktop usability refinement
+
+[9b59fb2](https://github.com/syedaafatima/EECS3311-Project/commit/9b59fb2d40064fb581b5b0e82205e7daf56d49a4) adds sidebar navigation, a built-in shared Swing theme, responsive action buttons, readable multiline inputs and separate saved-job/posting-entry tools. Native checks exercise both window sizes and a real displayed ranking; the full desktop-enabled suite passed 61 tests. The legacy verification fixture now uses Toronto dates consistently. This is an additional code change beyond the five selected Period 3 commits; report/export-only changes are excluded from the five-code-commit count.

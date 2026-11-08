@@ -2,9 +2,10 @@
 
 The November 7 implementation is pushed to main. Pull the latest code before recording. This checklist is preparation, not evidence that recordings or live AI checks have already happened.
 
-November 8 checkpoint: the user supplied Windows CLI output showing a successful
+November 8 UTC (November 7 Toronto) checkpoint: the user supplied Windows CLI output showing a successful
 live Groq `ai verify` response after configuring a private local key. Connection
-setup is complete; feature-level live checks and recordings remain pending. Keep
+setup is complete. Subsequent user-reported checks covered F03/F05/F06/F07;
+remaining live checks and all recordings are pending. Keep
 the existing private `.env`; do not overwrite it by copying the template again.
 
 Use the actual application and your configured Groq model (or explicitly selected optional provider). Test fixtures, simulated model responses, slides and static screenshots do not substitute for running feature demonstrations. Record both GUI and CLI across your videos.
@@ -21,6 +22,10 @@ Use the actual application and your configured Groq model (or explicitly selecte
 8. Use the list commands to obtain actual resume, document, question-set and session IDs. Do not copy sample UUIDs from tests.
 
 Safe PDF/DOCX resume examples are in `examples/`; use them instead of private personal documents when recording.
+
+The refreshed desktop uses sidebar navigation. In **Jobs & matching**, use
+**Add / update posting** to enter a job and **Saved jobs** for analysis, ranking
+and comparison. Maximize the window when recording for readable controls and results.
 
 Safe example candidate: Demo Candidate, BSc Computer Science, Java coursework and a task-tracker project, approved skills Java and Git, software-development interests, Toronto location.
 
@@ -98,7 +103,7 @@ Replace every pending value with a real accessible URL and exact segment timesta
 
 ## Final report tasks
 
-- Finish live feature checks and human code review; connectivity verification was reported successful November 8.
+- Finish live feature checks and human code review; connectivity verification was reported successful November 8 UTC (November 7 Toronto).
 - Replace pending video fields with real timestamped URLs.
 - Obtain actual development-tool model/usage/cost and provider usage/billing figures; do not invent totals.
 - Review the updated implemented UML and feature-specific sequence/use-case diagrams against the final code.

@@ -38,6 +38,8 @@ digraph Classes {
 "InterviewSession" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#f1f5f9"><B>InterviewSession</B></TD></TR><TR><TD ALIGN="LEFT">id; questionSet; answers; skipped; feedback; status<BR ALIGN="LEFT"/>nextQuestion(); answer(); pause(); resume(); finish()<BR ALIGN="LEFT"/>attachFeedback(); toRecord()/fromRecord()</TD></TR></TABLE>>];
 "AnswerFeedback" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#f1f5f9"><B>AnswerFeedback</B></TD></TR><TR><TD ALIGN="LEFT">&lt;&lt;immutable evaluation&gt;&gt;<BR ALIGN="LEFT"/>score; strengths; weaknesses; improvements<BR ALIGN="LEFT"/>answerEvidence; toRecord()/fromRecord()</TD></TR></TABLE>>];
 "CompanyNotes" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#f1f5f9"><B>CompanyNotes</B></TD></TR><TR><TD ALIGN="LEFT">&lt;&lt;user research&gt;&gt;<BR ALIGN="LEFT"/>id; company; text; sources<BR ALIGN="LEFT"/>idFor(); fingerprint(); toRecord()/fromRecord()</TD></TR></TABLE>>];
+"CareerTheme" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#f1f5f9"><B>CareerTheme</B></TD></TR><TR><TD ALIGN="LEFT">&lt;&lt;presentation helper&gt;&gt;<BR ALIGN="LEFT"/>install(); card(); button(); styleScrollBars()<BR ALIGN="LEFT"/>responsive Actions; NavigationRenderer</TD></TR></TABLE>>];
+"JobSearchGUI" -> "CareerTheme" [label="presentation",style="dashed"];
 "JobSearchGUI" -> "AgentController" [label="controller"];
 "JobSearchCLI" -> "AgentController" [label="controller"];
 "AgentController" -> "CareerFacade" [label="facade"];
