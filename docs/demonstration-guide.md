@@ -2,6 +2,11 @@
 
 The November 7 implementation is pushed to main. Pull the latest code before recording. This checklist is preparation, not evidence that recordings or live AI checks have already happened.
 
+November 8 checkpoint: the user supplied Windows CLI output showing a successful
+live Groq `ai verify` response after configuring a private local key. Connection
+setup is complete; feature-level live checks and recordings remain pending. Keep
+the existing private `.env`; do not overwrite it by copying the template again.
+
 Use the actual application and your configured Groq model (or explicitly selected optional provider). Test fixtures, simulated model responses, slides and static screenshots do not substitute for running feature demonstrations. Record both GUI and CLI across your videos.
 
 ## Preparation
@@ -93,7 +98,7 @@ Replace every pending value with a real accessible URL and exact segment timesta
 
 ## Final report tasks
 
-- Finish live model verification and human code review.
+- Finish live feature checks and human code review; connectivity verification was reported successful November 8.
 - Replace pending video fields with real timestamped URLs.
 - Obtain actual development-tool model/usage/cost and provider usage/billing figures; do not invent totals.
 - Review the updated implemented UML and feature-specific sequence/use-case diagrams against the final code.

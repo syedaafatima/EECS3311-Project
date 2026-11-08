@@ -1,10 +1,10 @@
-# Stage 2 implementation checkpoint — November 7, 2026 (Toronto)
+# Stage 2 implementation checkpoint — November 8, 2026 (Toronto)
 
 All 17 Stage 1 features have connected implementations in both CLI and Swing GUI.
 Five meaningful Period 3 code commits were pushed to main November 7 at 18:00:29 Toronto.
 The five selected code commits end at `0f2b00a`; `6979590` additionally exposes persisted tracker history. Report artifacts follow these code checkpoints.
 
-**Submission remains unfinished:** live AI verification, feature videos and links,
+**Submission remains unfinished:** live feature checks, feature videos and links,
 actual AI usage/cost figures and final human report/code review are pending.
 Injected provider responses test workflows; they are not claimed as live model demonstrations.
 
@@ -49,7 +49,9 @@ The user requested a free API option. GroqAdapter now defaults to Groq-hosted
 explicit provider choice per request; OpenAIAdapter remains optional. Shared HTTP
 translation keeps provider keys isolated and does not automatically fall back after
 errors. This is documented as a Stage 1 provider change, with official references
-in README and the report. A private local key and live verification are still pending.
+in README and the report. On November 8, the user configured a private local key
+and reported successful CLI `ai verify` output from Groq. Feature-level live checks
+and recordings remain pending.
 
 ## Verification and corrected defects
 
@@ -58,6 +60,13 @@ verification. A headless run skips that one native test. Important fixes cover s
 job analysis, cross-process source fingerprints, bracket-containing/long array values,
 atomic JSON writes, invalid record IDs, future application dates, interrupted review,
 provider-error redaction and displaying saved application history in the interfaces.
+
+On November 8, the user supplied Windows PowerShell output confirming Temurin
+JDK 21.0.13 and Maven 3.10.0, followed by CLI `ai status` selecting Groq and
+`ai verify` reporting: "Live LLM verification succeeded. The configured model
+returned the expected JSON response." This user-reported connectivity check is
+separate from the automated tests and does not establish every feature's live
+output quality. No private key was shared.
 
 ## Submission records
 

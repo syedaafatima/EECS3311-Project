@@ -4,13 +4,13 @@ AI Job Search and Career Agent — EECS3311
 
 Prepared for the repository owner. Personal identifiers omitted from this public working draft.
 
-Implementation checkpoint: November 7, 2026 (Toronto). Submission due November 10, 2026.
+Implementation checkpoint: November 8, 2026 (Toronto). Submission due November 10, 2026.
 
-**Not ready for submission:** live provider verification, all feature demonstration links/timestamps, actual AI usage/cost figures and final human review remain pending. Five meaningful Period 3 code commits were pushed to main on November 7; the code/weekly-upload checkpoint is complete. The final report and videos must still be completed before submission.
+**Not ready for submission:** live feature checks, all feature demonstration links/timestamps, actual AI usage/cost figures and final human review remain pending. The user reported successful live Groq connectivity verification on November 8. Five meaningful Period 3 code commits were pushed to main on November 7; the code/weekly-upload checkpoint is complete. The final report and videos must still be completed before submission.
 
 ## 1. Project overview and implementation status
 
-The application serves students, new graduates and career changers who need a single workspace for profiles, resumes, job comparison, application tracking, interview practice, research and career planning. Both Swing GUI and CLI route through AgentController and CareerFacade to the same local records. Source code now contains workflows for all 17 original Stage 1 features; deterministic behavior and injected-provider workflows were verified with 61 passing tests, including a real desktop window and file picker. A live Groq call is pending until the user configures a private Free-plan API key locally.
+The application serves students, new graduates and career changers who need a single workspace for profiles, resumes, job comparison, application tracking, interview practice, research and career planning. Both Swing GUI and CLI route through AgentController and CareerFacade to the same local records. Source code now contains workflows for all 17 original Stage 1 features; deterministic behavior and injected-provider workflows were verified with 61 passing tests, including a real desktop window and file picker. The user configured a private Free-plan key locally and reported a successful live Groq verification call on November 8; feature-level live checks remain pending.
 
 ConfiguredLLMClient selects a concrete GroqAdapter by default (Groq-hosted openai/gpt-oss-20b) or an explicitly selected OpenAIAdapter (gpt-4.1-mini). Both use shared ChatCompletionAdapter HTTP translation behind provider-independent LLMClient. The Groq option was added after the user requested free access. Keys are provider-specific, and failures never trigger an automatic switch to a paid provider. The agent performs retrieval through ToolManager, task-specific generation, schema/evidence validation, review and persistence. It retrieves prior reviewed resume advice for career planning as durable advice memory. It is a bounded task agent, not an autonomous planner or unrestricted model-selected tool executor. Generated content never sends applications/messages or modifies the original resume automatically.
 
@@ -294,7 +294,7 @@ The [full-resolution class diagram](https://github.com/syedaafatima/EECS3311-Pro
 - Implemented change: GroqAdapter and ConfiguredLLMClient add Groq-hosted `openai/gpt-oss-20b` as the default; OpenAIAdapter remains an explicit optional selection. ChatCompletionAdapter shares compatible HTTP handling, with separate key/model namespaces and no automatic provider fallback.
 - Reason: the user requested a free-provider option. Groq's documented Free plan and JSON-capable production model fit the existing task schemas. The Stage 2 instructions permit a cheap/free model and documented provider changes.
 - Impact: all AI features use the same LLMClient boundary; per-feature retrieval/validation/review remains unchanged. Consent text is provider-neutral. The AI setup tab, CLI, safe example configuration, HTTP tests and model/provider report mapping were updated.
-- Sources checked November 7, 2026: [Groq Free-plan FAQ](https://community.groq.com/t/do-i-get-charged-for-anything-on-the-groq-free-plan/832), [rate limits](https://console.groq.com/docs/rate-limits), [model](https://console.groq.com/docs/model/openai/gpt-oss-20b), [API compatibility](https://console.groq.com/docs/openai). Availability and quotas are account/provider controlled; a live key check remains pending.
+- Sources checked November 7, 2026: [Groq Free-plan FAQ](https://community.groq.com/t/do-i-get-charged-for-anything-on-the-groq-free-plan/832), [rate limits](https://console.groq.com/docs/rate-limits), [model](https://console.groq.com/docs/model/openai/gpt-oss-20b), [API compatibility](https://console.groq.com/docs/openai). Availability and quotas are account/provider controlled; the user reported a successful live key check on November 8.
 
 ## 5. AI tools and collaboration log
 
@@ -305,6 +305,7 @@ Representative interactions:
 - October 29 checkpoint: PDF/DOCX import through Adapter, preview/confirmation, versioned persistence and tests.
 - November 1: user requested four meaningful Period 2 commits and supplied Stage 1/Stage 2 PDFs. Professor feedback required role labels and feature-specific retrieval/validation. Implemented F03, F05, F15 and shared GUI; 33 tests passed; pushed four commits November 1.
 - November 7: implemented F06–F08, F09–F10, F11–F13 and F16–F17, then hardened cross-process source verification, persistence, identifiers/date validation and API setup. Five substantive code commits were pushed to main. A temporary workspace disconnect was recovered. A further tracker-history display regression was corrected; the desktop-enabled suite passed 61 checks after adding the free-provider adapter and its HTTP/configuration/quota tests.
+- November 8: guided Windows JDK/Maven setup and private Groq configuration. The user supplied CLI output showing `ai status` selecting Groq and `ai verify` successfully receiving the expected JSON response. This establishes reported live connectivity; feature demonstrations and output review remain pending.
 
 Human responsibilities: review and understand generated code, validate real provider access/output, record running feature demonstrations and review final submission. Exact total development-tool token use and monetary cost are **pending actual session usage/billing data**. Do not substitute guessed figures or zero. Runtime API verification and demonstration costs are also pending actual provider usage/billing.
 
@@ -344,13 +345,13 @@ All five selected code commits were pushed together on **November 7 at 18:00:29 
 
 On November 7, 61 tests passed with zero failures/errors/skips using a desktop-capable Java 21 test runtime and virtual X display. The suite covers PDF/DOCX parsing; preview/confirmation/cancellation; long text, Unicode and control characters; malformed and unsupported model evidence; HTTP contract/configuration precedence and credential redaction; original resume preservation; stale-source rejection; budget checks; exact interview question counts and duplicate detection; session pause/resume/skip/finish and feedback validation; deadline timezone/Observer lifecycle; GUI forms, background responsiveness, actual window and native file-picker cancellation; a separate JVM editing reviewed records; invalid future application dates; and interrupted document editing.
 
-Tests use injected model responses/local HTTP endpoints. They do not establish live Groq/OpenAI account access or prove the truth/quality of every model-generated sentence. Live verification and human review remain necessary. Full Stage 3 deterministic/KUMA requirements are outside this Stage 2 checkpoint.
+Tests use injected model responses/local HTTP endpoints. They do not establish live Groq/OpenAI account access or prove the truth/quality of every model-generated sentence. Separately, on November 8 the user supplied Windows CLI output reporting: "Live LLM verification succeeded. The configured model returned the expected JSON response." The preceding `ai status` output selected Groq and confirmed a locally configured key with its value hidden. PowerShell output confirmed Temurin JDK 21.0.13 and Maven 3.10.0. This user-reported connectivity check was not independently run in the cloud workspace and does not replace feature-level live checks, recordings or human review. Full Stage 3 deterministic/KUMA requirements are outside this Stage 2 checkpoint.
 
 Important corrected defects: long-text JSON regex stack risk; interrupted input retaining stale review state; edited posting descriptions retaining old requirements; unordered collection iteration changing source fingerprints after restart; bracket-containing array values truncating; direct record writes risking partial content; unchecked future application dates; provider error bodies risking disclosure; saved tracker history not appearing in interface output; and native GUI prerequisites missing from the original cloud JRE.
 
 ### Remaining limitations and finalization work
 
-- Configure a private Groq Free-plan key locally, then run ai verify and each AI workflow against the real model. Allow time between requests and use short demonstration inputs to fit free-tier quotas.
+- Complete each AI workflow against the real model; the user reported that local key setup and ai verify succeeded November 8. Allow time between requests and use short demonstration inputs to fit free-tier quotas.
 - Human-review source evidence and qualifications; quotation checks do not guarantee semantic truth.
 - Single-candidate local JSON storage; run one interface at a time because there is no cross-process file locking.
 - No web browsing/source verification, external application sending or OS/email notifications.
