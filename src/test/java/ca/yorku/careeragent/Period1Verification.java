@@ -7,6 +7,7 @@ import ca.yorku.careeragent.service.CareerFacade;
 
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Set;
 
 /** Lightweight verification runner that uses only the Java standard library. */
@@ -15,13 +16,14 @@ public class Period1Verification {
         var temp = Files.createTempDirectory("career-agent-period1-");
         Repository repository = new Repository(temp);
         CareerFacade facade = new CareerFacade(repository);
+        LocalDate today = LocalDate.now(ZoneId.of("America/Toronto"));
 
         facade.updateProfile("Test Candidate", "University", "Java project experience",
                 Set.of("Java", "SQL", "Git"), Set.of("Software"), "Toronto");
         assert repository.loadProfile().orElseThrow().getSkills().contains("Java");
 
         Job job = facade.importJob("Junior Developer", "Example Co", "Build Java applications",
-                "$60,000", "Toronto", LocalDate.now().plusDays(10));
+                "$60,000", "Toronto", today.plusDays(10));
         job.updateAnalysis(Set.of("Java", "SQL"), Set.of("Docker"));
         repository.save(job);
 
@@ -32,7 +34,7 @@ public class Period1Verification {
         double score = facade.matchJobs("weighted").values().iterator().next();
         assert score >= 69.9 && score <= 70.1 : "Expected 70% weighted score, got " + score;
 
-        Application app = facade.trackApplication(job.getId(), LocalDate.now(), Application.Status.APPLIED);
+        Application app = facade.trackApplication(job.getId(), today, Application.Status.APPLIED);
         facade.updateApplicationStatus(app.getId(), Application.Status.INTERVIEW);
         assert repository.findApplication(app.getId()).orElseThrow().getStatus() == Application.Status.INTERVIEW;
 

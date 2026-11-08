@@ -11,6 +11,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Path;
@@ -23,6 +25,8 @@ import java.util.function.Consumer;
 
 /** Swing view of the shared controller. Slow provider calls run outside the event dispatch thread. */
 public final class JobSearchGUI extends JPanel implements DeadlineObserver, AutoCloseable {
+    static { CareerTheme.install(); }
+
     private record Choice(String id, String label) {
         @Override public String toString() { return label; }
     }
@@ -34,6 +38,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     private final JComboBox<Choice> questionSets = new JComboBox<>();
     private final JComboBox<Choice> sessions = new JComboBox<>();
     private final JLabel status = new JLabel("Ready. Local data is shared with the CLI.");
+    private final JProgressBar progress = new JProgressBar();
     private final JTextArea reminders = output("deadline.reminders");
     private final Map<String, JTextComponent> profileFields = new LinkedHashMap<>();
     private final Timer deadlineTimer;
@@ -42,29 +47,113 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     private boolean closed;
 
     public JobSearchGUI(AgentController controller) {
-        super(new BorderLayout(12, 12));
+        super(new BorderLayout());
         this.controller = controller;
-        setBorder(BorderFactory.createEmptyBorder(16, 20, 12, 20));
-        JLabel title = new JLabel("Career Agent");
-        title.setFont(title.getFont().deriveFont(Font.BOLD, 25f));
-        add(title, BorderLayout.NORTH);
-        JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Skills profile", profileTab());
-        tabs.addTab("Resumes", resumeTab());
-        tabs.addTab("Jobs & matching", jobsTab());
-        tabs.addTab("Applications & deadlines", applicationsTab());
-        tabs.addTab("Writing assistant", writingTab());
-        tabs.addTab("Interview preparation", interviewTab());
-        tabs.addTab("Company research", researchTab());
-        tabs.addTab("Career plan", careerPlanTab());
-        tabs.addTab("AI setup", aiSetupTab());
-        add(tabs, BorderLayout.CENTER);
-        add(status, BorderLayout.SOUTH);
+        setBackground(CareerTheme.CANVAS);
+        String[] sections = {"Skills profile", "Resumes", "Jobs & matching", "Applications & deadlines",
+                "Writing assistant", "Interview preparation", "Company research", "Career plan", "AI setup"};
+        String[] descriptions = {
+                "Keep your experience and approved skills in one place.",
+                "Import, review and organize your resume versions.",
+                "Understand requirements and find roles that fit your skills.",
+                "Keep track of your applications and upcoming deadlines.",
+                "Turn your experience into writing you can review and refine.",
+                "Practice job-specific questions and review your progress.",
+                "Collect company notes and turn your sources into useful context.",
+                "Build a practical next step around your goals, time and budget.",
+                "Check your AI connection and manage your local setup."};
+        JPanel[] pages = {profileTab(), resumeTab(), jobsTab(), applicationsTab(), writingTab(),
+                interviewTab(), researchTab(), careerPlanTab(), aiSetupTab()};
+        CardLayout cards = new CardLayout();
+        JPanel workspace = new JPanel(cards);
+        workspace.setName("workspace.pages");
+        workspace.setOpaque(false);
+        for (int i = 0; i < sections.length; i++) workspace.add(pages[i], sections[i]);
+        JLabel heading = CareerTheme.label(sections[0], Font.BOLD, 27, CareerTheme.INK);
+        JLabel description = CareerTheme.label(descriptions[0], Font.PLAIN, 13, CareerTheme.MUTED);
+        description.setBorder(BorderFactory.createEmptyBorder(7, 0, 0, 0));
+        JPanel header = new JPanel(new BorderLayout(0, 8));
+        header.setOpaque(false);
+        header.setBorder(BorderFactory.createEmptyBorder(0, 0, 22, 0));
+        header.add(CareerTheme.label("YOUR CAREER WORKSPACE", Font.BOLD, 10, CareerTheme.MUTED), BorderLayout.NORTH);
+        header.add(heading, BorderLayout.CENTER);
+        header.add(description, BorderLayout.SOUTH);
+        JPanel content = new JPanel(new BorderLayout());
+        content.setOpaque(false);
+        content.setBorder(BorderFactory.createEmptyBorder(26, 26, 14, 26));
+        content.add(header, BorderLayout.NORTH);
+        content.add(workspace, BorderLayout.CENTER);
+        JPanel footer = new JPanel(new BorderLayout(12, 0));
+        footer.setOpaque(false);
+        footer.setBorder(BorderFactory.createEmptyBorder(12, 2, 0, 2));
+        status.setFont(CareerTheme.font(Font.PLAIN, 12));
+        status.setForeground(CareerTheme.MUTED);
+        progress.setIndeterminate(true);
+        progress.setPreferredSize(new Dimension(96, 8));
+        progress.setVisible(false);
+        footer.add(status, BorderLayout.CENTER);
+        footer.add(progress, BorderLayout.EAST);
+        content.add(footer, BorderLayout.SOUTH);
+        add(content, BorderLayout.CENTER);
+        JList<String> navigation = new JList<>(sections);
+        navigation.setName("workspace.navigation");
+        navigation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        navigation.setFixedCellHeight(46);
+        navigation.setBackground(CareerTheme.NAVY);
+        navigation.setCellRenderer(new CareerTheme.NavigationRenderer());
+        navigation.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        navigation.getAccessibleContext().setAccessibleName("Workspace sections");
+        navigation.addListSelectionListener(event -> {
+            if (event.getValueIsAdjusting() || navigation.getSelectedIndex() < 0) return;
+            int selected = navigation.getSelectedIndex();
+            cards.show(workspace, sections[selected]);
+            heading.setText(sections[selected]);
+            description.setText(descriptions[selected]);
+            description.setToolTipText(descriptions[selected]);
+            navigation.requestFocusInWindow();
+            SwingUtilities.invokeLater(() -> resetFormScroll(pages[selected]));
+        });
+        navigation.setSelectedIndex(0);
+        add(sidebar(navigation), BorderLayout.WEST);
+        CareerTheme.styleScrollBars(this);
         deadlineTimer = new Timer(60_000, e -> {
             if (!busy) execute("deadlines.check", Map.of(), null, null);
         });
         refreshChoices();
         loadProfileFields();
+    }
+
+    private static void resetFormScroll(Container parent) {
+        for (Component child : parent.getComponents()) {
+            if (child instanceof JScrollPane scroll && "workspace.fields".equals(scroll.getName())) {
+                scroll.getViewport().setViewPosition(new Point(0, 0));
+            } else if (child instanceof Container container) resetFormScroll(container);
+        }
+    }
+
+    private static JPanel sidebar(JList<String> navigation) {
+        JPanel sidebar = new JPanel(new BorderLayout(0, 24));
+        sidebar.setBackground(CareerTheme.NAVY);
+        sidebar.setPreferredSize(new Dimension(232, 0));
+        sidebar.setBorder(BorderFactory.createEmptyBorder(28, 14, 22, 14));
+        JPanel brand = new JPanel(new BorderLayout(0, 9));
+        brand.setOpaque(false);
+        brand.setBorder(BorderFactory.createEmptyBorder(0, 13, 0, 0));
+        brand.add(CareerTheme.label("CAREER / AGENT", Font.BOLD, 20, Color.WHITE), BorderLayout.NORTH);
+        brand.add(CareerTheme.label("A little clarity for your next step.", Font.PLAIN, 10, new Color(0xB7C6D9)), BorderLayout.SOUTH);
+        sidebar.add(brand, BorderLayout.NORTH);
+        JScrollPane scroll = new JScrollPane(navigation);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.getViewport().setBackground(CareerTheme.NAVY);
+        sidebar.add(scroll, BorderLayout.CENTER);
+        JPanel note = new JPanel(new BorderLayout(0, 7));
+        note.setOpaque(false);
+        note.setBorder(BorderFactory.createEmptyBorder(14, 13, 0, 0));
+        note.add(CareerTheme.label("YOUR WORK, SAVED LOCALLY", Font.BOLD, 9, CareerTheme.MINT), BorderLayout.NORTH);
+        note.add(CareerTheme.label("Review AI suggestions before saving.", Font.PLAIN, 10, new Color(0xB7C6D9)), BorderLayout.SOUTH);
+        sidebar.add(note, BorderLayout.SOUTH);
+        return sidebar;
     }
 
     public void start() {
@@ -103,8 +192,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
 
     private JPanel resumeTab() {
         JPanel form = form();
-        form.add(new JLabel("Import a PDF/DOCX or paste text from a scanned resume."));
-        form.add(new JLabel("You review extracted text before it is saved."));
+        form.add(CareerTheme.hint("Import a PDF/DOCX or paste text from a scanned resume. Review the extracted text before saving."));
         JTextArea result = output("resume.result");
         result.setText("Import or select a resume to review its text. Skill extraction requires a local API key.");
         JPanel imports = actions();
@@ -151,20 +239,24 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     }
 
     private JPanel jobsTab() {
-        JPanel form = form();
+        JPanel posting = form();
+        JTabbedPane jobSections = new JTabbedPane();
+        jobSections.setName("job.sections");
         Map<String, JTextComponent> fields = new LinkedHashMap<>();
-        field(form, fields, "job", "title", "Job title", false);
-        field(form, fields, "job", "company", "Company", false);
-        field(form, fields, "job", "description", "Job description", true);
-        field(form, fields, "job", "salary", "Salary (optional)", false);
-        field(form, fields, "job", "location", "Location", false);
-        field(form, fields, "job", "deadline", "Deadline YYYY-MM-DD (optional)", false);
+        field(posting, fields, "job", "title", "Job title", false);
+        field(posting, fields, "job", "company", "Company", false);
+        field(posting, fields, "job", "description", "Job description", true);
+        field(posting, fields, "job", "salary", "Salary (optional)", false);
+        field(posting, fields, "job", "location", "Location", false);
+        field(posting, fields, "job", "deadline", "Deadline YYYY-MM-DD (optional)", false);
         JTextArea result = output("job.result");
         result.setText("Import or select a posting. Review its requirements before comparing skills or ranking jobs.");
         JPanel imports = actions();
-        button(imports, "Save / update posting", "job.save", () -> execute("job.import", values(fields), result, null));
-        form.add(imports);
-        form.add(new JLabel("Same title and company update an existing posting."));
+        button(imports, "Save / update posting", "job.save", () -> execute("job.import", values(fields), result,
+                response -> jobSections.setSelectedIndex(0)));
+        posting.add(imports);
+        imports.setToolTipText("Using the same title and company updates an existing posting.");
+        JPanel form = form();
         JComboBox<Choice> jobs = jobSelector(form, "job.selected");
         JPanel analysis = actions();
         button(analysis, "Show posting", "job.show", () -> withChoice(jobs, id -> execute("job.show", Map.of("jobId", id), result, null)));
@@ -191,6 +283,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         JPanel matching = actions();
         JComboBox<String> strategy = new JComboBox<>(new String[]{"weighted", "required"});
         strategy.setName("job.strategy");
+        strategy.setPreferredSize(new Dimension(124, 38));
         matching.add(new JLabel("Matching policy")); matching.add(strategy);
         button(matching, "Rank jobs", "job.match", () -> execute("job.match", Map.of("strategy", (String) strategy.getSelectedItem()), result, null));
         button(matching, "Refresh jobs", "job.refresh", this::refreshChoices);
@@ -209,7 +302,20 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
             }
         });
         form.add(interpretations);
-        return split(form, result);
+        jobSections.addTab("Saved jobs", alignTop(form));
+        jobSections.addTab("Add / update posting", alignTop(posting));
+        jobSections.setSelectedIndex(controller.getJobs().isEmpty() ? 1 : 0);
+        JPanel workspace = form();
+        workspace.add(jobSections);
+        return split(workspace, result);
+    }
+
+    private static JPanel alignTop(JPanel form) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+        panel.setBorder(BorderFactory.createEmptyBorder(14, 0, 0, 0));
+        panel.add(form, BorderLayout.NORTH);
+        return panel;
     }
 
     private JPanel applicationsTab() {
@@ -233,7 +339,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         button(deadlines, "List deadlines", "deadline.list", () -> execute("deadlines.list", Map.of(), result, null));
         button(deadlines, "Check reminders", "deadline.check", () -> execute("deadlines.check", Map.of(), result, null));
         form.add(deadlines);
-        form.add(new JLabel("Active reminders · America/Toronto · checked every minute"));
+        form.add(CareerTheme.hint("Active reminders use America/Toronto time and are checked every minute."));
         JScrollPane reminderScroll = new JScrollPane(reminders);
         reminderScroll.setPreferredSize(new Dimension(420, 160));
         form.add(reminderScroll);
@@ -321,12 +427,14 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         if (busy || closed) return;
         busy = true;
         enableControls(this, false);
+        progress.setVisible(true);
         status.setText("Working…");
         worker = new SwingWorker<>() {
             @Override protected String doInBackground() { return controller.submitRequest(action, input); }
             @Override protected void done() {
                 if (closed) return;
                 busy = false;
+                progress.setVisible(false);
                 enableControls(JobSearchGUI.this, true);
                 try {
                     String response = get();
@@ -376,7 +484,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     }
 
     private static JPanel form() {
-        return new JPanel(new GridBagLayout()) {
+        JPanel form = new JPanel(new GridBagLayout()) {
             private int row;
             @Override protected void addImpl(Component component, Object constraints, int index) {
                 GridBagConstraints cell = new GridBagConstraints();
@@ -385,24 +493,42 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
                 cell.weightx = 1;
                 cell.fill = GridBagConstraints.HORIZONTAL;
                 cell.anchor = GridBagConstraints.NORTHWEST;
-                cell.insets = new Insets(0, 0, 6, 0);
+                cell.insets = new Insets(0, 0, component instanceof JLabel ? 5 : 11, 0);
                 super.addImpl(component, cell, index);
             }
         };
+        form.setOpaque(false);
+        return form;
     }
 
-    private static JPanel actions() { return new JPanel(new GridLayout(0, 2, 6, 6)); }
+    private static JPanel actions() { return new CareerTheme.Actions(); }
 
     private static void field(JPanel form, Map<String, JTextComponent> fields, String prefix,
             String key, String label, boolean multiline) {
         JTextComponent input = multiline ? new JTextArea(4, 30) : new JTextField(30);
         input.setName(prefix + "." + key);
-        JLabel caption = new JLabel(label);
+        input.setFont(CareerTheme.font(Font.PLAIN, 13));
+        input.setForeground(CareerTheme.INK);
+        input.setBackground(CareerTheme.SURFACE);
+        input.setSelectionColor(new Color(0xDCE9FF));
+        JLabel caption = CareerTheme.label(label, Font.BOLD, 12, CareerTheme.INK);
         caption.setLabelFor(input);
         form.add(caption);
         fields.put(key, input);
-        if (input instanceof JTextArea area) { area.setLineWrap(true); area.setWrapStyleWord(true); }
-        form.add(multiline ? new JScrollPane(input) : input);
+        if (input instanceof JTextArea area) {
+            area.setLineWrap(true);
+            area.setWrapStyleWord(true);
+            area.setMargin(new Insets(10, 11, 10, 11));
+            JScrollPane scroll = new JScrollPane(input);
+            scroll.setBorder(new CareerTheme.InputBorder());
+            scroll.setPreferredSize(new Dimension(0, 112));
+            scroll.setMinimumSize(new Dimension(0, 112));
+            form.add(scroll);
+        } else {
+            input.setBorder(new CareerTheme.InputBorder());
+            input.setMinimumSize(new Dimension(0, 38));
+            form.add(input);
+        }
     }
 
     private static JTextArea output(String name) {
@@ -411,12 +537,18 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         output.setLineWrap(true);
         output.setWrapStyleWord(true);
         output.setName(name);
-        output.setMargin(new Insets(12, 12, 12, 12));
+        output.setFont(CareerTheme.font(Font.PLAIN, 13));
+        output.setForeground(CareerTheme.INK);
+        output.setBackground(CareerTheme.SURFACE);
+        output.setSelectionColor(new Color(0xDCE9FF));
+        output.setMargin(new Insets(18, 20, 18, 20));
         return output;
     }
 
     private static void button(JPanel parent, String label, String name, Runnable action) {
-        JButton button = new JButton(label);
+        boolean primary = List.of("profile.save", "resume.browse", "job.save", "application.save",
+                "writing.letter.draft", "interview.generate", "research.save", "plan.generate", "ai.verify").contains(name);
+        JButton button = CareerTheme.button(label, primary);
         button.setName(name);
         button.addActionListener(e -> action.run());
         parent.add(button);
@@ -424,8 +556,8 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
 
     /** Keep forms within the viewport when the split pane or window is resized. */
     private static final class FormBody extends JPanel implements Scrollable {
-        FormBody() { super(new BorderLayout()); }
-        @Override public Dimension getPreferredScrollableViewportSize() { return new Dimension(500, 650); }
+        FormBody() { super(new BorderLayout()); setBackground(CareerTheme.SURFACE); }
+        @Override public Dimension getPreferredScrollableViewportSize() { return new Dimension(440, 600); }
         @Override public int getScrollableUnitIncrement(Rectangle r, int orientation, int direction) { return 24; }
         @Override public int getScrollableBlockIncrement(Rectangle r, int orientation, int direction) { return 200; }
         @Override public boolean getScrollableTracksViewportWidth() { return true; }
@@ -433,15 +565,63 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     }
 
     private static JPanel split(JPanel form, JTextArea output) {
+        String formTitle = switch (output.getName()) {
+            case "profile.result" -> "Profile details";
+            case "resume.result" -> "Your resume library";
+            case "job.result" -> "Job details & matching";
+            case "application.result" -> "Application tracker";
+            case "writing.result" -> "Writing tools";
+            case "interview.result" -> "Interview workspace";
+            case "research.result" -> "Notes & sources";
+            case "plan.result" -> "Plan settings";
+            default -> "Connection settings";
+        };
         JPanel left = new FormBody();
-        left.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        left.setBorder(BorderFactory.createEmptyBorder(6, 20, 8, 20));
         left.add(form, BorderLayout.NORTH);
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(left), new JScrollPane(output));
-        split.setResizeWeight(0.5);
-        split.setDividerLocation(530);
+        JPanel formCard = CareerTheme.card();
+        formCard.add(cardHeading(formTitle), BorderLayout.NORTH);
+        JScrollPane fields = new JScrollPane(left);
+        fields.setName("workspace.fields");
+        fields.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        fields.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        fields.getVerticalScrollBar().setUnitIncrement(24);
+        formCard.add(fields, BorderLayout.CENTER);
+        formCard.setMinimumSize(new Dimension(270, 0));
+        JPanel resultCard = CareerTheme.card();
+        resultCard.add(cardHeading("Results & preview"), BorderLayout.NORTH);
+        JScrollPane results = new JScrollPane(output);
+        results.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        results.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        resultCard.add(results, BorderLayout.CENTER);
+        resultCard.setMinimumSize(new Dimension(230, 0));
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formCard, resultCard);
+        CareerTheme.styleDivider(split);
+        split.setName(output.getName() + ".split");
+        split.setOpaque(false);
+        split.setBorder(BorderFactory.createEmptyBorder());
+        split.setContinuousLayout(true);
+        split.setResizeWeight(0.48);
+        split.setDividerSize(16);
+        split.addComponentListener(new ComponentAdapter() {
+            @Override public void componentResized(ComponentEvent event) {
+                if (split.getWidth() > 0) {
+                    split.setDividerLocation(0.48);
+                }
+            }
+        });
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
         panel.add(split);
         return panel;
+    }
+
+    private static JPanel cardHeading(String title) {
+        JPanel heading = new JPanel(new BorderLayout());
+        heading.setOpaque(false);
+        heading.setBorder(BorderFactory.createEmptyBorder(19, 20, 17, 20));
+        heading.add(CareerTheme.label(title, Font.BOLD, 14, CareerTheme.INK));
+        return heading;
     }
 
     public static void main(String[] args) {
@@ -459,7 +639,8 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
                     @Override public void windowClosed(WindowEvent e) { view.close(); }
                 });
                 frame.setContentPane(view);
-                frame.setSize(1180, 820);
+                Dimension screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize();
+                frame.setSize(Math.min(1280, screen.width), Math.min(860, screen.height));
                 frame.setMinimumSize(new Dimension(900, 650));
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
@@ -473,7 +654,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
 
     private JPanel writingTab() {
         JPanel form = form();
-        form.add(new JLabel("Review candidate claims before saving generated writing."));
+        form.add(CareerTheme.hint("Review candidate claims before saving generated writing."));
         JComboBox<Choice> resume = new JComboBox<>();
         resumeChoices.add(resume);
         resume.setName("writing.resume");
@@ -586,7 +767,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
 
     private JPanel careerPlanTab() {
         JPanel form = form();
-        form.add(new JLabel("Use the reviewed gaps of 1-4 target jobs to plan one week."));
+        form.add(CareerTheme.hint("Use reviewed gaps from 1-4 target jobs to plan one week."));
         Map<String, JTextComponent> fields = new LinkedHashMap<>();
         field(form, fields, "plan", "jobIds", "Target job IDs (comma-separated)", false);
         field(form, fields, "plan", "goals", "Specific career goal", true);
@@ -609,7 +790,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
 
     private JPanel aiSetupTab() {
         JPanel form = form();
-        form.add(new JLabel("Groq offers a quota-limited Free plan. Select your provider in local .env."));
+        form.add(CareerTheme.hint("Check your configured AI provider and verify access before generating content."));
         JTextArea result = output("ai.result");
         result.setText("1. Create an API key at https://console.groq.com/keys\n"
                 + "2. Use the Groq Free plan; check its account quotas before recording.\n"

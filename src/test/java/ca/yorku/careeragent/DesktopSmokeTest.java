@@ -32,18 +32,28 @@ class DesktopSmokeTest {
         AtomicReference<JFrame> frameRef = new AtomicReference<>();
         AtomicReference<JobSearchGUI> viewRef = new AtomicReference<>();
         SwingUtilities.invokeAndWait(() -> {
-            JobSearchGUI view = new JobSearchGUI(new AgentController(new CareerFacade(new Repository(data))));
+            CareerFacade facade = new CareerFacade(new Repository(data));
+            facade.updateProfile("Demo Candidate", "BSc Computer Science", "Java coursework and a task-tracker project",
+                    java.util.Set.of("Java", "Git", "JUnit"), java.util.Set.of("Software development"), "Toronto");
+            var job = facade.importJob("Junior Developer", "Example Company",
+                    "Java and SQL are required. Git is preferred.", "", "Toronto", null);
+            facade.saveManualRequirements(job.getId(), java.util.Set.of("Java", "SQL"), java.util.Set.of("Git"));
+            JobSearchGUI view = new JobSearchGUI(new AgentController(facade));
             JFrame frame = new JFrame("Stage 2 desktop verification — sample workspace");
             frame.setContentPane(view); frame.setSize(1180, 820); frame.setVisible(true);
             frameRef.set(frame); viewRef.set(view);
         });
         try {
             SwingUtilities.invokeAndWait(() -> {
-                for (Component component : viewRef.get().getComponents()) if (component instanceof JTabbedPane tabs) {
-                    assertEquals(9, tabs.getTabCount());
-                    for (int i = 0; i < tabs.getTabCount(); i++) { tabs.setSelectedIndex(i); frameRef.get().validate(); }
-                    tabs.setSelectedIndex(1);
+                JList<?> navigation = (JList<?>) named(viewRef.get(), "workspace.navigation");
+                Container pages = (Container) named(viewRef.get(), "workspace.pages");
+                assertEquals(9, navigation.getModel().getSize());
+                for (int i = 0; i < navigation.getModel().getSize(); i++) {
+                    navigation.setSelectedIndex(i);
+                    frameRef.get().validate();
+                    assertTrue(pages.getComponent(i).isVisible(), "Navigation must open the selected workspace");
                 }
+                navigation.setSelectedIndex(1);
             });
             CountDownLatch cancelled = new CountDownLatch(1);
             SwingUtilities.invokeLater(() -> {
@@ -62,7 +72,54 @@ class DesktopSmokeTest {
             });
             assertTrue(cancelled.await(8, TimeUnit.SECONDS));
             java.nio.file.Files.createDirectories(Path.of("target", "desktop"));
+            new Robot().waitForIdle();
             ImageIO.write(new Robot().createScreenCapture(frameRef.get().getBounds()), "png", Path.of("target", "desktop", "workspace.png").toFile());
+            for (Dimension size : java.util.List.of(new Dimension(900, 650), new Dimension(1280, 860))) {
+                SwingUtilities.invokeAndWait(() -> {
+                    frameRef.get().setSize(size);
+                    ((JList<?>) named(viewRef.get(), "workspace.navigation")).setSelectedIndex(2);
+                    ((JTabbedPane) named(viewRef.get(), "job.sections")).setSelectedIndex(1);
+                    frameRef.get().validate();
+                });
+                new Robot().waitForIdle();
+                SwingUtilities.invokeAndWait(() -> {
+                    Component description = named(viewRef.get(), "job.description");
+                    assertTrue(description.getHeight() >= 72, "Multiline inputs must stay readable after resizing");
+                    Component button = named(viewRef.get(), "job.save");
+                    assertTrue(button.getWidth() >= button.getPreferredSize().width,
+                            "Posting button label must fit at " + size.width + "px");
+                    ((JTabbedPane) named(viewRef.get(), "job.sections")).setSelectedIndex(0);
+                    frameRef.get().validate();
+                });
+                new Robot().waitForIdle();
+                SwingUtilities.invokeAndWait(() -> {
+                    for (String action : java.util.List.of("job.manual", "job.match.explain")) {
+                        Component button = named(viewRef.get(), action);
+                        assertTrue(button.getWidth() >= button.getPreferredSize().width,
+                                action + " label must fit at " + size.width + "px");
+                    }
+                });
+                ImageIO.write(new Robot().createScreenCapture(frameRef.get().getBounds()), "png",
+                        Path.of("target", "desktop", "jobs-" + size.width + ".png").toFile());
+            }
+            CountDownLatch ranked = new CountDownLatch(1);
+            AtomicReference<Timer> rankCheck = new AtomicReference<>();
+            SwingUtilities.invokeAndWait(() -> {
+                Timer timer = new Timer(50, event -> {
+                    if (((JTextArea) named(viewRef.get(), "job.result")).getText().contains("65.0%")) {
+                        ((Timer) event.getSource()).stop();
+                        ranked.countDown();
+                    }
+                });
+                rankCheck.set(timer);
+                timer.start();
+                ((JButton) named(viewRef.get(), "job.match")).doClick();
+            });
+            try { assertTrue(ranked.await(8, TimeUnit.SECONDS), "The visible ranking action must display its result"); }
+            finally { SwingUtilities.invokeAndWait(() -> rankCheck.get().stop()); }
+            new Robot().waitForIdle();
+            ImageIO.write(new Robot().createScreenCapture(frameRef.get().getBounds()), "png",
+                    Path.of("target", "desktop", "jobs-ranked.png").toFile());
         } finally { SwingUtilities.invokeAndWait(() -> { viewRef.get().close(); frameRef.get().dispose(); }); }
     }
     private static void cancelChooser(Container parent) {
