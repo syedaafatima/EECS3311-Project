@@ -186,6 +186,22 @@ public class CareerFacade {
         return job;
     }
 
+    /** Explicit edits retain the posting identity used by applications and reviewed documents. */
+    public Job updateJob(String jobId, String title, String company, String description,
+            String salary, String location, LocalDate deadline) {
+        Job existing = toolManager.readJob(jobId);
+        Job details = new Job(existing.getId(), title, company, description, salary, location, deadline);
+        repository.findJobByTitleAndCompany(details.getTitle(), details.getCompany()).ifPresent(duplicate -> {
+            if (!duplicate.getId().equals(existing.getId())) {
+                throw new IllegalArgumentException("Another posting already uses that title and company. Select it or use a different title/company.");
+            }
+        });
+        existing.updateDetails(details.getTitle(), details.getCompany(), details.getDescription(),
+                details.getSalary(), details.getLocation(), details.getDeadline());
+        repository.save(existing);
+        return existing;
+    }
+
     public ca.yorku.careeragent.domain.JobAnalysis analyzeJob(String jobId) {
         return agent.analyzeJob(jobId);
     }

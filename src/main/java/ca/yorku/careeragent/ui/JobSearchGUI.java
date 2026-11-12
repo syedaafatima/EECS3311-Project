@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -41,6 +43,8 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     private final JProgressBar progress = new JProgressBar();
     private final JTextArea reminders = output("deadline.reminders");
     private final Map<String, JTextComponent> profileFields = new LinkedHashMap<>();
+    private final Map<String, JTextComponent> jobFields = new LinkedHashMap<>();
+    private String editingJobId;
     private final Timer deadlineTimer;
     private SwingWorker<String, Void> worker;
     private boolean busy;
@@ -242,7 +246,10 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         JPanel posting = form();
         JTabbedPane jobSections = new JTabbedPane();
         jobSections.setName("job.sections");
-        Map<String, JTextComponent> fields = new LinkedHashMap<>();
+        Map<String, JTextComponent> fields = jobFields;
+        JTextArea editorMode = CareerTheme.hint("New posting. A matching title and company update an existing posting.");
+        editorMode.setName("job.editorMode");
+        posting.add(editorMode);
         field(posting, fields, "job", "title", "Job title", false);
         field(posting, fields, "job", "company", "Company", false);
         field(posting, fields, "job", "description", "Job description", true);
@@ -252,14 +259,51 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         JTextArea result = output("job.result");
         result.setText("Import or select a posting. Review its requirements before comparing skills or ranking jobs.");
         JPanel imports = actions();
-        button(imports, "Save / update posting", "job.save", () -> execute("job.import", values(fields), result,
-                response -> jobSections.setSelectedIndex(0)));
+        button(imports, "Save / update posting", "job.save", () -> {
+            Map<String, String> input = values(fields);
+            String action = "job.import";
+            if (editingJobId != null) {
+                action = "job.update";
+                input.put("jobId", editingJobId);
+            }
+            execute(action, input, result, response -> {
+                controller.getJobs().stream().filter(job -> job.getTitle().equalsIgnoreCase(input.get("title").trim())
+                        && job.getCompany().equalsIgnoreCase(input.get("company").trim())).findFirst().ifPresent(job -> {
+                    editingJobId = job.getId();
+                    editorMode.setText("Editing " + editingJobId + ". Saving keeps this job's ID and linked applications.");
+                    for (JComboBox<Choice> choice : jobChoices) restoreSelection(choice, job.getId());
+                });
+                jobSections.setSelectedIndex(0);
+            });
+        });
+        Runnable newPosting = () -> {
+            editingJobId = null;
+            fields.values().forEach(input -> input.setText(""));
+            editorMode.setText("New posting. A matching title and company update an existing posting.");
+            jobSections.setSelectedIndex(1);
+            SwingUtilities.invokeLater(() -> resetFormScroll(this));
+        };
+        button(imports, "Clear / new posting", "job.reset", newPosting);
         posting.add(imports);
-        imports.setToolTipText("Using the same title and company updates an existing posting.");
         JPanel form = form();
         JComboBox<Choice> jobs = jobSelector(form, "job.selected");
         JPanel analysis = actions();
         button(analysis, "Show posting", "job.show", () -> withChoice(jobs, id -> execute("job.show", Map.of("jobId", id), result, null)));
+        button(analysis, "Edit posting", "job.edit", () -> withChoice(jobs, id ->
+                execute("job.show", Map.of("jobId", id), result, response -> {
+                    var job = controller.getJob(id);
+                    fields.get("title").setText(job.getTitle());
+                    fields.get("company").setText(job.getCompany());
+                    fields.get("description").setText(job.getDescription());
+                    fields.get("salary").setText(job.getSalary());
+                    fields.get("location").setText(job.getLocation());
+                    fields.get("deadline").setText(job.getDeadline() == null ? "" : job.getDeadline().toString());
+                    editingJobId = id;
+                    editorMode.setText("Editing " + id + ". Saving keeps this job's ID and linked applications.");
+                    jobSections.setSelectedIndex(1);
+                    SwingUtilities.invokeLater(() -> resetFormScroll(this));
+                })));
+        button(analysis, "New posting", "job.new", newPosting);
         button(analysis, "Analyze…", "job.analyze", () -> withChoice(jobs, id -> {
             if (!allowAI("the selected job description")) return;
             execute("job.analyze", Map.of("jobId", id), result, response -> {
@@ -355,28 +399,31 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
     }
 
     private void refreshChoices() {
-        var jobs = controller.getJobs();
+        var jobs = controller.getJobs().stream().map(job -> new Choice(job.getId(), job.toString())).toList();
         for (JComboBox<Choice> selector : jobChoices) {
-            String previous = selectedId(selector);
-            selector.removeAllItems();
-            jobs.forEach(job -> selector.addItem(new Choice(job.getId(), job.toString())));
-            restoreSelection(selector, previous);
+            refreshSelector(selector, jobs);
         }
-        String selectedQuestions = selectedId(questionSets);
-        questionSets.removeAllItems();
-        controller.listQuestionSets().forEach(q -> questionSets.addItem(new Choice(q.id(), q.id() + " | job=" + q.jobId() + " | count=" + q.questions().size())));
-        restoreSelection(questionSets, selectedQuestions);
-        String selectedSession = selectedId(sessions);
-        sessions.removeAllItems();
-        controller.listInterviews().forEach(s -> sessions.addItem(new Choice(s.id(), s.id() + " | " + s.status())));
-        restoreSelection(sessions, selectedSession);
-        var savedResumes = controller.listResumes();
+        refreshSelector(questionSets, controller.listQuestionSets().stream()
+                .map(q -> new Choice(q.id(), q.id() + " | job=" + q.jobId() + " | count=" + q.questions().size())).toList());
+        refreshSelector(sessions, controller.listInterviews().stream()
+                .map(s -> new Choice(s.id(), s.id() + " | " + s.status())).toList());
+        var savedResumes = controller.listResumes().stream()
+                .map(resume -> new Choice(resume.getId(), resume.getId() + " | " + resume.getOriginalPath())).toList();
         for (JComboBox<Choice> selector : resumeChoices) {
-            String previous = selectedId(selector);
-            selector.removeAllItems();
-            savedResumes.forEach(resume -> selector.addItem(new Choice(resume.getId(), resume.getId() + " | " + resume.getOriginalPath())));
-            restoreSelection(selector, previous);
+            refreshSelector(selector, savedResumes);
         }
+    }
+
+    /** Select a single newly saved record; routine refreshes retain the candidate's choice. */
+    private static void refreshSelector(JComboBox<Choice> selector, List<Choice> records) {
+        String previous = selectedId(selector);
+        Set<String> known = java.util.stream.IntStream.range(0, selector.getItemCount())
+                .mapToObj(index -> selector.getItemAt(index).id()).collect(Collectors.toSet());
+        List<Choice> added = records.stream().filter(record -> !known.contains(record.id())).toList();
+        String preferred = added.size() == 1 ? added.get(0).id() : previous;
+        selector.removeAllItems();
+        records.forEach(selector::addItem);
+        restoreSelection(selector, preferred);
     }
 
     private static String selectedId(JComboBox<Choice> choices) {

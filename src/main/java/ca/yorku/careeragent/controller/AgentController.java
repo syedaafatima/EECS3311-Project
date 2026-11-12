@@ -28,6 +28,7 @@ public class AgentController {
 
     public java.util.Optional<CandidateProfile> getProfile() { return facade.getProfile(); }
     public java.util.List<Job> getJobs() { return facade.listJobs(); }
+    public Job getJob(String jobId) { return facade.getJob(jobId); }
     public java.util.List<Resume> listResumes() { return facade.listResumes(); }
 
     public java.util.List<ca.yorku.careeragent.domain.QuestionSet> listQuestionSets() { return facade.listQuestionSets(); }
@@ -76,6 +77,7 @@ public class AgentController {
                         input.get("jobId"), csv(input.get("required")), csv(input.get("preferred")));
                 case "job.show" -> showJob(input.get("jobId"));
                 case "job.import" -> importJob(input);
+                case "job.update" -> updateJob(input);
                 case "job.list" -> listJobs();
                 case "application.add" -> addApplication(input);
                 case "application.update" -> updateApplication(input);
@@ -219,6 +221,12 @@ public class AgentController {
         Job job = facade.importJob(input.get("title"), input.get("company"), input.get("description"),
                 input.get("salary"), input.get("location"), parseDate(input.get("deadline"), true));
         return "Job saved: " + job;
+    }
+
+    private String updateJob(Map<String, String> input) {
+        Job job = facade.updateJob(input.get("jobId"), input.get("title"), input.get("company"),
+                input.get("description"), input.get("salary"), input.get("location"), parseDate(input.get("deadline"), true));
+        return "Job updated: " + job;
     }
 
     private String listJobs() {
