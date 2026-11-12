@@ -1,6 +1,6 @@
 # Stage 2 demonstration recording guide — working draft
 
-The November 7 implementation is pushed to main. Pull the latest code before recording. This checklist is preparation, not evidence that recordings or live AI checks have already happened.
+The implementation is available on main. Pull the latest code before recording. This checklist is preparation, not evidence that recordings or live AI checks have already happened.
 
 November 8 UTC (November 7 Toronto) checkpoint: the user supplied Windows CLI output showing a successful
 live Groq `ai verify` response after configuring a private local key. Connection
@@ -23,7 +23,9 @@ Use the actual application and your configured Groq model (or explicitly selecte
 
 Safe PDF/DOCX resume examples are in `examples/`; use them instead of private personal documents when recording.
 
-The refreshed desktop uses sidebar navigation. In **Jobs & matching**, use
+The refreshed desktop uses sidebar navigation. New saved records become selected
+automatically; verify the displayed record before continuing. Use **Edit posting**
+to load saved fields and **New posting** for a blank editor. In **Jobs & matching**, use
 **Add / update posting** to enter a job and **Saved jobs** for analysis, ranking
 and comparison. Maximize the window when recording for readable controls and results.
 
@@ -43,7 +45,7 @@ You may combine all recordings into one video, but every feature needs a labeled
 |---|---|---|
 | F01 Profile | Skills profile: candidate details, Java/Git | Save and reload; show validation of a blank required field |
 | F02 Resume import | Import a PDF/DOCX example with extractable text | Preview, cancel once, then confirm; show saved text/version; demonstrate pasted text for scanned resumes |
-| F04 Job import | Import J01 and J02 | Show stored cards/records; update the same title/company to demonstrate duplicate handling |
+| F04 Job import | Click New posting before entering each of J01 and J02 | Show saved postings; use Edit posting to change fields while retaining the ID, and demonstrate duplicate handling |
 | F14 Application tracking | Track J01 as SAVED using today's date | Update to APPLIED, show saved history in the running app; reject an invalid transition or future date |
 | F15 Deadlines | Check a job due in two days, with another missing a deadline | Show upcoming/unknown listing and reminder; show that a submitted application has no submission reminder |
 | F06 deterministic part | Compare approved skills to reviewed J01 requirements | Show matched/missing/uncertain lists; the AI explanation belongs in Recording B |
@@ -107,5 +109,5 @@ Replace every pending value with a real accessible URL and exact segment timesta
 - Replace pending video fields with real timestamped URLs.
 - Obtain actual development-tool model/usage/cost and provider usage/billing figures; do not invent totals.
 - Review the updated implemented UML and feature-specific sequence/use-case diagrams against the final code.
-- Retain the five confirmed November 7 code-commit links from the weekly summary in the final report.
-- Export the completed implementation report as `stage2-report.pdf` or Word, push it and submit the public repository URL by November 10.
+- Retain the meaningful code-commit links for each reporting period in the final report.
+- Export the completed implementation report as `stage2-report.pdf` or Word, push the approved artifacts and submit the public repository URL through the course submission system.

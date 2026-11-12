@@ -1,7 +1,7 @@
-# Stage 2 implementation checkpoint — November 8 UTC / November 7 Toronto, 2026
+# Stage 2 implementation checkpoint
 
 All 17 Stage 1 features have connected implementations in both CLI and Swing GUI.
-Five meaningful Period 3 code commits were pushed to main November 7 at 18:00:29 Toronto.
+The selected meaningful code commits cover the minimum for each reporting period.
 The five selected code commits end at `0f2b00a`; `6979590` additionally exposes persisted tracker history. Report artifacts follow these code checkpoints.
 
 **Submission remains unfinished:** remaining live feature checks, feature videos and links,
@@ -44,7 +44,7 @@ and reasons are recorded in section 4 of the report source.
 
 ## Free-provider change
 
-The user requested a free API option. GroqAdapter now defaults to Groq-hosted
+GroqAdapter defaults to Groq-hosted
 `openai/gpt-oss-20b` on a quota-limited Free plan. ConfiguredLLMClient reloads the
 explicit provider choice per request; OpenAIAdapter remains optional. Shared HTTP
 translation keeps provider keys isolated and does not automatically fall back after
@@ -55,7 +55,7 @@ and recordings are still pending.
 
 ## Verification and corrected defects
 
-The desktop-enabled suite passes 61 checks, including actual Swing-window/file-picker
+The desktop-enabled suite passes 64 checks, including actual Swing-window/file-picker
 verification. A headless run skips that one native test. Important fixes cover stale
 job analysis, cross-process source fingerprints, bracket-containing/long array values,
 atomic JSON writes, invalid record IDs, future application dates, interrupted review,
@@ -78,7 +78,7 @@ checks, with no video links yet. Other live workflows remain unverified.
 
 ## Desktop layout refinement
 
-At the user's request, the desktop uses a navy sidebar, consistent typography,
+The desktop uses a navy sidebar, consistent typography,
 rounded form/result cards, clear primary actions, readable multiline inputs and
 buttons that wrap instead of squeezing their labels. Jobs & matching separates
 saved-job tools from posting entry. CareerTheme holds presentation helpers while
@@ -87,6 +87,15 @@ dependency. Native checks cover all nine workspaces, file-picker cancellation,
 button labels and multiline input sizing at 900×650 and 1280×860, and a displayed
 65% deterministic ranking. The legacy Period 1 verification fixture now uses the
 same Toronto calendar as application-date validation.
+
+## Saved-record and posting editor refinements
+
+Newly saved resumes, jobs, question sets and interviews become selected automatically.
+Ordinary refreshes and cancelled imports retain explicit choices. Edit posting loads
+the selected job fields and updates by ID, preserving application references even
+after a title/company change. New posting clears edit mode. Conflicting identities
+are rejected, and description changes invalidate stale analysis. Three additional
+GUI regression checks cover these workflows; the desktop-enabled suite passes 64 checks.
 
 ## Submission records
 

@@ -5,7 +5,7 @@ Java implementation of the 17 Stage 1 features, with Swing GUI and CLI sharing
 Implemented patterns: **MVC, Facade, Adapter, Strategy and Observer**.
 
 **Implementation status:** F01–F17 have connected implementations. A desktop-enabled
-run passed all 61 tests. The user reported successful live Groq verification and
+run passed all 64 tests. Supplied CLI output supports successful live Groq verification and
 F03/F05/F06/F07 checks. Remaining live workflows, feature demonstration videos,
 usage/cost figures and final report review are still pending before submission.
 Injected model responses are used only in tests and are not live demonstrations.
@@ -85,14 +85,19 @@ The GUI sidebar covers Skills profile, Resumes, Jobs & matching, Applications & 
 Writing assistant, Interview preparation, Company research, Career plan and AI setup.
 Forms and results use separate cards; buttons reflow when the window is resized.
 Jobs & matching separates **Saved jobs** from **Add / update posting** so the ranking
-controls remain easy to reach. The built-in Swing theme needs no extra dependency.
+controls remain easy to reach. Select a saved job and choose **Edit posting** to load
+its fields. Saving an edit keeps the job ID and application links, including when
+the title/company changes; a collision with another posting is rejected. **New posting**
+or **Clear / new posting** starts a blank form. A newly saved resume, job, question set
+or interview becomes selected automatically. Routine refreshes preserve explicit choices.
+The built-in Swing theme needs no extra dependency.
 Long requests run in background workers; generated writing opens an editable review
 dialog. Original resumes are retained as separate immutable versions.
 
 ![Desktop layout with fictional sample data](docs/images/gui-refreshed-workspace.png)
 
 If your Windows copy came from Download ZIP, use the [GUI update steps](docs/windows-gui-update.md)
-to update the two presentation files in your existing project folder.
+to update the matching UI, controller and facade files in your existing project folder.
 
 ## CLI feature guide
 
@@ -157,12 +162,15 @@ pending reviews. Saved records survive restart.
 
 ## Verification and submission records
 
-`mvn test` runs 61 checks. With no desktop runtime/display, the native-window test is
-skipped (60 pass, 1 skip). On November 7 a desktop-enabled run passed all 61 with no
+`mvn test` runs 64 checks. With no desktop runtime/display, the native-window test is
+skipped (63 pass, 1 skip). The desktop-enabled suite passes all 64 with no
 failures/errors/skips. Coverage includes parsing, review/cancellation, malformed and
 unsupported model data, HTTP/configuration redaction, persistence and separate-JVM
 restart, gaps/ranking, interviews, notes/plans, budgets, dates, Observer lifecycle,
 GUI saves/responsiveness, actual window/file-picker behavior and interrupted input.
+GUI regression checks also cover new-record selection, cancelled imports, explicit
+selection retention, stable posting IDs/application references, duplicate identity
+rejection, description-analysis invalidation and clearing the posting editor.
 Tests use injected responses/local HTTP, not paid model calls.
 
 - [Implementation checkpoint and change record](docs/stage2-progress.md)
