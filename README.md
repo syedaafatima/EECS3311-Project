@@ -174,11 +174,11 @@ rejection, description-analysis invalidation and clearing the posting editor.
 Tests use injected responses/local HTTP, not paid model calls.
 
 - [Implementation checkpoint and change record](docs/stage2-progress.md)
+- [Report source](docs/stage2-report-working-draft.md)
 - [Weekly commit evidence](docs/weekly-commit-summary.md)
 - [Demonstration recording checklist](docs/demonstration-guide.md)
 - [Implemented class diagram](Diagrams/stage2_class_diagram.png)
 - [Feature-specific sequences](Diagrams/stage2_ai_workflows.md)
 
-The implementation report is being finalized separately. Add `stage2-report.pdf`
-before course submission, with demonstration links and actual AI usage/cost figures.
-Original Stage 1 artifacts remain design references.
+The report is a draft until live verification, demonstration links and actual AI
+usage/cost fields are completed. Original Stage 1 artifacts remain design references.

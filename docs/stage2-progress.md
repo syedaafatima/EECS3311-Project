@@ -99,6 +99,7 @@ GUI regression checks cover these workflows; the desktop-enabled suite passes 64
 
 ## Submission records
 
+- [Report source](stage2-report-working-draft.md)
 - [Weekly commit summary](weekly-commit-summary.md)
 - [Demonstration guide and pending link worksheet](demonstration-guide.md)
 - [Implemented UML](../Diagrams/stage2_class_diagram.png)
@@ -106,5 +107,5 @@ GUI regression checks cover these workflows; the desktop-enabled suite passes 64
 
 Keep actual model/token/money usage from the development-tool and provider billing
 records. Those values are not exposed to this workspace and must not be guessed.
-Recordings must show real GUI/CLI behavior and live AI where applicable. The
-implementation report is being finalized separately and must be added before submission.
+Recordings must show real GUI/CLI behavior and live AI where applicable. The report
+is deliberately labeled DRAFT until these remaining fields and checks are complete.
