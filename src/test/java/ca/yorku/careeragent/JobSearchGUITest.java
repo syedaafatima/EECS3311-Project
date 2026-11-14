@@ -93,8 +93,28 @@ class JobSearchGUITest {
         try {
             clickAndAwait(view, "profile.save", "profile.result", "ERROR:");
             assertTrue(repo.loadProfile().isEmpty());
-            fill(view, Map.of("profile.name", "Candidate", "profile.education", "University", "profile.skills", "Java"));
+            Map<String, String> originalProfile = Map.of("profile.name", "Candidate", "profile.education", "University",
+                    "profile.experience", "Java coursework", "profile.skills", "Java",
+                    "profile.interests", "Development", "profile.location", "Toronto");
+            fill(view, originalProfile);
             clickAndAwait(view, "profile.save", "profile.result", "Profile saved");
+            clickAndAwait(view, "profile.clear", "profile.result", "Profile form cleared");
+            SwingUtilities.invokeAndWait(() -> originalProfile.keySet().forEach(name ->
+                    assertEquals("", ((JTextComponent) named(view, name)).getText())));
+            assertEquals("Candidate", repo.loadProfile().orElseThrow().getName(), "Clearing the editor must preserve the saved profile");
+            clickAndAwait(view, "profile.reload", "profile.result", "Candidate");
+            SwingUtilities.invokeAndWait(() -> originalProfile.forEach((name, value) ->
+                    assertEquals(value, ((JTextComponent) named(view, name)).getText())));
+            clickAndAwait(view, "profile.clear", "profile.result", "Profile form cleared");
+            fill(view, Map.of("profile.name", "New Candidate", "profile.education", "College",
+                    "profile.experience", "Database project", "profile.skills", "SQL",
+                    "profile.interests", "Data", "profile.location", "Ottawa"));
+            clickAndAwait(view, "profile.save", "profile.result", "Profile saved");
+            fill(view, Map.of("profile.name", "Unsaved change"));
+            clickAndAwait(view, "profile.reload", "profile.result", "New Candidate");
+            SwingUtilities.invokeAndWait(() -> assertEquals("New Candidate", ((JTextComponent) named(view, "profile.name")).getText()));
+            assertEquals(java.util.Set.of("SQL"), repo.loadProfile().orElseThrow().getSkills());
+            assertEquals("Ottawa", repo.loadProfile().orElseThrow().getLocationPreference());
             fill(view, Map.of("job.title", "Developer", "job.company", "Example", "job.description", "Java required",
                     "job.deadline", LocalDate.now(ZoneId.of("America/Toronto")).plusDays(2).toString()));
             clickAndAwait(view, "job.save", "job.result", "Job saved");
@@ -103,7 +123,7 @@ class JobSearchGUITest {
             assertEquals(1, repo.listApplications().size());
             clickAndAwait(view, "deadline.list", "application.result", "UPCOMING");
             AgentController cliController = new AgentController(new CareerFacade(new Repository(data)));
-            assertTrue(cliController.submitRequest("profile.show", Map.of()).contains("Candidate"));
+            assertTrue(cliController.submitRequest("profile.show", Map.of()).contains("New Candidate"));
             assertTrue(cliController.submitRequest("application.list", Map.of()).contains("SAVED"));
         } finally { SwingUtilities.invokeAndWait(view::close); }
     }

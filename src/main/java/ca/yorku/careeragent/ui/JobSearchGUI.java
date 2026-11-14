@@ -179,6 +179,12 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         JPanel actions = actions();
         button(actions, "Save profile", "profile.save", () -> execute("profile.update", values(profileFields), result, null));
         button(actions, "Reload profile", "profile.reload", () -> execute("profile.show", Map.of(), result, s -> loadProfileFields()));
+        button(actions, "Clear profile", "profile.clear", () -> {
+            profileFields.values().forEach(input -> input.setText(""));
+            result.setText("Profile form cleared. Enter new details and choose Save profile to store them. "
+                    + "Reload profile restores the last saved profile.");
+            profileFields.get("name").requestFocusInWindow();
+        });
         form.add(actions);
         return split(form, result);
     }

@@ -120,6 +120,20 @@ class DesktopSmokeTest {
             new Robot().waitForIdle();
             ImageIO.write(new Robot().createScreenCapture(frameRef.get().getBounds()), "png",
                     Path.of("target", "desktop", "jobs-ranked.png").toFile());
+            SwingUtilities.invokeAndWait(() -> {
+                ((JList<?>) named(viewRef.get(), "workspace.navigation")).setSelectedIndex(0);
+                frameRef.get().validate();
+            });
+            new Robot().waitForIdle();
+            SwingUtilities.invokeAndWait(() -> {
+                for (String action : java.util.List.of("profile.save", "profile.reload", "profile.clear")) {
+                    Component button = named(viewRef.get(), action);
+                    assertTrue(button.isShowing());
+                    assertTrue(button.getWidth() >= button.getPreferredSize().width, "Profile action labels must fit");
+                }
+            });
+            ImageIO.write(new Robot().createScreenCapture(frameRef.get().getBounds()), "png",
+                    Path.of("target", "desktop", "profile-actions.png").toFile());
         } finally { SwingUtilities.invokeAndWait(() -> { viewRef.get().close(); frameRef.get().dispose(); }); }
     }
     private static void cancelChooser(Container parent) {

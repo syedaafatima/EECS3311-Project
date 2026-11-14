@@ -6,7 +6,8 @@ Implemented patterns: **MVC, Facade, Adapter, Strategy and Observer**.
 
 **Implementation status:** F01–F17 have connected implementations. A desktop-enabled
 run passed all 64 tests. Supplied CLI output supports successful live Groq verification and
-F03/F05/F06/F07 checks. Remaining live workflows, feature demonstration videos,
+F03/F05/F06/F07 checks; GUI confirmation covers F01 saving, reloading and validation.
+Remaining live workflows, feature demonstration videos,
 usage/cost figures and final report review are still pending before submission.
 Injected model responses are used only in tests and are not live demonstrations.
 
@@ -44,8 +45,7 @@ The model's `openai/` identifier identifies an open-weight model hosted by Groq;
 requests use the Groq endpoint and Groq account.
 
 1. Create a free Groq account and key at <https://console.groq.com/keys>.
-2. Copy `.env.example` to `.env`: `cp .env.example .env` on macOS/Linux, or
-   `Copy-Item .env.example .env` in PowerShell.
+2. Copy `.env.example` to a private file named `.env` in the project root.
 3. Set these values locally, replacing the key placeholder only in ignored `.env`:
 
 ```dotenv
@@ -84,6 +84,8 @@ Import jobs and review requirements, using the model or explicit manual input.
 The GUI sidebar covers Skills profile, Resumes, Jobs & matching, Applications & deadlines,
 Writing assistant, Interview preparation, Company research, Career plan and AI setup.
 Forms and results use separate cards; buttons reflow when the window is resized.
+**Clear profile** empties the profile editor for a new entry. **Reload profile**
+restores the last saved profile; **Save profile** stores the newly entered details.
 Jobs & matching separates **Saved jobs** from **Add / update posting** so the ranking
 controls remain easy to reach. Select a saved job and choose **Edit posting** to load
 its fields. Saving an edit keeps the job ID and application links, including when
@@ -93,11 +95,6 @@ or interview becomes selected automatically. Routine refreshes preserve explicit
 The built-in Swing theme needs no extra dependency.
 Long requests run in background workers; generated writing opens an editable review
 dialog. Original resumes are retained as separate immutable versions.
-
-![Desktop layout with fictional sample data](docs/images/gui-refreshed-workspace.png)
-
-If your Windows copy came from Download ZIP, use the [GUI update steps](docs/windows-gui-update.md)
-to update the matching UI, controller and facade files in your existing project folder.
 
 ## CLI feature guide
 
@@ -171,6 +168,8 @@ GUI saves/responsiveness, actual window/file-picker behavior and interrupted inp
 GUI regression checks also cover new-record selection, cancelled imports, explicit
 selection retention, stable posting IDs/application references, duplicate identity
 rejection, description-analysis invalidation and clearing the posting editor.
+Profile checks cover clearing all fields, reloading the previous save and storing
+a new active profile, with all three action labels visible in the native window.
 Tests use injected responses/local HTTP, not paid model calls.
 
 - [Implementation checkpoint and change record](docs/stage2-progress.md)

@@ -2,7 +2,9 @@
 
 All 17 Stage 1 features have connected implementations in both CLI and Swing GUI.
 The selected meaningful code commits cover the minimum for each reporting period.
-The five selected code commits end at `0f2b00a`; `6979590` additionally exposes persisted tracker history. Report artifacts follow these code checkpoints.
+The weekly commit summary records implementation, tests and supporting repository
+changes. Documentation/configuration changes and merge copies are distinguished
+from independent meaningful code work.
 
 **Submission remains unfinished:** remaining live feature checks, feature videos and links,
 actual AI usage/cost figures and final human report/code review are pending.
@@ -96,6 +98,19 @@ the selected job fields and updates by ID, preserving application references eve
 after a title/company change. New posting clears edit mode. Conflicting identities
 are rejected, and description changes invalidate stale analysis. Three additional
 GUI regression checks cover these workflows; the desktop-enabled suite passes 64 checks.
+
+## Profile editor clear action
+
+Clear profile appears beside Save profile and Reload profile. It empties all six
+editor fields and focuses Name, preparing a new entry. The last saved profile stays
+available through Reload; saving valid new details replaces the single active profile.
+
+The shared GUI/controller persistence check exercises save, clear, reload, a new
+candidate save and loading that candidate through the CLI controller. The native
+window check confirms all three profile action labels fit and remain visible.
+The full desktop-enabled suite passes 64 checks with no failures, errors or skips.
+Supplied GUI confirmation also covers F01 save/reload and blank-name validation
+on the local Windows copy. Remaining live workflows and recordings stay pending.
 
 ## Submission records
 
