@@ -101,7 +101,6 @@ GUI regression checks cover these workflows; the desktop-enabled suite passes 64
 
 - [Report source](stage2-report-working-draft.md)
 - [Weekly commit summary](weekly-commit-summary.md)
-- [Demonstration guide and pending link worksheet](demonstration-guide.md)
 - [Implemented UML](../Diagrams/stage2_class_diagram.png)
 - [Feature-specific sequences](../Diagrams/stage2_ai_workflows.md)
 

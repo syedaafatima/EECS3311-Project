@@ -176,7 +176,6 @@ Tests use injected responses/local HTTP, not paid model calls.
 - [Implementation checkpoint and change record](docs/stage2-progress.md)
 - [Report source](docs/stage2-report-working-draft.md)
 - [Weekly commit evidence](docs/weekly-commit-summary.md)
-- [Demonstration recording checklist](docs/demonstration-guide.md)
 - [Implemented class diagram](Diagrams/stage2_class_diagram.png)
 - [Feature-specific sequences](Diagrams/stage2_ai_workflows.md)
 
