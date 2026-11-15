@@ -133,8 +133,8 @@ AI setup also provides status and live verification. Close the window to exit.
 
 ### Feature demonstrations
 
-Each link opens a separate feature recording at **00:00**. F01–F13 are linked
-below; F14–F17 will be added when their recordings are available.
+Each link opens a separate feature recording at **00:00**. All seventeen features
+are indexed below; the recordings collectively show the GUI and CLI.
 
 | Feature | Demonstration | Start |
 |---|---|---|
@@ -151,6 +151,10 @@ below; F14–F17 will be added when their recordings are available.
 | F11 — Interview Question Generation | [F11 link](https://youtu.be/WMgN_87MDAQ?t=0) | 00:00 |
 | F12 — Mock Interview | [F12 link](https://youtu.be/4k0ZOYJNH1Y?t=0) | 00:00 |
 | F13 — Interview Answer Feedback | [F13 link](https://youtu.be/RddPFQT3lUM?t=0) | 00:00 |
+| F14 — Application Tracking | [F14 link](https://youtu.be/nMa3M06CLVc?t=0) | 00:00 |
+| F15 — Deadline Tracking | [F15 link](https://youtu.be/dCIjHg0C6sQ?t=0) | 00:00 |
+| F16 — Company Research Notes | [F16 link](https://youtu.be/71LjEAsCVNE?t=0) | 00:00 |
+| F17 — Career Development Plan | [F17 link](https://youtu.be/QQYZjPArcyo?t=0) | 00:00 |
 
 ### CLI: profile, resume and matching
 

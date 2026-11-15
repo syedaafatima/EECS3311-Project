@@ -6,9 +6,9 @@ The weekly commit summary records implementation, tests and supporting repositor
 changes. Documentation/configuration changes and merge copies are distinguished
 from independent meaningful code work.
 
-**Submission remains unfinished:** remaining feature video links, live checks,
-actual AI usage/cost figures and final human report/code review are pending.
-F01–F13 recordings are linked from the README; F14–F17 links remain pending.
+All seventeen feature demonstration links are indexed in the README.
+**Submission remains unfinished:** final playback/accessibility and content review,
+complete AI usage/cost figures and final human report/code review are pending.
 Injected provider responses test workflows; they are not claimed as live model demonstrations.
 
 ## Feature status
@@ -53,8 +53,8 @@ explicit provider choice per request; OpenAIAdapter remains optional. Shared HTT
 translation keeps provider keys isolated and does not automatically fall back after
 errors. This is documented as a Stage 1 provider change, with official references
 in README and the report. On November 8 UTC (November 7 Toronto), the user configured a private local key
-and reported successful CLI `ai verify` output from Groq. Further live feature checks
-and recordings are still pending.
+and reported successful CLI `ai verify` output from Groq. The complete demonstration index is now in the README; final playback and content
+review remain pending.
 
 ## Verification and corrected defects
 
@@ -77,7 +77,8 @@ with source quotations, approval of only JUnit and a persisted profile update; F
 import and a deadline reminder; live F05 categorized requirements and explicit approval;
 F06 matched Java/missing SQL with a consistent live AI explanation; and F07 weighted
 65%/required 50% scores with a consistent live explanation. These are user-reported
-checks, with no video links yet. Other live workflows remain unverified.
+checks. All seventeen demonstration links are now indexed in the README; final
+playback/accessibility and content review remain pending.
 
 ## Desktop layout refinement
 
@@ -111,7 +112,8 @@ candidate save and loading that candidate through the CLI controller. The native
 window check confirms all three profile action labels fit and remain visible.
 The current desktop-enabled suite passes 80 checks with no failures, errors or skips.
 Supplied GUI confirmation also covers F01 save/reload and blank-name validation
-on the local Windows copy. Remaining live workflows and recordings stay pending.
+on the local Windows copy. All seventeen recordings are linked from the README;
+final access and content review remain pending.
 
 ## AI source references and corrective generation
 
@@ -130,8 +132,9 @@ questions and excessive study budgets remain rejected.
 
 The verification includes a complete F01–F17 replay and actual GUI generation,
 consent, evidence review and saving for F10/F11/F13/F16/F17. These use controlled,
-fallible provider responses; live Groq checks remain pending on the configured local
-copy. See the [feature verification record](feature-verification.md).
+fallible provider responses. Supplied recordings are linked for all seventeen
+features and need separate playback/content review. See the
+[feature verification record](feature-verification.md).
 
 ## Submission records
 
