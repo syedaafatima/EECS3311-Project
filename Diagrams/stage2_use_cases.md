@@ -1,4 +1,4 @@
-# Stage 2 implemented use cases — November 7
+# Stage 2 implemented use cases
 
 ```mermaid
 flowchart LR
@@ -39,6 +39,6 @@ flowchart LR
 ```
 
 These are connected code workflows. AI paths have automated injected-provider
-verification; live provider verification and all feature demonstration links are
-still required before submission. The app does not send applications, letters,
+verification, and all seventeen feature demonstration links are indexed in
+[README.md](../README.md#feature-demonstrations). The app does not send applications, letters,
 messages or external notifications, or browse research websites automatically.

@@ -15,13 +15,13 @@ sequenceDiagram
         Controller->>Facade: checkDeadlines()
         Facade->>Subject: checkDeadlines()
         Subject->>Subject: Resolve local date from Clock (America/Toronto)
-        Subject->>Store: listApplications(); listJobs()
+        Subject->>Store: listApplications()#59; listJobs()
         Subject->>Subject: Retain untracked / SAVED jobs
         alt Deadline unknown, past, more than 7 days away, or application already submitted/closed
             Subject->>Subject: No notification (overdue/unknown still listed if outstanding)
         else Due within 0–7 days and not already delivered today
             Subject->>View: onDeadline(reminder: DeadlineReminder)
-            View->>View: CLI prints; GUI queues display on Swing EDT
+            View->>View: CLI prints#59; GUI queues display on Swing EDT
             Subject->>Subject: Record successful in-process delivery
         end
         Subject-->>Controller: Current due entries / count
@@ -29,7 +29,7 @@ sequenceDiagram
     View->>Controller: unsubscribeDeadlines(this) on close
     Controller->>Facade: unsubscribeDeadlines(observer)
     Facade->>Subject: unsubscribe(observer: DeadlineObserver)
-    Note over View,Subject: GUI stops its Timer; CLI unregisters in finally
+    Note over View,Subject: GUI stops its Timer#59; CLI unregisters in finally
 ```
 
 `listDeadlines()` returns sorted `DeadlineReminder` values with OVERDUE, TODAY,

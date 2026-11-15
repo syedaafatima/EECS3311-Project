@@ -1,8 +1,9 @@
 # Stage 2 AI workflows — separate retrieval and validation branches
 
-Both views use AgentController. No generated output writes data until the candidate
-selects numbered proposals and confirms. These are implemented bounded tasks, not
-a generic loop standing in for unimplemented AI features.
+Both views use AgentController. Each task retrieves its own saved inputs and
+validates generated output before persistence. Skill and requirement changes use
+numbered approvals; generated documents require candidate review before saving.
+The diagrams follow the implemented feature-specific services and validation branches.
 
 ## F03 — Resume skill extraction
 
@@ -16,34 +17,34 @@ sequenceDiagram
     participant Tools as ToolManager
     participant LLM as LLMClient / selected provider Adapter
     participant Store as Repository
-    Candidate->>View: Select saved resume; allow provider request
+    Candidate->>View: Select saved resume#59; allow provider request
     View->>Controller: submitRequest("resume.extract-skills", resumeId)
     Controller->>Controller: Clear earlier pendingSkills
     Controller->>Facade: extractSkills(resumeId)
     Facade->>Agent: extractSkills(resumeId)
-    Agent->>Tools: readProfile(); readResume(resumeId)
-    Tools->>Store: loadProfile(); findResume(resumeId)
+    Agent->>Tools: readProfile()#59; readResume(resumeId)
+    Tools->>Store: loadProfile()#59; findResume(resumeId)
     alt Missing profile/resume or source exceeds 60000 characters
         Agent-->>Controller: Validation error, no provider request or save
-        Controller-->>View: ERROR; manual profile editing available
+        Controller-->>View: ERROR#59; manual profile editing available
     else Saved source is usable
         Agent->>LLM: complete(resume-specific instructions, saved text)
         alt Provider/configuration failure or invalid skills schema
             LLM-->>Controller: Error, no data mutation
-            Controller-->>View: ERROR; retry or manual entry
+            Controller-->>View: ERROR#59; retry or manual entry
         else Structured skills response
             Agent->>Agent: Validate verbatim evidence, whole skill token, lengths, duplicates
             Agent-->>Controller: Immutable SkillProposal list
             Controller-->>View: Numbered skills and supporting excerpts
             alt No grounded proposals
-                View-->>Candidate: No skills found; manual entry available
+                View-->>Candidate: No skills found#59; manual entry available
             else Candidate selects numbered proposals
                 Candidate->>View: Accept subset, or cancel
                 View->>Controller: skills.approve(confirmed, selected)
                 alt Cancel or no confirmation
                     Controller->>Controller: Discard pendingSkills
                 else Invalid number
-                    Controller-->>View: ERROR; saved profile unchanged
+                    Controller-->>View: ERROR#59; saved profile unchanged
                 else Valid selection
                     Controller->>Facade: approveSkills(pendingSkills, selected)
                     Facade->>Tools: readProfile()
@@ -69,7 +70,7 @@ sequenceDiagram
     participant Tools as ToolManager
     participant LLM as LLMClient / selected provider Adapter
     participant Store as Repository
-    Candidate->>View: Select job; allow provider request
+    Candidate->>View: Select job#59; allow provider request
     View->>Controller: submitRequest("job.analyze", jobId)
     Controller->>Controller: Clear earlier pendingAnalysis
     Controller->>Facade: analyzeJob(jobId)
@@ -77,19 +78,19 @@ sequenceDiagram
     Agent->>Tools: readJob(jobId)
     Tools->>Store: findJob(jobId)
     alt Missing job or description exceeds 60000 characters
-        Agent-->>Controller: Validation error; no provider request
-        Controller-->>View: ERROR; correct input or enter manual requirements
+        Agent-->>Controller: Validation error#59; no provider request
+        Controller-->>View: ERROR#59; correct input or enter manual requirements
     else Saved description available
         Agent->>LLM: complete(job-specific instructions, description)
         alt Provider failure or invalid requirements schema/category
-            Agent-->>Controller: Error; previous reviewed analysis unchanged
-            Controller-->>View: ERROR; retry or job.requirements fallback
+            Agent-->>Controller: Error#59; previous reviewed analysis unchanged
+            Controller-->>View: ERROR#59; retry or job.requirements fallback
         else Structured requirements response
             Agent->>Agent: Validate category, source quotation, requirement text, lengths, duplicates
             Agent-->>Controller: JobAnalysis(jobId, sourceDescription, requirements)
             Controller-->>View: Numbered required/preferred skills, qualifications, experience, uncertain items
             alt No grounded requirements
-                View-->>Candidate: Manual requirements available; no automatic score
+                View-->>Candidate: Manual requirements available#59; no automatic score
             else Candidate reviews proposals
                 Candidate->>View: Accept subset, or cancel
                 View->>Controller: job.analysis.approve(confirmed, selected)
@@ -99,7 +100,7 @@ sequenceDiagram
                     Controller->>Facade: approveJobAnalysis(snapshot, selected)
                     Facade->>Tools: readJob(jobId)
                     alt Current description differs from snapshot or selection is invalid
-                        Facade-->>View: ERROR; analyze again or correct selection
+                        Facade-->>View: ERROR#59; analyze again or correct selection
                     else Source matches and selection is valid
                         Facade->>Facade: Set reviewed skill sets and categorized evidence
                         Facade->>Store: save(job)
@@ -107,7 +108,7 @@ sequenceDiagram
                         Controller-->>View: Reviewed analysis saved
                         Candidate->>View: Show job / skill gaps / matching
                         View->>Controller: job.show / job.gaps / job.match
-                        Controller->>Facade: Read reviewed data; deterministic Strategy scoring
+                        Controller->>Facade: Read reviewed data#59; deterministic Strategy scoring
                         Facade-->>View: Evidence / gaps / ranked jobs
                     end
                 end
@@ -118,9 +119,9 @@ sequenceDiagram
 
 Changing the stored description clears old analysis. Education, experience and
 uncertain requirements remain visible with evidence but are not scored as skills.
-The November 7 sections below expand F06–F13/F16/F17 with feature-specific retrieval and validation.
+The sections below expand F06–F13/F16/F17 with feature-specific retrieval and validation.
 
-# November 7 feature-specific branches
+# Additional feature-specific branches
 
 Each task below retrieves its own inputs and validates its own output schema. Shared
 HTTP/JSON/evidence helpers do not replace these branches. AI responses are data;
@@ -142,9 +143,9 @@ sequenceDiagram
     participant L as LLMClient
     UI->>F: explainGaps(jobId)
     F->>T: compareSkills(jobId)
-    T->>T: Retrieve profile and reviewed job; compute matched/missing/uncertain
+    T->>T: Retrieve profile and reviewed job#59; compute matched/missing/uncertain
     F->>A: explainGaps(jobId)
-    A->>T: readProfile(); readJob(); compareSkills()
+    A->>T: readProfile()#59; readJob()#59; compareSkills()
     A->>L: complete(F06 instructions, retrieved facts)
     A->>A: Validate explanation length and exact cited context excerpts
     alt Valid interpretation
@@ -164,7 +165,7 @@ sequenceDiagram
     participant A as CareerAgent
     participant L as LLMClient
     UI->>F: explainMatches(strategy)
-    F->>T: Select policy; calculate reviewed job scores
+    F->>T: Select policy#59; calculate reviewed job scores
     F->>F: Rank descending, break ties by job ID
     F->>A: explainMatches(ranked)
     A->>T: Retrieve profile and gaps for ranked jobs
@@ -190,8 +191,8 @@ sequenceDiagram
     alt Not 2-4 distinct valid selections
         F-->>UI: Validation error before provider call
     else Valid selection
-        F->>T: Retrieve selected postings/profile; compute available compatibility
-        F->>F: Build comparison; preserve unknown/unanalysed fields
+        F->>T: Retrieve selected postings/profile#59; compute available compatibility
+        F->>F: Build comparison#59; preserve unknown/unanalysed fields
         F->>A: summarizeComparison(table)
         A->>L: complete(F08 instructions, selected facts)
         A->>A: Validate interpretation and evidence
@@ -213,8 +214,8 @@ sequenceDiagram
     C->>C: Clear pendingDocument
     C->>F: suggestResume(resumeId, jobId)
     F->>A: suggestResume(resumeId, jobId)
-    A->>T: candidateEvidence(); readJob(); require reviewed requirements
-    A->>A: Request suggestions; validate 1-15 items and candidate quotations
+    A->>T: candidateEvidence()#59; readJob()#59; require reviewed requirements
+    A->>A: Request suggestions#59; validate 1-15 items and candidate quotations
     A-->>C: CareerDocument draft with evidence and source fingerprint
     C-->>UI: Editable preview (not saved)
     UI->>C: document.save(confirmed, edited content), or cancel
@@ -222,7 +223,7 @@ sequenceDiagram
         C->>F: saveDocument(draft, editedContent)
         F->>R: Atomic save of reviewed separate document
     else Cancel, invalid content, or changed source
-        C-->>UI: Cancel/error; original resume preserved
+        C-->>UI: Cancel/error#59; original resume preserved
     end
 ```
 
@@ -239,9 +240,9 @@ sequenceDiagram
     F->>A: draftLetter(resumeId, jobId, tone)
     A->>A: Validate professional/warm/concise tone
     A->>T: Retrieve candidate evidence and selected posting
-    A->>A: Number candidate passages; capture source fingerprint
+    A->>A: Number candidate passages#59; capture source fingerprint
     A->>L: complete(F10 instructions, tone and candidate source IDs)
-    A->>A: Validate 2-6 paragraphs; resolve IDs to original candidate evidence
+    A->>A: Validate 2-6 paragraphs#59; resolve IDs to original candidate evidence
     opt Invalid generated content, once only
         A->>L: Correct response using original sources and validation reason
         A->>A: Revalidate paragraphs and source references
@@ -265,8 +266,8 @@ sequenceDiagram
     UI->>S: generateQuestions(jobId, count)
     S->>A: generateQuestions(jobId, count)
     A->>A: Require count 1-20
-    A->>T: readJob(); require reviewed requirements
-    A->>A: Number job passages; plan technical/behavioural question kinds
+    A->>T: readJob()#59; require reviewed requirements
+    A->>A: Number job passages#59; plan technical/behavioural question kinds
     A->>L: complete(F11 instructions, count, kind plan and job source IDs)
     A->>A: Validate exact count, distinct wording, categories, rubrics and job evidence
     opt Invalid generated content, once only
@@ -278,7 +279,7 @@ sequenceDiagram
         S->>R: put(question-sets, id, record)
         S-->>UI: Saved questions and rubrics
     else Invalid response/provider error
-        S-->>UI: Error; older question sets remain intact
+        S-->>UI: Error#59; older question sets remain intact
     end
 ```
 
@@ -297,14 +298,14 @@ sequenceDiagram
     loop Next question until complete
         UI->>S: answer(sessionId, text, skip)
         S->>R: Reload persisted session
-        S->>I: Require active state; accept nonblank answer or explicit skip
+        S->>I: Require active state#59; accept nonblank answer or explicit skip
         S->>R: Atomic save progress
         S-->>UI: Current answers and next question
     end
     UI->>S: transition(sessionId, pause/resume/finish)
-    S->>I: Validate transition; finish only after all answered/skipped
+    S->>I: Validate transition#59; finish only after all answered/skipped
     S->>R: Save status/progress
-    Note over UI,R: Reopening loads progress; no new model call is needed to resume
+    Note over UI,R: Reopening loads progress#59; no new model call is needed to resume
 ```
 
 ## F13 — Interview answer feedback
@@ -324,8 +325,8 @@ sequenceDiagram
     else Submitted answers exist
         A->>A: Number each saved answer's passages separately
         A->>L: complete(F13 instructions, stored snapshot and per-answer source IDs)
-        A->>A: Validate exactly one result per answered question; exclude skips
-        A->>A: Validate 0-100 integer score and lists; resolve ID only within its own answer
+        A->>A: Validate exactly one result per answered question#59; exclude skips
+        A->>A: Validate 0-100 integer score and lists#59; resolve ID only within its own answer
         opt Invalid generated content, once only
             A->>L: Correct response using original sources and validation reason
             A->>A: Revalidate entire feedback response
@@ -335,7 +336,7 @@ sequenceDiagram
             S->>R: Attach and save complete feedback
             S-->>UI: Strengths, weaknesses, improvements, scores and evidence
         else Invalid response/provider error
-            S-->>UI: Error; previous saved feedback unchanged
+            S-->>UI: Error#59; previous saved feedback unchanged
         end
     end
 ```
@@ -359,7 +360,7 @@ sequenceDiagram
     A->>T: readNotes(jobId)
     A->>A: Number saved notes and supplied source URLs
     A->>L: complete(F16 instructions, note and URL source IDs)
-    A->>A: Validate summary; resolve original notes and supplied URLs only
+    A->>A: Validate summary#59; resolve original notes and supplied URLs only
     opt Invalid generated content, once only
         A->>L: Correct response using original sources and validation reason
         A->>A: Revalidate entire summary
@@ -399,7 +400,7 @@ sequenceDiagram
         F->>T: Recheck source fingerprint
         F->>R: Save reviewed plan
     else Invalid/over-budget output or provider failure
-        A-->>UI: Error; no new reviewed plan stored
+        A-->>UI: Error#59; no new reviewed plan stored
     end
 ```
 
@@ -414,14 +415,14 @@ sequenceDiagram
     participant H as ChatCompletionAdapter
     participant P as Selected provider API
     A->>C: complete(task instructions, retrieved context)
-    C->>C: Reload local LLM_PROVIDER; environment overrides file
+    C->>C: Reload local LLM_PROVIDER#59; environment overrides file
     C->>G: Select only groq or openai
     G->>H: Use provider-specific key/model namespace and fixed endpoint
     H->>P: JSON chat completion request
     alt Valid completed JSON content
         H-->>A: Final response content for feature validation
     else Authentication/quota/schema/network failure
-        H-->>A: Redacted error; no provider fallback
+        H-->>A: Redacted error#59; no provider fallback
     end
 ```
 
@@ -429,4 +430,5 @@ Groq defaults to `openai/gpt-oss-20b`; free-plan quotas require paced requests a
 short demonstration inputs. The OpenAI model identifier here refers to an
 open-weight model hosted by Groq, not an OpenAI API billing requirement. The chosen
 provider's private key is stored locally. Feature-specific schema/evidence checks
-are unchanged. Live verification remains pending user key configuration.
+are unchanged. Provider setup and all seventeen feature demonstration links are
+documented in [README.md](../README.md).
