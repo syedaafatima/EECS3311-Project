@@ -8,7 +8,7 @@ from independent meaningful code work.
 
 **Submission remains unfinished:** remaining feature video links, live checks,
 actual AI usage/cost figures and final human report/code review are pending.
-F11–F13 recordings are linked from the README.
+F01–F13 recordings are linked from the README; F14–F17 links remain pending.
 Injected provider responses test workflows; they are not claimed as live model demonstrations.
 
 ## Feature status

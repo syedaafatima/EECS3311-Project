@@ -133,11 +133,21 @@ AI setup also provides status and live verification. Close the window to exit.
 
 ### Feature demonstrations
 
-Each link opens a separate feature recording at **00:00**. Additional feature
-links will be added as the recordings become available.
+Each link opens a separate feature recording at **00:00**. F01–F13 are linked
+below; F14–F17 will be added when their recordings are available.
 
 | Feature | Demonstration | Start |
 |---|---|---|
+| F01 — Candidate Profile Management | [Watch on YouTube](https://youtu.be/a_7-OBFc5FA?t=0) | 00:00 |
+| F02 — Resume Import | [Watch on YouTube](https://youtu.be/rag1yg8JqYM?t=0) | 00:00 |
+| F03 — Resume Skill Extraction | [Watch on YouTube](https://youtu.be/uXXMgsYg68I?t=0) | 00:00 |
+| F04 — Job Import | [Watch on YouTube](https://youtu.be/dseg56TGSqo?t=0) | 00:00 |
+| F05 — Job Description Analysis | [Watch on YouTube](https://youtu.be/cmS2x1T1Tc8?t=0) | 00:00 |
+| F06 — Skill Gap Identification | [Watch on YouTube](https://youtu.be/94zQE5TPGRs?t=0) | 00:00 |
+| F07 — Job Matching | [Watch on YouTube](https://youtu.be/2SiS0G3_02M?t=0) | 00:00 |
+| F08 — Job Comparison | [Watch on YouTube](https://youtu.be/_R_zGnLrsEs?t=0) | 00:00 |
+| F09 — Customized Resume Suggestions | [Watch on YouTube](https://youtu.be/xvG0E3s51CQ?t=0) | 00:00 |
+| F10 — Cover Letter Drafting | [Watch on YouTube](https://youtu.be/LDz5NG0jGC4?t=0) | 00:00 |
 | F11 — Interview Question Generation | [Watch on YouTube](https://youtu.be/WMgN_87MDAQ?t=0) | 00:00 |
 | F12 — Mock Interview | [Watch on YouTube](https://youtu.be/4k0ZOYJNH1Y?t=0) | 00:00 |
 | F13 — Interview Answer Feedback | [Watch on YouTube](https://youtu.be/RddPFQT3lUM?t=0) | 00:00 |
