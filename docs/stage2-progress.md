@@ -6,8 +6,9 @@ The weekly commit summary records implementation, tests and supporting repositor
 changes. Documentation/configuration changes and merge copies are distinguished
 from independent meaningful code work.
 
-**Submission remains unfinished:** remaining live feature checks, feature videos and links,
+**Submission remains unfinished:** remaining feature video links, live checks,
 actual AI usage/cost figures and final human report/code review are pending.
+F11–F13 recordings are linked from the README.
 Injected provider responses test workflows; they are not claimed as live model demonstrations.
 
 ## Feature status
@@ -134,6 +135,7 @@ copy. See the [feature verification record](feature-verification.md).
 
 ## Submission records
 
+- [Feature demonstration videos](../README.md#feature-demonstrations)
 - [Report source](stage2-report-working-draft.md)
 - [Weekly commit summary](weekly-commit-summary.md)
 - [Implemented UML](../Diagrams/stage2_class_diagram.png)

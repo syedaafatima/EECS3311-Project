@@ -131,6 +131,17 @@ AI setup also provides status and live verification. Close the window to exit.
 
 ## 5. Example usage
 
+### Feature demonstrations
+
+Each link opens a separate feature recording at **00:00**. Additional feature
+links will be added as the recordings become available.
+
+| Feature | Demonstration | Start |
+|---|---|---|
+| F11 — Interview Question Generation | [Watch on YouTube](https://youtu.be/WMgN_87MDAQ?t=0) | 00:00 |
+| F12 — Mock Interview | [Watch on YouTube](https://youtu.be/4k0ZOYJNH1Y?t=0) | 00:00 |
+| F13 — Interview Answer Feedback | [Watch on YouTube](https://youtu.be/RddPFQT3lUM?t=0) | 00:00 |
+
 ### CLI: profile, resume and matching
 
 Use fictional data for this example. Lines beginning `career-agent>` are commands;
