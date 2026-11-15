@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ResearchPlanTest {
@@ -31,6 +32,63 @@ class ResearchPlanTest {
     private String plan(Object hours, Object cost, String gap) { return Json.encode(Map.of("activities", List.of(
             Map.of("gap", gap, "activity", "Practice SQL joins using a local dataset.", "hours", hours, "cost", cost,
                     "milestone", "Write and explain three join queries.")))); }
+    @Test void summaryReferencesPreserveOriginalNotesAndSuppliedUrls() {
+        String notes = "Builds data products.\nZoë leads collaborative development.";
+        String url = "https://example.com/about?topic=Java%20SQL";
+        AtomicInteger calls = new AtomicInteger();
+        var facade = facade((instructions, context) -> {
+            calls.incrementAndGet();
+            Map<?, ?> request = Json.object(Json.parse(context));
+            assertEquals("Builds data products.", Json.object(request.get("noteEvidence")).get("N1"));
+            assertEquals(url, Json.object(request.get("sourceUrls")).get("U1"));
+            return Json.encode(Map.of("summary", "The notes describe data products and collaborative development.",
+                    "citationIds", List.of("U1"), "evidenceIds", List.of("N1", "N2")));
+        });
+        facade.saveCompanyNotes("J01", notes, List.of(url));
+        var draft = facade.summarizeCompanyNotes("J01");
+        assertEquals(1, calls.get());
+        assertEquals(List.of("Builds data products.", "Zoë leads collaborative development."), draft.evidence());
+        assertTrue(draft.content().contains(url));
+        var saved = facade.saveDocument(draft, draft.content());
+        assertEquals(draft.evidence(), new CareerFacade(new Repository(data)).getDocument(saved.id()).evidence());
+    }
+    @Test void unknownSummaryReferencesAndProviderFailuresPreserveReviewedDocuments() {
+        var valid = facade((i, c) -> summary());
+        valid.saveCompanyNotes("J01", "Builds data products", List.of("https://example.com/about"));
+        var saved = valid.saveDocument(valid.summarizeCompanyNotes("J01"), "Reviewed company notes");
+        for (String invalidResponse : List.of(
+                Json.encode(Map.of("summary", "Invalid source.", "citationIds", List.of("U999"), "evidenceIds", List.of("N1"))),
+                Json.encode(Map.of("summary", "Invalid notes.", "citationIds", List.of("U1"), "evidenceIds", List.of("N999"))))) {
+            AtomicInteger calls = new AtomicInteger();
+            var invalid = facade((i, c) -> { calls.incrementAndGet(); return invalidResponse; });
+            assertThrows(IllegalArgumentException.class, () -> invalid.summarizeCompanyNotes("J01"));
+            assertEquals(2, calls.get());
+            assertEquals("Reviewed company notes", invalid.getDocument(saved.id()).content());
+            assertEquals(1, invalid.listDocuments().size());
+        }
+        AtomicInteger calls = new AtomicInteger();
+        var offline = facade((i, c) -> { calls.incrementAndGet(); throw new IllegalStateException("Provider unavailable"); });
+        assertThrows(IllegalStateException.class, () -> offline.summarizeCompanyNotes("J01"));
+        assertEquals(1, calls.get());
+        assertEquals("Reviewed company notes", offline.getDocument(saved.id()).content());
+    }
+    @Test void malformedOrOverBudgetPlansAreCorrectedOnceWithinTheOriginalLimits() {
+        for (String firstResponse : List.of("{\"activities\":[", plan(6, 0, "SQL"))) {
+            AtomicInteger calls = new AtomicInteger();
+            var facade = facade((instructions, context) -> {
+                if (calls.incrementAndGet() == 1) return firstResponse;
+                assertTrue(instructions.contains("previous response failed validation"));
+                return plan(new BigDecimal("2.5"), 0, "SQL");
+            });
+            assertThrows(IllegalArgumentException.class, () -> facade.generateCareerPlan(
+                    List.of("J01"), "Prepare for a developer role", 0, BigDecimal.ZERO));
+            assertEquals(0, calls.get());
+            var draft = facade.generateCareerPlan(List.of("J01"), "Prepare for a developer role", 5, BigDecimal.ZERO);
+            assertEquals(2, calls.get());
+            assertTrue(draft.content().contains("Allocated: 2.5 hours; cost 0"));
+            assertTrue(facade.listDocuments().isEmpty());
+        }
+    }
     @Test void notesSourcesSummaryAndReviewedDocumentSurviveRestart() {
         var facade = facade((i, c) -> summary());
         facade.saveCompanyNotes("J01", "Builds data products", List.of("https://example.com/about"));

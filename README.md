@@ -46,9 +46,11 @@ mvn package
 ```
 
 To run tests separately, use `mvn test`. Tests use injected model responses/local
-HTTP endpoints and do not need a real API key. The optional native-window check
-runs when `DISPLAY` is configured and a desktop Java runtime is available; otherwise
-it is skipped. The recorded desktop-enabled run passed all 64 checks.
+HTTP endpoints and do not need a real API key. Two optional native-window checks
+run when `DISPLAY` is configured and a desktop Java runtime is available; otherwise
+they are skipped. The recorded desktop-enabled run passed all 80 checks, including
+an end-to-end F01–F17 workflow and native AI consent/review dialogs. See the
+[feature verification record](docs/feature-verification.md) for coverage and limits.
 
 ## 3. Local configuration
 
@@ -95,6 +97,10 @@ provider's key is used.
 Complete the build first. Both interfaces save records in local `data/`, which is
 created automatically. Run **one interface at a time** because they share these
 files. Records survive an application restart.
+
+When updating from a ZIP, close the application first. Keep your existing private
+`.env` and `data/` folder, and copy both into the new project root before launching
+if you extract to a new folder. Existing saved records remain compatible.
 
 ### CLI
 
@@ -206,7 +212,12 @@ Additional workflows are listed by `help`:
 | Research and planning | `company notes`, `company summarize`, `career plan` |
 
 AI requests ask for consent before sending relevant saved records. Review generated
-claims before approval. Company summaries use supplied notes/sources; the app does
+claims before approval. Cover letters, interview questions, answer feedback and
+company summaries cite saved passages by reference; the app attaches their original
+text. These workflows and career planning may make one additional corrective request
+using the same sources if generated content fails validation. Provider and
+configuration failures, including rate limits, are returned without an automatic retry.
+Company summaries use supplied notes/sources; the app does
 not browse websites or automatically submit applications.
 
 For implementation status and limitations, see the

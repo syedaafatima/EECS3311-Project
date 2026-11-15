@@ -57,8 +57,8 @@ and recordings are still pending.
 
 ## Verification and corrected defects
 
-The desktop-enabled suite passes 64 checks, including actual Swing-window/file-picker
-verification. A headless run skips that one native test. Important fixes cover stale
+The desktop-enabled suite passes 80 checks, including actual Swing-window/file-picker
+verification and native AI consent/review dialogs. A headless run skips the two native tests. Important fixes cover stale
 job analysis, cross-process source fingerprints, bracket-containing/long array values,
 atomic JSON writes, invalid record IDs, future application dates, interrupted review,
 provider-error redaction and displaying saved application history in the interfaces.
@@ -97,7 +97,7 @@ Ordinary refreshes and cancelled imports retain explicit choices. Edit posting l
 the selected job fields and updates by ID, preserving application references even
 after a title/company change. New posting clears edit mode. Conflicting identities
 are rejected, and description changes invalidate stale analysis. Three additional
-GUI regression checks cover these workflows; the desktop-enabled suite passes 64 checks.
+GUI regression checks cover these workflows; the current desktop-enabled suite passes 80 checks.
 
 ## Profile editor clear action
 
@@ -108,9 +108,29 @@ available through Reload; saving valid new details replaces the single active pr
 The shared GUI/controller persistence check exercises save, clear, reload, a new
 candidate save and loading that candidate through the CLI controller. The native
 window check confirms all three profile action labels fit and remain visible.
-The full desktop-enabled suite passes 64 checks with no failures, errors or skips.
+The current desktop-enabled suite passes 80 checks with no failures, errors or skips.
 Supplied GUI confirmation also covers F01 save/reload and blank-name validation
 on the local Windows copy. Remaining live workflows and recordings stay pending.
+
+## AI source references and corrective generation
+
+F10 cover letters, F11 questions, F13 answer feedback and F16 company summaries
+now cite numbered passages from their own retrieved sources. The application
+resolves those references to original saved text. Feedback IDs are restricted to
+the particular answered question; company URL references are restricted to supplied
+sources. Exact quotation-based responses remain supported when their evidence
+matches, and saved record formats remain compatible.
+
+F10/F11/F13/F16/F17 permit at most one corrective request after invalid generated
+content, including malformed JSON. Each feature retains its own retrieval, schema
+and validation branch. Provider/configuration failures, including HTTP 429, are
+returned without retry. Unknown references, invalid counts/scores, duplicate
+questions and excessive study budgets remain rejected.
+
+The verification includes a complete F01–F17 replay and actual GUI generation,
+consent, evidence review and saving for F10/F11/F13/F16/F17. These use controlled,
+fallible provider responses; live Groq checks remain pending on the configured local
+copy. See the [feature verification record](feature-verification.md).
 
 ## Submission records
 

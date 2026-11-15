@@ -126,6 +126,11 @@ Each task below retrieves its own inputs and validates its own output schema. Sh
 HTTP/JSON/evidence helpers do not replace these branches. AI responses are data;
 no response is executed as a dynamic tool command.
 
+F10/F11/F13/F16/F17 use a shared bounded response helper: invalid generated content
+permits one corrective request with the validation reason. Provider/configuration
+errors return immediately. Each feature retains the retrieval and validation
+operations shown below; older saved records remain compatible.
+
 ## F06 — Skill gap explanation
 
 ```mermaid
@@ -234,8 +239,13 @@ sequenceDiagram
     F->>A: draftLetter(resumeId, jobId, tone)
     A->>A: Validate professional/warm/concise tone
     A->>T: Retrieve candidate evidence and selected posting
-    A->>L: complete(F10 instructions, tone and source records)
-    A->>A: Validate 2-6 paragraphs and verbatim candidate evidence
+    A->>A: Number candidate passages; capture source fingerprint
+    A->>L: complete(F10 instructions, tone and candidate source IDs)
+    A->>A: Validate 2-6 paragraphs; resolve IDs to original candidate evidence
+    opt Invalid generated content, once only
+        A->>L: Correct response using original sources and validation reason
+        A->>A: Revalidate paragraphs and source references
+    end
     A->>A: Add generic hiring-team greeting and candidate signature
     A-->>UI: Editable CareerDocument preview
     Note over UI,F: Controller review/save/cancel and stale-source validation match the document workflow above
@@ -256,8 +266,13 @@ sequenceDiagram
     S->>A: generateQuestions(jobId, count)
     A->>A: Require count 1-20
     A->>T: readJob(); require reviewed requirements
-    A->>L: complete(F11 instructions, count and job context)
+    A->>A: Number job passages; plan technical/behavioural question kinds
+    A->>L: complete(F11 instructions, count, kind plan and job source IDs)
     A->>A: Validate exact count, distinct wording, categories, rubrics and job evidence
+    opt Invalid generated content, once only
+        A->>L: Correct response using original sources and validation reason
+        A->>A: Revalidate complete question set
+    end
     alt Valid set
         A-->>S: QuestionSet with original context
         S->>R: put(question-sets, id, record)
@@ -307,9 +322,14 @@ sequenceDiagram
     alt No submitted answers
         A-->>UI: Validation error before model call
     else Submitted answers exist
-        A->>L: complete(F13 instructions, stored snapshot and answers)
+        A->>A: Number each saved answer's passages separately
+        A->>L: complete(F13 instructions, stored snapshot and per-answer source IDs)
         A->>A: Validate exactly one result per answered question; exclude skips
-        A->>A: Validate 0-100 integer score, lists and exact answer quote
+        A->>A: Validate 0-100 integer score and lists; resolve ID only within its own answer
+        opt Invalid generated content, once only
+            A->>L: Correct response using original sources and validation reason
+            A->>A: Revalidate entire feedback response
+        end
         alt Entire response is valid
             A-->>S: Feedback map
             S->>R: Attach and save complete feedback
@@ -337,8 +357,13 @@ sequenceDiagram
     UI->>F: summarizeCompanyNotes(jobId)
     F->>A: summarizeNotes(jobId)
     A->>T: readNotes(jobId)
-    A->>L: complete(F16 instructions, saved notes/sources)
-    A->>A: Validate summary, quotations and citations against supplied sources
+    A->>A: Number saved notes and supplied source URLs
+    A->>L: complete(F16 instructions, note and URL source IDs)
+    A->>A: Validate summary; resolve original notes and supplied URLs only
+    opt Invalid generated content, once only
+        A->>L: Correct response using original sources and validation reason
+        A->>A: Revalidate entire summary
+    end
     A-->>UI: Editable summary draft, or error
     UI->>F: Review and save via controller document workflow
     F->>T: Recheck current notes fingerprint
@@ -364,6 +389,10 @@ sequenceDiagram
     A->>L: complete(F17 instructions, gaps, prior advice and weekly limits)
     A->>A: Validate known gap names and positive numeric activity time
     A->>A: Sum hours/cost and enforce both limits
+    opt Invalid generated content, once only
+        A->>L: Correct response using original limits and validation reason
+        A->>A: Revalidate activities and both totals
+    end
     alt Valid plan
         A-->>UI: Editable one-week CareerDocument draft
         UI->>F: Approve edited content through controller
