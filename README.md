@@ -138,19 +138,19 @@ below; F14–F17 will be added when their recordings are available.
 
 | Feature | Demonstration | Start |
 |---|---|---|
-| F01 — Candidate Profile Management | [Watch on YouTube](https://youtu.be/a_7-OBFc5FA?t=0) | 00:00 |
-| F02 — Resume Import | [Watch on YouTube](https://youtu.be/rag1yg8JqYM?t=0) | 00:00 |
-| F03 — Resume Skill Extraction | [Watch on YouTube](https://youtu.be/uXXMgsYg68I?t=0) | 00:00 |
-| F04 — Job Import | [Watch on YouTube](https://youtu.be/dseg56TGSqo?t=0) | 00:00 |
-| F05 — Job Description Analysis | [Watch on YouTube](https://youtu.be/cmS2x1T1Tc8?t=0) | 00:00 |
-| F06 — Skill Gap Identification | [Watch on YouTube](https://youtu.be/94zQE5TPGRs?t=0) | 00:00 |
-| F07 — Job Matching | [Watch on YouTube](https://youtu.be/2SiS0G3_02M?t=0) | 00:00 |
-| F08 — Job Comparison | [Watch on YouTube](https://youtu.be/_R_zGnLrsEs?t=0) | 00:00 |
-| F09 — Customized Resume Suggestions | [Watch on YouTube](https://youtu.be/xvG0E3s51CQ?t=0) | 00:00 |
-| F10 — Cover Letter Drafting | [Watch on YouTube](https://youtu.be/LDz5NG0jGC4?t=0) | 00:00 |
-| F11 — Interview Question Generation | [Watch on YouTube](https://youtu.be/WMgN_87MDAQ?t=0) | 00:00 |
-| F12 — Mock Interview | [Watch on YouTube](https://youtu.be/4k0ZOYJNH1Y?t=0) | 00:00 |
-| F13 — Interview Answer Feedback | [Watch on YouTube](https://youtu.be/RddPFQT3lUM?t=0) | 00:00 |
+| F01 — Candidate Profile Management | [F01 link](https://youtu.be/a_7-OBFc5FA?t=0) | 00:00 |
+| F02 — Resume Import | [F02 link](https://youtu.be/rag1yg8JqYM?t=0) | 00:00 |
+| F03 — Resume Skill Extraction | [F03 link](https://youtu.be/uXXMgsYg68I?t=0) | 00:00 |
+| F04 — Job Import | [F04 link](https://youtu.be/dseg56TGSqo?t=0) | 00:00 |
+| F05 — Job Description Analysis | [F05 link](https://youtu.be/cmS2x1T1Tc8?t=0) | 00:00 |
+| F06 — Skill Gap Identification | [F06 link](https://youtu.be/94zQE5TPGRs?t=0) | 00:00 |
+| F07 — Job Matching | [F07 link](https://youtu.be/2SiS0G3_02M?t=0) | 00:00 |
+| F08 — Job Comparison | [F08 link](https://youtu.be/_R_zGnLrsEs?t=0) | 00:00 |
+| F09 — Customized Resume Suggestions | [F09 link](https://youtu.be/xvG0E3s51CQ?t=0) | 00:00 |
+| F10 — Cover Letter Drafting | [F10 link](https://youtu.be/LDz5NG0jGC4?t=0) | 00:00 |
+| F11 — Interview Question Generation | [F11 link](https://youtu.be/WMgN_87MDAQ?t=0) | 00:00 |
+| F12 — Mock Interview | [F12 link](https://youtu.be/4k0ZOYJNH1Y?t=0) | 00:00 |
+| F13 — Interview Answer Feedback | [F13 link](https://youtu.be/RddPFQT3lUM?t=0) | 00:00 |
 
 ### CLI: profile, resume and matching
 
