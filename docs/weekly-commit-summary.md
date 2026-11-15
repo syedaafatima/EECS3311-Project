@@ -4,9 +4,11 @@ Repository: https://github.com/syedaafatima/EECS3311-Project
 
 ## Commit coverage
 
-The log includes all 36 unique Stage 2 commits reachable from the published repository branches at checkpoint [c161f32](https://github.com/syedaafatima/EECS3311-Project/commit/c161f32f0bcb27ea64570d0ae1722769fb365911): 32 on main and 4 additional report-draft commits. Commit dates use Toronto local time and show the full month name and day only. Code, tests, documentation, configuration and merges are recorded. Documentation/configuration commits and repeated merge copies do not count as separate meaningful code changes. Later publication-only changes can be inspected in the [full main-branch history](https://github.com/syedaafatima/EECS3311-Project/commits/main).
+The log includes all 43 unique Stage 2 commits reachable from the published repository branches at checkpoint [02db7ed](https://github.com/syedaafatima/EECS3311-Project/commit/02db7ed01644ffc2250e02213f7ef6de4bb209fc): 39 on main and 4 additional report-draft commits. Commit dates use Toronto local time and show the full month name and day only. Code, tests, documentation, configuration and merges are recorded. Documentation/configuration commits and repeated merge copies do not count as separate meaningful code changes. Later publication-only changes can be inspected in the [full main-branch history](https://github.com/syedaafatima/EECS3311-Project/commits/main).
 
 Period 3 is displayed through November 14 for this development log. The original Stage 2 brief defines the minimum five-code-commit window as November 3–9; later follow-up entries are listed without extending that original window.
+
+Within the original reporting windows, Periods 1, 2 and 3 contain 5, 5 and 8 implementation/test commits respectively. Each meets the minimum of five; documentation, configuration and merge entries are excluded from these counts.
 
 **Period 1 (October 20–26)**
 
@@ -58,3 +60,15 @@ Period 3 is displayed through November 14 for this development log. The original
 | November 14 | [61fd001](https://github.com/syedaafatima/EECS3311-Project/commit/61fd001b1e9103ffaa8c423ed4b6af13a30f0b49) | Restore the Stage 2 Markdown source and its links while keeping PDF/Word exports removed. | Docs |
 | November 14 | [1ba43f2](https://github.com/syedaafatima/EECS3311-Project/commit/1ba43f2103c00e6cb37a351b4caae3c1f610a0cb) | Remove the repository demonstration guide and its README/progress links. | Docs |
 | November 14 | [c161f32](https://github.com/syedaafatima/EECS3311-Project/commit/c161f32f0bcb27ea64570d0ae1722769fb365911) | Add Clear profile with reload/new-candidate persistence checks and native label verification; remove obsolete guides/screenshots. | Code/tests |
+| November 14 | [a8d85ea](https://github.com/syedaafatima/EECS3311-Project/commit/a8d85eae892edbfc75990f35ec217440d8612426) | Update weekly commit evidence through the Clear profile checkpoint. | Docs |
+| November 14 | [60b2015](https://github.com/syedaafatima/EECS3311-Project/commit/60b20154fc61f8cdae477713df2db53bc38977c4) | Organize README around prerequisites, setup, launch and example usage. | Docs |
+
+**Follow-up revisions (November 15 onward)**
+
+| Date | Commit | Change | Type |
+|---|---|---|---|
+| November 15 | [4e4c4d4](https://github.com/syedaafatima/EECS3311-Project/commit/4e4c4d40b5d45f607f4d79bad1a00434179ca83e) | Fix AI source references and verify all 17 feature workflows. | Code/tests |
+| November 15 | [b379ada](https://github.com/syedaafatima/EECS3311-Project/commit/b379ada81485ada181b050f110299591a6c67fbf) | Link F11-F13 interview demonstrations in the README. | Docs |
+| November 15 | [db79949](https://github.com/syedaafatima/EECS3311-Project/commit/db7994935a60e029865c048e6b6bf31f509211ee) | Add F01-F10 demonstration links to complete the F01-F13 video index. | Docs |
+| November 15 | [0f604bc](https://github.com/syedaafatima/EECS3311-Project/commit/0f604bcb915ac06512d89a4423cc724d2c602515) | Label demonstration links by feature ID in the README. | Docs |
+| November 15 | [02db7ed](https://github.com/syedaafatima/EECS3311-Project/commit/02db7ed01644ffc2250e02213f7ef6de4bb209fc) | Complete the F01-F17 feature demonstration video index. | Docs |

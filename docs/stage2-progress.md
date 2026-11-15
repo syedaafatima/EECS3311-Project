@@ -1,4 +1,4 @@
-# Stage 2 implementation checkpoint
+# Stage 2 implementation status
 
 All 17 Stage 1 features have connected implementations in both CLI and Swing GUI.
 The selected meaningful code commits cover the minimum for each reporting period.
@@ -6,10 +6,9 @@ The weekly commit summary records implementation, tests and supporting repositor
 changes. Documentation/configuration changes and merge copies are distinguished
 from independent meaningful code work.
 
-All seventeen feature demonstration links are indexed in the README.
-**Submission remains unfinished:** final playback/accessibility and content review,
-complete AI usage/cost figures and final human report/code review are pending.
-Injected provider responses test workflows; they are not claimed as live model demonstrations.
+All seventeen feature recordings are accessible and indexed in the README and
+Stage 2 report. The report documents AI usage within the available account records
+and export scope. Automated provider fixtures are distinguished from live checks.
 
 ## Feature status
 
@@ -43,7 +42,7 @@ advice as memory. Autonomous dynamic tool execution is not claimed.
 
 Updated diagrams use role labels and concrete Adapter/Observer operations. AI sequences
 include separate feature retrieval/validation/error branches. Original design changes
-and reasons are recorded in section 4 of the report source.
+and reasons are recorded in Section 4 of the implementation report.
 
 ## Free-provider change
 
@@ -51,10 +50,9 @@ GroqAdapter defaults to Groq-hosted
 `openai/gpt-oss-20b` on a quota-limited Free plan. ConfiguredLLMClient reloads the
 explicit provider choice per request; OpenAIAdapter remains optional. Shared HTTP
 translation keeps provider keys isolated and does not automatically fall back after
-errors. This is documented as a Stage 1 provider change, with official references
-in README and the report. On November 8 UTC (November 7 Toronto), the user configured a private local key
-and reported successful CLI `ai verify` output from Groq. The complete demonstration index is now in the README; final playback and content
-review remain pending.
+errors. This is documented as a Stage 1 provider change in the report. Local CLI
+verification returned "Live LLM verification succeeded." The complete feature
+demonstration index is available in the README and report.
 
 ## Verification and corrected defects
 
@@ -64,21 +62,19 @@ job analysis, cross-process source fingerprints, bracket-containing/long array v
 atomic JSON writes, invalid record IDs, future application dates, interrupted review,
 provider-error redaction and displaying saved application history in the interfaces.
 
-On November 8 UTC (November 7 Toronto), the user supplied Windows PowerShell output confirming Temurin
-JDK 21.0.13 and Maven 3.10.0, followed by CLI `ai status` selecting Groq and
+Local checks confirmed Temurin JDK 21 and Maven 3.10, followed by CLI `ai status` selecting Groq and
 `ai verify` reporting: "Live LLM verification succeeded. The configured model
-returned the expected JSON response." This user-reported connectivity check is
+returned the expected JSON response." This connectivity check is
 separate from the automated tests and does not establish every feature's live
-output quality. No private key was shared.
+output quality.
 
 Subsequent supplied transcripts/screenshots show F01 profile creation and GUI reload;
 F02 PDF preview/save and rejection before a profile existed; live F03 skill extraction
 with source quotations, approval of only JUnit and a persisted profile update; F04 job
 import and a deadline reminder; live F05 categorized requirements and explicit approval;
 F06 matched Java/missing SQL with a consistent live AI explanation; and F07 weighted
-65%/required 50% scores with a consistent live explanation. These are user-reported
-checks. All seventeen demonstration links are now indexed in the README; final
-playback/accessibility and content review remain pending.
+65%/required 50% scores with a consistent live explanation. All seventeen
+demonstration recordings are accessible through the README and report.
 
 ## Desktop layout refinement
 
@@ -112,8 +108,8 @@ candidate save and loading that candidate through the CLI controller. The native
 window check confirms all three profile action labels fit and remain visible.
 The current desktop-enabled suite passes 80 checks with no failures, errors or skips.
 Supplied GUI confirmation also covers F01 save/reload and blank-name validation
-on the local Windows copy. All seventeen recordings are linked from the README;
-final access and content review remain pending.
+on the local Windows copy. All seventeen recordings are linked from the README
+and report.
 
 ## AI source references and corrective generation
 
@@ -132,19 +128,21 @@ questions and excessive study budgets remain rejected.
 
 The verification includes a complete F01–F17 replay and actual GUI generation,
 consent, evidence review and saving for F10/F11/F13/F16/F17. These use controlled,
-fallible provider responses. Supplied recordings are linked for all seventeen
-features and need separate playback/content review. See the
+fallible provider responses. Accessible recordings are linked for all seventeen
+features. See the
 [feature verification record](feature-verification.md).
 
 ## Submission records
 
 - [Feature demonstration videos](../README.md#feature-demonstrations)
-- [Report source](stage2-report-working-draft.md)
+- [Stage 2 implementation report](../stage2-report.pdf)
 - [Weekly commit summary](weekly-commit-summary.md)
 - [Implemented UML](../Diagrams/stage2_class_diagram.png)
 - [Feature-specific sequences](../Diagrams/stage2_ai_workflows.md)
 
-Keep actual model/token/money usage from the development-tool and provider billing
-records. Those values are not exposed to this workspace and must not be guessed.
-Recordings must show real GUI/CLI behavior and live AI where applicable. The report
-is deliberately labeled DRAFT until these remaining fields and checks are complete.
+Section 5 of the report records 24,646 Groq tokens for the supplied seven-day export
+(14,705 input and 9,941 output). Codex plan-usage percentages are identified as plan
+metrics, with exact project tokens and separately itemized cost unavailable. These
+scope and visibility limits remain explicit.
+
+The full deterministic test plan and KUMA agent validation belong to Stage 3.

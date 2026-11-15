@@ -247,6 +247,6 @@ not browse websites or automatically submit applications.
 
 For implementation status and limitations, see the
 [implementation checkpoint](docs/stage2-progress.md). Additional records:
+[Stage 2 implementation report](stage2-report.pdf),
 [commit summary](docs/weekly-commit-summary.md),
-[implemented UML](Diagrams/stage2_class_diagram.png) and
-[report source](docs/stage2-report-working-draft.md).
+[implemented UML](Diagrams/stage2_class_diagram.png).
