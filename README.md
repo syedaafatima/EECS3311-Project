@@ -45,11 +45,18 @@ Build the application and run its tests:
 mvn package
 ```
 
+This builds **`target/career-agent.jar`**, an executable JAR containing the application
+and its runtime dependencies. After building, the CLI runs with Java 17+ directly;
+Maven and an IDE are not needed to launch the JAR. Keep the `examples/` folder when
+using the shipped sample files.
+
 To run tests separately, use `mvn test`. Tests use injected model responses/local
 HTTP endpoints and do not need a real API key. Two optional native-window checks
 run when `DISPLAY` is configured and a desktop Java runtime is available; otherwise
-they are skipped. The recorded desktop-enabled run passed all 80 checks, including
-an end-to-end F01–F17 workflow and native AI consent/review dialogs. See the
+they are skipped. The suite now contains 88 checks, including eight standalone CLI
+checks: the current headless run passes 86 and skips the two native-window checks.
+The earlier desktop-enabled run passed the original 80 checks, including an
+end-to-end F01–F17 workflow and native AI consent/review dialogs. See the
 [feature verification record](docs/feature-verification.md) for coverage and limits.
 
 ## 3. Local configuration
@@ -105,9 +112,10 @@ if you extract to a new folder. Existing saved records remain compatible.
 ### CLI
 
 ```sh
-mvn exec:java
+java -jar target/career-agent.jar
 ```
 
+`mvn exec:java` remains available as a source-development launch command.
 At `career-agent>`, enter `help` to list commands or `exit` to close the CLI.
 To check AI setup, enter these commands one at a time **inside the CLI**:
 
@@ -119,10 +127,81 @@ ai verify
 Status hides the key value. Verification asks for consent; enter `yes` to make a
 small live provider request without candidate/job records.
 
+### Standalone options and task files
+
+```sh
+java -jar target/career-agent.jar --help
+java -jar target/career-agent.jar --input examples/cli-demo.json --data-dir data/cli-demo
+```
+
+The second command works without an API key. Use a fresh `data/cli-demo` directory
+for the first run: the example creates its own profile and `J01` posting, saves
+manually reviewed Java/SQL/Git requirements, displays **Java matched / SQL missing**,
+and ranks the job at **65.0%**. Repeating it in that same example directory updates
+the same profile/posting. Use the ordinary `data/` directory for the interactive
+GUI/CLI records; `--data-dir` lets an automated run use separate records.
+
+| Option | Supported behavior |
+|---|---|
+| No `--input` | Interactive commands and answers from standard input |
+| `--input FILE` or `-input FILE` | Execute a UTF-8 JSON task file |
+| `--input -` | Read one complete JSON task from standard input, ending at EOF; no prompts |
+| `--data-dir DIR` | Read/write records in that directory; default `data` |
+| `--allow-ai` | Explicit consent to send relevant saved records for batch AI actions |
+| `--help` or `-h` | Print options and input format without creating records or contacting AI |
+
+A single request has an action and optional input object:
+
+```json
+{"action":"profile.show","input":{}}
+```
+
+A multi-step task uses `{"requests":[...]}`, as demonstrated in
+[cli-demo.json](examples/cli-demo.json). **Input values are strings**, including
+counts, dates and comma-separated IDs/selections. Actions are the controller names
+used by both interfaces: for example `profile.update`, `job.import`,
+`job.requirements`, `job.gaps`, `job.match`, `resume.preview`, `resume.import`,
+`interview.questions` and `career.plan`. Interactive `help` lists the equivalent
+feature commands. At most 100 requests and 1 MiB of UTF-8 task input are accepted.
+Relative file paths resolve from the terminal's current working directory.
+
+For a live AI explanation, first complete the offline example, configure the
+private `.env` as described above, and run:
+
+```sh
+java -jar target/career-agent.jar --input examples/cli-ai-task.json --data-dir data/cli-demo --allow-ai
+```
+
+This retrieves the saved profile, job and reviewed requirements and sends them to
+the selected provider for F06 interpretation. Review the explanation against the
+fixed Java/SQL gaps. The live wording can vary. The JSON output has a top-level
+`ok` and a `results` array containing each action, its `ok` and its textual `output`.
+Batch mode never asks interactive questions. AI consent does not approve generated
+skills, requirements or documents; their existing confirmation/selection rules still
+apply. Use the interactive interface for hands-on preview and review.
+
+Exit codes are **0** for success, **1** for a failed feature/provider request and
+**2** for invalid options, unreadable files or invalid task JSON. A batch stops on
+the first failed feature request; earlier successful changes remain saved. Task
+shape and AI consent are checked before any batch request runs. Usage/input errors
+are JSON on standard error; executed-request results are JSON on standard output.
+There is no rollback of already completed requests. Never place API keys in task
+files or command-line arguments.
+
+F06/F07/F08 can preserve their deterministic result when optional AI interpretation
+fails. In that case the request succeeds with an explicit AI-unavailable warning
+inside `output`; inspect the returned facts and warning together.
+
 ### GUI
 
 ```sh
 mvn exec:java "-Dexec.mainClass=ca.yorku.careeragent.ui.JobSearchGUI"
+```
+
+The same built JAR also contains the GUI and its dependencies:
+
+```sh
+java -cp target/career-agent.jar ca.yorku.careeragent.ui.JobSearchGUI
 ```
 
 Use the sidebar for Skills profile, Resumes, Jobs & matching, Applications & deadlines,

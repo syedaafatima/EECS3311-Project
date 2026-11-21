@@ -1,6 +1,9 @@
 # Feature verification
 
-The desktop-enabled Maven run passes **80 tests with no failures, errors or skips**.
+The suite contains **88 tests** after adding eight standalone CLI checks. The
+current headless Maven package run passes **86**, with no failures/errors and two
+native-window checks skipped. The earlier desktop-enabled run passed the original
+**80 tests with no failures, errors or skips**.
 It includes an F01–F17 workflow replay using the shipped demo PDF, real local
 persistence, CLI input and application restarts. Two native-window tests exercise
 the Swing desktop; one specifically opens and approves the AI consent/review dialogs.
@@ -57,7 +60,22 @@ retry or provider switching. Invalid form inputs are checked before model access
 Unknown sources remain rejected; valid older quotation-based responses and existing
 saved record formats remain supported.
 
+## Standalone CLI verification
+
+`CommandLineTest` verifies the shipped task file against empty persistent storage,
+UTF-8/BOM input on standard input, help without side effects, complete shape/consent
+validation before execution, fail-fast execution, invalid options/missing files,
+malformed JSON and the 1 MiB input bound.
+
+The actual packaged `target/career-agent.jar` was also launched in a separate JVM
+from an isolated working directory. Checks covered interactive standard input,
+JSON file/stdin modes, expected Java/SQL gaps and 65% matching, help, missing-file
+and invalid-option exit codes, AI-consent rejection, and real PDF/DOCX imports.
+The parser checks establish that the executable JAR contains its runtime libraries.
+These checks do not make a live provider request or substitute for the paired
+GUI-to-CLI video demonstration.
+
 Run the standard suite with **mvn test**. Without a configured desktop display, the
-two native-window tests are skipped; the remaining 78 tests can run headlessly.
+two native-window tests are skipped; the remaining 86 tests can run headlessly.
 Test fixtures belong only to test source code. The application still requires a
 configured live provider for its AI operations.

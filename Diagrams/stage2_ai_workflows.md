@@ -5,6 +5,30 @@ validates generated output before persistence. Skill and requirement changes use
 numbered approvals; generated documents require candidate review before saving.
 The diagrams follow the implemented feature-specific services and validation branches.
 
+## Standalone CLI — file and standard-input task execution
+
+```mermaid
+sequenceDiagram
+    actor Operator
+    participant CLI as CommandLine
+    participant Controller as AgentController
+    participant Facade as CareerFacade
+    Operator->>CLI: --input FILE or --input - with optional --data-dir
+    CLI->>CLI: Read UTF-8 task, validate JSON shape and request limits
+    alt Invalid options, file, JSON, or absent AI consent
+        CLI-->>Operator: JSON error on stderr, exit status 2, no requests executed
+    else Valid task and required --allow-ai consent
+        CLI->>Controller: Create shared controller and services for chosen data directory
+        loop Requests in file order until first failure
+            CLI->>Controller: submitRequest(action, input)
+            Controller->>Facade: Execute existing feature workflow
+            Facade-->>CLI: Validated result or feature/provider error
+        end
+        CLI-->>Operator: JSON results on stdout, exit status 0 or 1
+    end
+    Note over CLI,Facade: Earlier successful requests remain saved, generated content retains its approval rules
+```
+
 ## F03 — Resume skill extraction
 
 ```mermaid

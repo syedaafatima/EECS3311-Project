@@ -10,6 +10,25 @@ All seventeen feature recordings are accessible and indexed in the README and
 Stage 2 report. The report documents AI usage within the available account records
 and export scope. Automated provider fixtures are distinguished from live checks.
 
+## Standalone CLI follow-up
+
+`mvn package` now produces `target/career-agent.jar` with its runtime dependencies.
+`CommandLine` selects interactive input or JSON file/stdin tasks and routes requests
+through the existing AgentController/CareerFacade workflows. Documented options
+include `--input`, `--data-dir`, `--allow-ai` and `--help`; the `-input` alias is
+also supported. JSON output and exit codes support automated invocation.
+
+The shipped offline example creates its own candidate/posting, records reviewed
+requirements, reports Java matched and SQL missing, and ranks the posting at 65%.
+The optional AI example explains those saved gaps with explicit provider consent.
+Both are documented in the README. A clean-source build and separate-JVM JAR
+checks passed, including real PDF/DOCX imports with bundled libraries.
+
+The expanded suite has 88 checks: 86 pass headlessly and the two native-window
+checks are skipped without a display. The earlier native-enabled run passed the
+original 80 checks. Per-feature screenshot evidence and a paired GUI-to-CLI task
+recording are being incorporated in the final report for the follow-up submission.
+
 ## Feature status
 
 | ID | Feature | Mode | Invocation |

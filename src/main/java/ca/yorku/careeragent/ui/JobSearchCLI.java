@@ -1,10 +1,7 @@
 package ca.yorku.careeragent.ui;
 
 import ca.yorku.careeragent.controller.AgentController;
-import ca.yorku.careeragent.persistence.Repository;
-import ca.yorku.careeragent.service.CareerFacade;
 
-import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -250,10 +247,7 @@ public class JobSearchCLI implements ca.yorku.careeragent.deadline.DeadlineObser
     }
 
     public static void main(String[] args) {
-        Repository repository = new Repository(Path.of("data"));
-        CareerFacade facade = new CareerFacade(repository);
-        AgentController controller = new AgentController(facade);
-        new JobSearchCLI(controller, new Scanner(System.in)).run();
+        CommandLine.main(args);
     }
 
     private void writingRequest(String action) {

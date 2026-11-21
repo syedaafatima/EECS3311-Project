@@ -1,0 +1,9 @@
+{
+  "requests": [
+    {"action":"profile.update","input":{"name":"Demo Candidate","education":"BSc Computer Science","experience":"Java coursework and a task-tracker project","skills":"Java, Git","interests":"Software development","location":"Toronto"}},
+    {"action":"job.import","input":{"title":"Junior Developer","company":"Example Company","description":"Java and SQL are required. Git is preferred.","salary":"","location":"Toronto","deadline":""}},
+    {"action":"job.requirements","input":{"jobId":"J01","required":"Java, SQL","preferred":"Git"}},
+    {"action":"job.gaps","input":{"jobId":"J01"}},
+    {"action":"job.match","input":{"strategy":"weighted"}}
+  ]
+}
