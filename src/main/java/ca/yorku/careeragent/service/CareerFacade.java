@@ -317,15 +317,92 @@ public class CareerFacade {
         else if (strategy == null || strategy.isBlank() || "weighted".equalsIgnoreCase(strategy)) toolManager.setMatchingStrategy(new WeightedMatching());
         else throw new IllegalArgumentException("Matching strategy must be 'weighted' or 'required'.");
         StringBuilder table = new StringBuilder("Job | Title | Company | Salary | Location | Deadline | Compatibility | Gaps\n");
+        Map<String, String> verifiedFacts = new LinkedHashMap<>();
+        Map<String, Double> scores = new LinkedHashMap<>();
         for (Job job : selected) {
+            Double score = job.isAnalyzed() ? toolManager.calculateMatch(job.getId()) : null;
+            String compatibility = score == null ? "Not analyzed" : percentage(score);
+            String gaps = job.isAnalyzed() ? toolManager.compareSkills(job.getId()).toString() : "Unknown";
+            if (score != null) scores.put(job.getId(), score);
             table.append(job.getId()).append(" | ").append(job.getTitle()).append(" | ").append(job.getCompany())
                     .append(" | ").append(known(job.getSalary())).append(" | ").append(known(job.getLocation()))
                     .append(" | ").append(job.getDeadline() == null ? "Unknown" : job.getDeadline()).append(" | ")
-                    .append(job.isAnalyzed() ? String.format(java.util.Locale.ROOT, "%.1f%%", toolManager.calculateMatch(job.getId())) : "Not analyzed")
-                    .append(" | ").append(job.isAnalyzed() ? toolManager.compareSkills(job.getId()) : "Unknown").append('\n');
+                    .append(compatibility).append(" | ").append(gaps).append('\n');
+            verifiedFacts.put(job.getId() + "_salary", job.getId() + " recorded salary: " + known(job.getSalary()) + ".");
+            verifiedFacts.put(job.getId() + "_location", job.getId() + " recorded location: " + known(job.getLocation()) + ".");
+            verifiedFacts.put(job.getId() + "_deadline", job.getId() + " recorded deadline: "
+                    + (job.getDeadline() == null ? "Unknown" : job.getDeadline()) + ".");
+            verifiedFacts.put(job.getId() + "_compatibility", job.getId() + " skill compatibility under the "
+                    + toolManager.getMatchingStrategyName() + " policy: " + compatibility + ".");
+            verifiedFacts.put(job.getId() + "_gaps", job.getId() + " reviewed required-skill comparison: " + gaps + ".");
+        }
+        table.append("\nRecorded salary comparisons (currency and pay period are not inferred):\n");
+        for (int i = 0; i < selected.size(); i++) {
+            for (int j = i + 1; j < selected.size(); j++) {
+                Job left = selected.get(i), right = selected.get(j);
+                String pair = "pair_" + left.getId() + "_" + right.getId();
+                String salary = compareSalaries(left, right);
+                table.append("- ").append(salary).append('\n');
+                verifiedFacts.put(pair + "_salary", salary);
+                if (scores.containsKey(left.getId()) && scores.containsKey(right.getId())) {
+                    double leftScore = scores.get(left.getId()), rightScore = scores.get(right.getId());
+                    String statement;
+                    if (Double.compare(leftScore, rightScore) == 0) {
+                        statement = left.getId() + " and " + right.getId() + " have equal skill compatibility ("
+                                + percentage(leftScore) + ") under the " + toolManager.getMatchingStrategyName() + " policy.";
+                    } else {
+                        Job higher = leftScore > rightScore ? left : right;
+                        Job lower = leftScore > rightScore ? right : left;
+                        statement = higher.getId() + " has higher skill compatibility (" + percentage(scores.get(higher.getId()))
+                                + ") than " + lower.getId() + " (" + percentage(scores.get(lower.getId())) + ") under the "
+                                + toolManager.getMatchingStrategyName() + " policy.";
+                    }
+                    verifiedFacts.put(pair + "_compatibility", statement);
+                }
+                if (left.getDeadline() != null && right.getDeadline() != null) {
+                    String statement;
+                    if (left.getDeadline().equals(right.getDeadline())) {
+                        statement = left.getId() + " and " + right.getId() + " have the same recorded deadline: " + left.getDeadline() + ".";
+                    } else {
+                        Job earlier = left.getDeadline().isBefore(right.getDeadline()) ? left : right;
+                        Job later = earlier == left ? right : left;
+                        statement = earlier.getId() + " has an earlier recorded deadline (" + earlier.getDeadline() + ") than "
+                                + later.getId() + " (" + later.getDeadline() + ").";
+                    }
+                    verifiedFacts.put(pair + "_deadline", statement);
+                }
+            }
         }
         String facts = table.toString();
-        return new ca.yorku.careeragent.domain.Assessment("F08 Job comparison", facts, optionalExplanation(() -> agent.summarizeComparison(facts)));
+        return new ca.yorku.careeragent.domain.Assessment("F08 Job comparison", facts,
+                optionalExplanation(() -> agent.summarizeComparison(facts, verifiedFacts)));
+    }
+
+    private static String percentage(double value) { return String.format(java.util.Locale.ROOT, "%.1f%%", value); }
+
+    /** Only bare amounts are ordered; currency/unit strings and ranges remain uninterpreted. */
+    private static Optional<java.math.BigDecimal> numericSalary(String salary) {
+        String value = salary == null ? "" : salary.trim();
+        if (!value.matches("(?:\\d+|\\d{1,3}(?:,\\d{3})+)(?:\\.\\d+)?")) return Optional.empty();
+        return Optional.of(new java.math.BigDecimal(value.replace(",", "")));
+    }
+
+    private static String compareSalaries(Job left, Job right) {
+        var leftAmount = numericSalary(left.getSalary());
+        var rightAmount = numericSalary(right.getSalary());
+        if (leftAmount.isEmpty() || rightAmount.isEmpty()) {
+            return "Salary order is not established for " + left.getId() + " (" + known(left.getSalary()) + ") and "
+                    + right.getId() + " (" + known(right.getSalary()) + "); both entries must be plain numeric amounts.";
+        }
+        int order = leftAmount.get().compareTo(rightAmount.get());
+        if (order == 0) {
+            return left.getId() + " and " + right.getId() + " have equal recorded numeric salaries ("
+                    + left.getSalary() + " and " + right.getSalary() + ").";
+        }
+        Job higher = order > 0 ? left : right;
+        Job lower = order > 0 ? right : left;
+        return higher.getId() + " has a higher recorded numeric salary (" + higher.getSalary() + ") than "
+                + lower.getId() + " (" + lower.getSalary() + ").";
     }
 
     private static String known(String text) { return text == null || text.isBlank() ? "Unknown" : text; }

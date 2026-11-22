@@ -53,8 +53,8 @@ using the shipped sample files.
 To run tests separately, use `mvn test`. Tests use injected model responses/local
 HTTP endpoints and do not need a real API key. Two optional native-window checks
 run when `DISPLAY` is configured and a desktop Java runtime is available; otherwise
-they are skipped. The suite now contains 88 checks, including eight standalone CLI
-checks: the current headless run passes 86 and skips the two native-window checks.
+they are skipped. The suite now contains 95 checks, including eight standalone CLI
+checks and seven comparison-grounding checks: the current headless run passes 93 and skips the two native-window checks.
 The earlier desktop-enabled run passed the original 80 checks, including an
 end-to-end F01–F17 workflow and native AI consent/review dialogs. See the
 [feature verification record](docs/feature-verification.md) for coverage and limits.
@@ -321,6 +321,10 @@ company summaries cite saved passages by reference; the app attaches their origi
 text. These workflows and career planning may make one additional corrective request
 using the same sources if generated content fails validation. Provider and
 configuration failures, including rate limits, are returned without an automatic retry.
+F08 computes numeric salary order and comparison statements from saved records.
+The model selects verified fact IDs to highlight; the application renders their
+original statements. Plain numeric salaries can be ordered; ranges, currencies
+and pay-period strings remain as recorded without an inferred ordering.
 Company summaries use supplied notes/sources; the app does
 not browse websites or automatically submit applications.
 

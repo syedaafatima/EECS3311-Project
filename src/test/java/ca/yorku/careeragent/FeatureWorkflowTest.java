@@ -99,7 +99,9 @@ class FeatureWorkflowTest {
         assertTrue(ok(controller, "job.match", Map.of("strategy", "required")).contains("50.0%"));
         assertTrue(ok(controller, "job.match.explain", Map.of("strategy", "weighted")).contains("AI interpretation"));
         assertTrue(controller.submitRequest("job.compare", Map.of("jobIds", first)).startsWith("ERROR:"));
-        assertTrue(ok(controller, "job.compare", Map.of("jobIds", first + "," + second, "strategy", "weighted")).contains("Unknown"));
+        String comparison = ok(controller, "job.compare", Map.of("jobIds", first + "," + second, "strategy", "weighted"));
+        assertTrue(comparison.contains("Unknown"));
+        assertTrue(comparison.contains("AI-selected comparison highlights"));
 
         // F09-F10: separate reviewed documents, including correction of an unsupported model quote.
         assertTrue(controller.submitRequest("resume.suggest", Map.of("resumeId", resume, "jobId", practice.getId())).startsWith("ERROR:"));

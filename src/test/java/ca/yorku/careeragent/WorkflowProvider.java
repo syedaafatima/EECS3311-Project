@@ -33,7 +33,11 @@ final class WorkflowProvider implements LLMClient {
                     Map.of("kind", "REQUIRED", "text", qa ? "Git" : "SQL", "evidence", context),
                     Map.of("kind", "PREFERRED", "text", qa ? "SQL" : "Git", "evidence", context))));
         }
-        if (List.of("F06", "F07", "F08").contains(feature)) {
+        if (feature.equals("F08")) {
+            Map<?, ?> facts = Json.object(Json.object(Json.parse(context)).get("verifiedFacts"));
+            return Json.encode(Map.of("highlights", facts.keySet().stream().limit(3).toList()));
+        }
+        if (List.of("F06", "F07").contains(feature)) {
             return Json.encode(Map.of("explanation", "Review the recorded compatibility and skill gaps.",
                     "evidence", List.of(context.lines().reduce((first, next) -> next).orElseThrow())));
         }

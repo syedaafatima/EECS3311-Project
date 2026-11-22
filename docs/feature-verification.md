@@ -1,7 +1,7 @@
 # Feature verification
 
-The suite contains **88 tests** after adding eight standalone CLI checks. The
-current headless Maven package run passes **86**, with no failures/errors and two
+The suite contains **95 tests** after adding eight standalone CLI checks and seven comparison-grounding checks. The
+current headless Maven package run passes **93**, with no failures/errors and two
 native-window checks skipped. The earlier desktop-enabled run passed the original
 **80 tests with no failures, errors or skips**.
 It includes an F01–F17 workflow replay using the shipped demo PDF, real local
@@ -30,7 +30,7 @@ The focused tests below add validation and failure coverage.
 | F05 Job analysis | Review required/preferred skills before saving | JobAnalysisTest: stale descriptions, categories and invalid selections |
 | F06 Skill gaps | Java matched, SQL missing and AI explanation | AssessmentTest: deterministic results and unavailable/unsupported AI explanations |
 | F07 Matching | Weighted 65%/35%; required-only 50%; unreviewed jobs excluded | AssessmentTest and JobSearchGUITest: policy selection and deterministic scores |
-| F08 Comparison | Two-job comparison; unknown fields preserved | AssessmentTest: invalid selections and AI failure with deterministic results retained |
+| F08 Comparison | Java computes salary order and comparison facts; AI selects validated highlights | AssessmentTest and ComparisonGroundingTest: reversed salary claims with real citations, extra prose, malformed/unknown/duplicate IDs, numeric formatting, ranges/pay units, missing fields, selected policies, four-job selection and provider failures |
 | F09 Resume suggestions | Evidence-backed separate advice document and human approval | WritingTest: unsupported evidence, cancelled review and stale source fingerprints |
 | F10 Cover letter | Resolve original candidate passages; correct invalid response once; review/save | WritingTest: Unicode/long lines, unknown IDs, invalid legacy quotations and provider failures |
 | F11 Interview questions | Resolve original job passages; correct malformed JSON; save valid set only | InterviewTest: exact count, category spelling, both kinds, duplicates, missing rubrics and unknown IDs |
@@ -53,7 +53,7 @@ The focused tests below add validation and failure coverage.
   translation, provider configuration, malformed/incomplete responses and errors
   without using real credentials or paid requests.
 
-The five corrected generation workflows make at most two provider requests for one
+The corrected generation workflows, including F08, make at most two provider requests for one
 action: the initial request and one correction after invalid generated content.
 Provider/configuration failures, including HTTP 429, are returned without automatic
 retry or provider switching. Invalid form inputs are checked before model access.
@@ -76,6 +76,24 @@ These checks do not make a live provider request or substitute for the paired
 GUI-to-CLI video demonstration.
 
 Run the standard suite with **mvn test**. Without a configured desktop display, the
-two native-window tests are skipped; the remaining 86 tests can run headlessly.
+two native-window tests are skipped; the remaining 93 tests can run headlessly.
 Test fixtures belong only to test source code. The application still requires a
 configured live provider for its AI operations.
+
+## Grounded job comparison
+
+F08 builds a catalog of statements from the selected saved postings and matching
+policy. Numeric salary order, compatibility and deadline relations are computed in
+Java. The LLM selects distinct catalog IDs to prioritize; only the corresponding
+application-generated statements are displayed. Free-form claims and unknown IDs
+are rejected, with at most one corrective response request. Provider failures are
+not retried, and the recorded table and salary comparisons remain available.
+
+Regression checks reproduce salaries 60,000 versus 75,000 with an AI response that
+reverses their order while citing a real excerpt and invents city affordability.
+Neither claim reaches the displayed highlights. Additional cases cover equal and
+reversed salaries, comma/decimal formatting, unknown values, salary ranges and
+entries containing currencies/pay units, missing analyses, both matching policies and
+selected subsets of up to four jobs. Bare numeric amounts are ordered; currencies,
+ranges and pay-period strings remain uninterpreted. No external living-cost claims
+are generated.

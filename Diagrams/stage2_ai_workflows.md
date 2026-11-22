@@ -216,11 +216,15 @@ sequenceDiagram
         F-->>UI: Validation error before provider call
     else Valid selection
         F->>T: Retrieve selected postings/profile#59; compute available compatibility
-        F->>F: Build comparison#59; preserve unknown/unanalysed fields
-        F->>A: summarizeComparison(table)
-        A->>L: complete(F08 instructions, selected facts)
-        A->>A: Validate interpretation and evidence
-        A-->>UI: Table and summary, or table with AI-unavailable warning
+        F->>F: Compute salary order and verified statements#59; preserve unknown fields
+        F->>A: summarizeComparison(table, verifiedFacts)
+        A->>L: Select 2-8 verified fact IDs to highlight
+        A->>A: Reject extra prose, unknown IDs and duplicate selections
+        opt Invalid response
+            A->>L: Request one corrected JSON selection
+        end
+        A->>A: Render selected statements from the verified catalog
+        A-->>UI: Recorded comparisons and verified highlights, or AI-unavailable warning
     end
 ```
 

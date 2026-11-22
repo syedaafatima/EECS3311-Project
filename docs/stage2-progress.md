@@ -24,10 +24,20 @@ The optional AI example explains those saved gaps with explicit provider consent
 Both are documented in the README. A clean-source build and separate-JVM JAR
 checks passed, including real PDF/DOCX imports with bundled libraries.
 
-The expanded suite has 88 checks: 86 pass headlessly and the two native-window
+The expanded suite has 95 checks: 93 pass headlessly and the two native-window
 checks are skipped without a display. The earlier native-enabled run passed the
 original 80 checks. Per-feature screenshot evidence and a paired GUI-to-CLI task
 recording are being incorporated in the final report for the follow-up submission.
+
+## Grounded F08 comparison
+
+F08 now computes numeric salary order, skill compatibility and deadline statements
+from saved records. The model selects verified statement IDs to highlight; arbitrary
+prose cannot reverse the numbers or introduce unsupported location claims. Invalid
+selections get at most one correction; provider failures preserve the recorded
+comparison. Seven new regression checks cover the reported 60,000/75,000 reversal,
+source citations with false conclusions, malformed/extra output, numeric formatting,
+unknown/range/pay-unit entries, selected policies and up to four selected postings.
 
 ## Feature status
 
