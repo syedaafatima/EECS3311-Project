@@ -6,8 +6,8 @@ The weekly commit summary records implementation, tests and supporting repositor
 changes. Documentation/configuration changes and merge copies are distinguished
 from independent meaningful code work.
 
-All seventeen feature recordings are accessible and indexed in the README and
-Stage 2 report. The report documents AI usage within the available account records
+All seventeen features have GUI and CLI recording links indexed in the README
+and Stage 2 report, for a total of 34 recordings. The report documents AI usage within the available account records
 and export scope. Automated provider fixtures are distinguished from live checks.
 
 ## Standalone CLI follow-up
@@ -26,8 +26,9 @@ checks passed, including real PDF/DOCX imports with bundled libraries.
 
 The expanded suite has 95 checks: 93 pass headlessly and the two native-window
 checks are skipped without a display. The earlier native-enabled run passed the
-original 80 checks. Per-feature screenshot evidence and a paired GUI-to-CLI task
-recording are being incorporated in the final report for the follow-up submission.
+original 80 checks. The updated report includes original-requirement statements and screenshot evidence
+for all seventeen features. Separate GUI and CLI links are provided for each
+feature, ordered GUI first and CLI second in both demonstration indexes.
 
 ## Grounded F08 comparison
 
@@ -102,8 +103,8 @@ F02 PDF preview/save and rejection before a profile existed; live F03 skill extr
 with source quotations, approval of only JUnit and a persisted profile update; F04 job
 import and a deadline reminder; live F05 categorized requirements and explicit approval;
 F06 matched Java/missing SQL with a consistent live AI explanation; and F07 weighted
-65%/required 50% scores with a consistent live explanation. All seventeen
-demonstration recordings are accessible through the README and report.
+65%/required 50% scores with a consistent live explanation. GUI and CLI recordings for all seventeen
+features are indexed through the README and report.
 
 ## Desktop layout refinement
 
@@ -137,7 +138,7 @@ candidate save and loading that candidate through the CLI controller. The native
 window check confirms all three profile action labels fit and remain visible.
 The current desktop-enabled suite passes 80 checks with no failures, errors or skips.
 Supplied GUI confirmation also covers F01 save/reload and blank-name validation
-on the local Windows copy. All seventeen recordings are linked from the README
+on the local Windows copy. All 34 GUI/CLI recordings are linked from the README
 and report.
 
 ## AI source references and corrective generation
@@ -157,7 +158,7 @@ questions and excessive study budgets remain rejected.
 
 The verification includes a complete F01–F17 replay and actual GUI generation,
 consent, evidence review and saving for F10/F11/F13/F16/F17. These use controlled,
-fallible provider responses. Accessible recordings are linked for all seventeen
+fallible provider responses. GUI and CLI recordings are linked for all seventeen
 features. See the
 [feature verification record](feature-verification.md).
 

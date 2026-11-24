@@ -846,7 +846,7 @@ public final class JobSearchGUI extends JPanel implements DeadlineObserver, Auto
         form.add(CareerTheme.hint("Check your configured AI provider and verify access before generating content."));
         JTextArea result = output("ai.result");
         result.setText("1. Create an API key at https://console.groq.com/keys\n"
-                + "2. Use the Groq Free plan; check its account quotas before recording.\n"
+                + "2. Check the request and token quotas for your Groq account.\n"
                 + "3. Copy .env.example to .env in this project's directory.\n"
                 + "4. Set LLM_PROVIDER=groq and GROQ_API_KEY locally. Keep .env private and ignored by Git.\n"
                 + "5. Check setup, then verify live access. The verification sends no personal records.\n\n"

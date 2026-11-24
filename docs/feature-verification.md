@@ -12,8 +12,8 @@ AI test responses are injected or served by local HTTP fixtures. They deliberate
 include unsupported quotations, malformed JSON, unknown source references and
 over-budget plans before valid responses. These checks establish application
 behavior under those conditions; they do not establish live Groq output quality,
-API access or available account quota. Live provider verification remains a local
-check before recording the final demonstrations.
+API access or available account quota. Live provider access and quota must be
+checked separately with a configured account.
 
 ## Coverage
 

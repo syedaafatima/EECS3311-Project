@@ -4,6 +4,7 @@ digraph Classes {
  edge [fontname="DejaVu Sans", fontsize=9, color="#475569"];
 "JobSearchGUI" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#f1f5f9"><B>JobSearchGUI</B></TD></TR><TR><TD ALIGN="LEFT">&lt;&lt;MVC view; Observer&gt;&gt;<BR ALIGN="LEFT"/>start(); close(); onDeadline(DeadlineReminder)<BR ALIGN="LEFT"/>SwingWorker dispatch + editable review dialogs</TD></TR></TABLE>>];
 "JobSearchCLI" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#f1f5f9"><B>JobSearchCLI</B></TD></TR><TR><TD ALIGN="LEFT">&lt;&lt;MVC view; Observer&gt;&gt;<BR ALIGN="LEFT"/>run(); onDeadline(DeadlineReminder)<BR ALIGN="LEFT"/>prompt input + explicit review/consent</TD></TR></TABLE>>];
+"CommandLine" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#f1f5f9"><B>CommandLine</B></TD></TR><TR><TD ALIGN="LEFT">&lt;&lt;terminal entry point&gt;&gt;<BR ALIGN="LEFT"/>main(args); execute(args, stdin, out, err): int<BR ALIGN="LEFT"/>interactive or JSON file/stdin input<BR ALIGN="LEFT"/>validate task shape, limits and AI consent<BR ALIGN="LEFT"/>JSON results and process exit status</TD></TR></TABLE>>];
 "AgentController" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#f1f5f9"><B>AgentController</B></TD></TR><TR><TD ALIGN="LEFT">&lt;&lt;MVC controller&gt;&gt;<BR ALIGN="LEFT"/>submitRequest(String, Map): String<BR ALIGN="LEFT"/>pendingResume; pendingSkills; pendingAnalysis; pendingDocument<BR ALIGN="LEFT"/>list/get records; subscribe/unsubscribeDeadlines</TD></TR></TABLE>>];
 "CareerFacade" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#bfdbfe"><B>CareerFacade</B></TD></TR><TR><TD ALIGN="LEFT">&lt;&lt;Facade&gt;&gt;<BR ALIGN="LEFT"/>profile/resume/job/application workflows<BR ALIGN="LEFT"/>importJob(); updateJob(); getJob()<BR ALIGN="LEFT"/>explainGaps(); explainMatches(); compareJobs()<BR ALIGN="LEFT"/>suggestResume(); draftLetter(); saveDocument()<BR ALIGN="LEFT"/>interview questions/session/feedback workflows<BR ALIGN="LEFT"/>saveCompanyNotes(); summarizeCompanyNotes()<BR ALIGN="LEFT"/>generateCareerPlan(); aiStatus(); verifyAI()</TD></TR></TABLE>>];
 "CareerAgent" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD BGCOLOR="#ddd6fe"><B>CareerAgent</B></TD></TR><TR><TD ALIGN="LEFT">&lt;&lt;feature-specific agent tasks&gt;&gt;<BR ALIGN="LEFT"/>extractSkills(); analyzeJob()<BR ALIGN="LEFT"/>explainGaps(); explainMatches(); summarizeComparison()<BR ALIGN="LEFT"/>suggestResume(); draftLetter()<BR ALIGN="LEFT"/>generateQuestions(); evaluateAnswers()<BR ALIGN="LEFT"/>summarizeNotes(); generateCareerPlan()<BR ALIGN="LEFT"/>evidence/schema/count/budget validation</TD></TR></TABLE>>];
@@ -42,6 +43,9 @@ digraph Classes {
 "JobSearchGUI" -> "CareerTheme" [label="presentation",style="dashed"];
 "JobSearchGUI" -> "AgentController" [label="controller"];
 "JobSearchCLI" -> "AgentController" [label="controller"];
+"JobSearchCLI" -> "CommandLine" [label="main entry",style="dashed"];
+"CommandLine" -> "JobSearchCLI" [label="interactive view"];
+"CommandLine" -> "AgentController" [label="batch controller"];
 "AgentController" -> "CareerFacade" [label="facade"];
 "CareerFacade" -> "Repository" [label="repository"];
 "CareerFacade" -> "CareerAgent" [label="agent"];

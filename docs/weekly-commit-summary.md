@@ -4,7 +4,7 @@ Repository: https://github.com/syedaafatima/EECS3311-Project
 
 ## Commit coverage
 
-The log includes all 43 unique Stage 2 commits reachable from the published repository branches at checkpoint [02db7ed](https://github.com/syedaafatima/EECS3311-Project/commit/02db7ed01644ffc2250e02213f7ef6de4bb209fc): 39 on main and 4 additional report-draft commits. Commit dates use Toronto local time and show the full month name and day only. Code, tests, documentation, configuration and merges are recorded. Documentation/configuration commits and repeated merge copies do not count as separate meaningful code changes. Later publication-only changes can be inspected in the [full main-branch history](https://github.com/syedaafatima/EECS3311-Project/commits/main).
+The log includes all 47 unique Stage 2 commits reachable from the published repository branches at checkpoint [4a9960e](https://github.com/syedaafatima/EECS3311-Project/commit/4a9960e27425fd760096f2c9e235e644f6393cd2): 43 on main and 4 additional report-draft commits. Commit dates use Toronto local time and show the full month name and day only. Code, tests, documentation, configuration and merges are recorded. Documentation/configuration commits and repeated merge copies do not count as separate meaningful code changes. Later publication-only changes can be inspected in the [full main-branch history](https://github.com/syedaafatima/EECS3311-Project/commits/main).
 
 Period 3 is displayed through November 14 for this development log. The original Stage 2 brief defines the minimum five-code-commit window as November 3–9; later follow-up entries are listed without extending that original window.
 
@@ -72,3 +72,7 @@ Within the original reporting windows, Periods 1, 2 and 3 contain 5, 5 and 8 imp
 | November 15 | [db79949](https://github.com/syedaafatima/EECS3311-Project/commit/db7994935a60e029865c048e6b6bf31f509211ee) | Add F01-F10 demonstration links to complete the F01-F13 video index. | Docs |
 | November 15 | [0f604bc](https://github.com/syedaafatima/EECS3311-Project/commit/0f604bcb915ac06512d89a4423cc724d2c602515) | Label demonstration links by feature ID in the README. | Docs |
 | November 15 | [02db7ed](https://github.com/syedaafatima/EECS3311-Project/commit/02db7ed01644ffc2250e02213f7ef6de4bb209fc) | Complete the F01-F17 feature demonstration video index. | Docs |
+| November 15 | [435b17e](https://github.com/syedaafatima/EECS3311-Project/commit/435b17e1aa585a2db59ac1e3f589da2a648b34c0) | Publish final Stage 2 report and submission records. | Docs |
+| November 15 | [b46439d](https://github.com/syedaafatima/EECS3311-Project/commit/b46439deb903a4630166fcd3f3cc2a4c30bc2724) | Fix Mermaid sequence diagram rendering. | Docs |
+| November 20 | [62649b5](https://github.com/syedaafatima/EECS3311-Project/commit/62649b5683af5eaf28c21df4c22d1f8245536224) | Add standalone CLI packaging and JSON task input. | Code/tests |
+| November 22 | [4a9960e](https://github.com/syedaafatima/EECS3311-Project/commit/4a9960e27425fd760096f2c9e235e644f6393cd2) | Ground F08 salary, compatibility and deadline highlights in verified facts; add seven regression checks. | Code/tests |

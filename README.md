@@ -212,28 +212,34 @@ AI setup also provides status and live verification. Close the window to exit.
 
 ### Feature demonstrations
 
-Each link opens a separate feature recording at **00:00**. All seventeen features
-are indexed below; the recordings collectively show the GUI and CLI.
+All seventeen features have separate **GUI Link** and **CLI Link** recordings,
+listed in that order below. Each link starts at **00:00**; the index contains 34
+recordings covering both interfaces for every feature.
 
-| Feature | Demonstration | Start |
-|---|---|---|
-| F01 — Candidate Profile Management | [F01 link](https://youtu.be/a_7-OBFc5FA?t=0) | 00:00 |
-| F02 — Resume Import | [F02 link](https://youtu.be/rag1yg8JqYM?t=0) | 00:00 |
-| F03 — Resume Skill Extraction | [F03 link](https://youtu.be/uXXMgsYg68I?t=0) | 00:00 |
-| F04 — Job Import | [F04 link](https://youtu.be/dseg56TGSqo?t=0) | 00:00 |
-| F05 — Job Description Analysis | [F05 link](https://youtu.be/cmS2x1T1Tc8?t=0) | 00:00 |
-| F06 — Skill Gap Identification | [F06 link](https://youtu.be/94zQE5TPGRs?t=0) | 00:00 |
-| F07 — Job Matching | [F07 link](https://youtu.be/2SiS0G3_02M?t=0) | 00:00 |
-| F08 — Job Comparison | [F08 link](https://youtu.be/_R_zGnLrsEs?t=0) | 00:00 |
-| F09 — Customized Resume Suggestions | [F09 link](https://youtu.be/xvG0E3s51CQ?t=0) | 00:00 |
-| F10 — Cover Letter Drafting | [F10 link](https://youtu.be/LDz5NG0jGC4?t=0) | 00:00 |
-| F11 — Interview Question Generation | [F11 link](https://youtu.be/WMgN_87MDAQ?t=0) | 00:00 |
-| F12 — Mock Interview | [F12 link](https://youtu.be/4k0ZOYJNH1Y?t=0) | 00:00 |
-| F13 — Interview Answer Feedback | [F13 link](https://youtu.be/RddPFQT3lUM?t=0) | 00:00 |
-| F14 — Application Tracking | [F14 link](https://youtu.be/nMa3M06CLVc?t=0) | 00:00 |
-| F15 — Deadline Tracking | [F15 link](https://youtu.be/dCIjHg0C6sQ?t=0) | 00:00 |
-| F16 — Company Research Notes | [F16 link](https://youtu.be/71LjEAsCVNE?t=0) | 00:00 |
-| F17 — Career Development Plan | [F17 link](https://youtu.be/QQYZjPArcyo?t=0) | 00:00 |
+| Feature | Demonstrations | Screenshot | Start |
+|---|---|---|---|
+| F01 — Candidate Profile Management | [GUI Link](https://youtu.be/a_7-OBFc5FA?t=0)<br>[CLI Link](https://youtu.be/rSdcdK7djJc?t=0) | [F01 screenshot](docs/screenshots/F01.png) | 00:00 |
+| F02 — Resume Import | [GUI Link](https://youtu.be/rag1yg8JqYM?t=0)<br>[CLI Link](https://youtu.be/rXKyAUBPfZk?t=0) | [F02 screenshot](docs/screenshots/F02.png) | 00:00 |
+| F03 — Resume Skill Extraction | [GUI Link](https://youtu.be/uXXMgsYg68I?t=0)<br>[CLI Link](https://youtu.be/pxfFihLwaPE?t=0) | [F03 screenshot](docs/screenshots/F03.png) | 00:00 |
+| F04 — Job Import | [GUI Link](https://youtu.be/dseg56TGSqo?t=0)<br>[CLI Link](https://youtu.be/gdHN0RPydpg?t=0) | [F04 screenshot](docs/screenshots/F04.png) | 00:00 |
+| F05 — Job Description Analysis | [GUI Link](https://youtu.be/cmS2x1T1Tc8?t=0)<br>[CLI Link](https://youtu.be/q9q5eHOaXto?t=0) | [F05 screenshot](docs/screenshots/F05.png) | 00:00 |
+| F06 — Skill Gap Identification | [GUI Link](https://youtu.be/94zQE5TPGRs?t=0)<br>[CLI Link](https://youtu.be/Ad5xzEYVtz4?t=0) | [F06 screenshot](docs/screenshots/F06.png) | 00:00 |
+| F07 — Job Matching | [GUI Link](https://youtu.be/2SiS0G3_02M?t=0)<br>[CLI Link](https://youtu.be/2RrhQOMezEk?t=0) | [F07 screenshot](docs/screenshots/F07.png) | 00:00 |
+| F08 — Job Comparison | [GUI Link](https://youtu.be/_R_zGnLrsEs?t=0)<br>[CLI Link](https://youtu.be/WrjT-NVL-zU?t=0) | [F08 screenshot](docs/screenshots/F08.png) | 00:00 |
+| F09 — Customized Resume Suggestions | [GUI Link](https://youtu.be/xvG0E3s51CQ?t=0)<br>[CLI Link](https://youtu.be/S7BvsngTCUs?t=0) | [F09 screenshot](docs/screenshots/F09.jpg) | 00:00 |
+| F10 — Cover Letter Drafting | [GUI Link](https://youtu.be/LDz5NG0jGC4?t=0)<br>[CLI Link](https://youtu.be/A9ayRYTmc9Y?t=0) | [F10 screenshot](docs/screenshots/F10.png) | 00:00 |
+| F11 — Interview Question Generation | [GUI Link](https://youtu.be/nh1YAB0DnqA?t=0)<br>[CLI Link](https://youtu.be/WMgN_87MDAQ?t=0) | [F11 screenshot](docs/screenshots/F11.png) | 00:00 |
+| F12 — Mock Interview | [GUI Link](https://youtu.be/bmaXwKWqH-A?t=0)<br>[CLI Link](https://youtu.be/4k0ZOYJNH1Y?t=0) | [F12 screenshot](docs/screenshots/F12.png) | 00:00 |
+| F13 — Interview Answer Feedback | [GUI Link](https://youtu.be/cROrSsUEbSQ?t=0)<br>[CLI Link](https://youtu.be/RddPFQT3lUM?t=0) | [F13 screenshot](docs/screenshots/F13.png) | 00:00 |
+| F14 — Application Tracking | [GUI Link](https://youtu.be/nMa3M06CLVc?t=0)<br>[CLI Link](https://youtu.be/THbXWWsypno?t=0) | [F14 screenshot](docs/screenshots/F14.jpg) | 00:00 |
+| F15 — Deadline Tracking | [GUI Link](https://youtu.be/dCIjHg0C6sQ?t=0)<br>[CLI Link](https://youtu.be/0ysiJabqwNU?t=0) | [F15 screenshot](docs/screenshots/F15.jpg) | 00:00 |
+| F16 — Company Research Notes | [GUI Link](https://youtu.be/71LjEAsCVNE?t=0)<br>[CLI Link](https://youtu.be/jx_wRE3DoWg?t=0) | [F16 screenshot](docs/screenshots/F16.jpg) | 00:00 |
+| F17 — Career Development Plan | [GUI Link](https://youtu.be/QQYZjPArcyo?t=0)<br>[CLI Link](https://youtu.be/7acJ_UHYX7Q?t=0) | [F17 screenshot](docs/screenshots/F17.jpg) | 00:00 |
+
+Screenshots of all seventeen running features are included in the final report,
+with the original requirements and implementation explanations. An additional
+[F15 reminder-check screenshot](docs/screenshots/F15-reminders.jpg) shows the
+notification count.
 
 ### CLI: profile, resume and matching
 
