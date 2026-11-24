@@ -225,7 +225,7 @@ recordings covering both interfaces for every feature.
 | F05 — Job Description Analysis | [GUI Link](https://youtu.be/cmS2x1T1Tc8?t=0)<br>[CLI Link](https://youtu.be/q9q5eHOaXto?t=0) | [F05 screenshot](docs/screenshots/F05.png) | 00:00 |
 | F06 — Skill Gap Identification | [GUI Link](https://youtu.be/94zQE5TPGRs?t=0)<br>[CLI Link](https://youtu.be/Ad5xzEYVtz4?t=0) | [F06 screenshot](docs/screenshots/F06.png) | 00:00 |
 | F07 — Job Matching | [GUI Link](https://youtu.be/2SiS0G3_02M?t=0)<br>[CLI Link](https://youtu.be/2RrhQOMezEk?t=0) | [F07 screenshot](docs/screenshots/F07.png) | 00:00 |
-| F08 — Job Comparison | [GUI Link](https://youtu.be/_R_zGnLrsEs?t=0)<br>[CLI Link](https://youtu.be/WrjT-NVL-zU?t=0) | [F08 screenshot](docs/screenshots/F08.png) | 00:00 |
+| F08 — Job Comparison | [GUI Link](https://youtu.be/kudm4QjJyPc?t=0)<br>[CLI Link](https://youtu.be/WrjT-NVL-zU?t=0) | [F08 screenshot](docs/screenshots/F08.png) | 00:00 |
 | F09 — Customized Resume Suggestions | [GUI Link](https://youtu.be/xvG0E3s51CQ?t=0)<br>[CLI Link](https://youtu.be/S7BvsngTCUs?t=0) | [F09 screenshot](docs/screenshots/F09.jpg) | 00:00 |
 | F10 — Cover Letter Drafting | [GUI Link](https://youtu.be/LDz5NG0jGC4?t=0)<br>[CLI Link](https://youtu.be/A9ayRYTmc9Y?t=0) | [F10 screenshot](docs/screenshots/F10.png) | 00:00 |
 | F11 — Interview Question Generation | [GUI Link](https://youtu.be/nh1YAB0DnqA?t=0)<br>[CLI Link](https://youtu.be/WMgN_87MDAQ?t=0) | [F11 screenshot](docs/screenshots/F11.png) | 00:00 |
